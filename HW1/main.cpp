@@ -14,7 +14,6 @@ static void render();
 static void log(const string& msg);
 
 static GLFWwindow* pWindow = nullptr; 
-#define DEBUG_MODE
 
 int main() 
 {
@@ -104,9 +103,10 @@ void render()
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-static void log(const string& msg) 
+void log(const string& msg) 
 {
-#ifdef DEBUG_MODE
+    // c 표준 (NDEBUG: 릴리즈모드에서 정의된다.)
+#ifndef NDEBUG
     cout << msg << endl;
 #endif
 }
