@@ -18,6 +18,9 @@ static void log(const string& msg);
 
 static GLFWwindow* pWindow = nullptr;
 
+static GLuint vao;
+static GLuint shaderProgram;
+
 int main()
 {
     if (!initGL())
@@ -29,20 +32,37 @@ int main()
     { 
         // top
         0.f, 0.8f, 0.f, 
-        1.f, 1.f, 1.f,
-
-        // right
-        0.4f, -0.8f, 0.f, 
-        1.f, 0.f, 0.f,
 
         // left
-        -0.4f, -0.8f, 0.f 
+        -0.4f, -0.8f, 0.f,
+
+        // right
+        0.4f, -0.8f, 0.f 
     };
+
+    glGenVertexArrays(1, &vao);
+
+    /*
+        vao가 저장하는 vertex attribute 데이터들
+
+        1. vbo의 바인딩 상태
+        2. glVertexAttribPointer 함수를 통해 기록되는 vertex attribute 정보
+        3. glEnableVertexAttribArray 함수를 통해 활성화되는 vertex attribute 정보
+        4. glDisableVertexAttribArray 함수를 통해 비활성화되는 vertex attribute 정보
+    */
+    glBindVertexArray(vao);
 
     GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(
+        0, 3, GL_FLOAT, GL_FALSE,
+        3 * sizeof(float), reinterpret_cast<const void *>(0));
+
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
 
     GLuint vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -51,6 +71,62 @@ int main()
     const char* const pRawVertexShaderSource = vertexShaderSource.c_str();
     glShaderSource(vertexShader, 1, &pRawVertexShaderSource, nullptr);
     glCompileShader(vertexShader);
+
+    GLint success;
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        GLchar infoLog[512];
+        glGetShaderInfoLog(vertexShader, sizeof(infoLog), nullptr, infoLog);
+
+        log(infoLog);
+        glfwTerminate();
+
+        return -1;
+    }
+
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    const string& fragShaderSource = TextReader::read("triangle_frag.glsl");
+    const char* const pRawFragShaderSource = fragShaderSource.c_str();
+    glShaderSource(fragmentShader, 1, &pRawFragShaderSource, nullptr);
+    glCompileShader(fragmentShader);
+
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        GLchar infoLog[512];
+        glGetShaderInfoLog(fragmentShader, sizeof(infoLog), nullptr, infoLog);
+
+        log(infoLog);
+        glfwTerminate();
+
+        return -1;
+    }
+
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) 
+    {
+        GLchar infoLog[512];
+        glGetProgramInfoLog(shaderProgram, sizeof(infoLog), nullptr, infoLog);
+        
+        log(infoLog);
+        glfwTerminate();
+
+        return -1;
+    }
+
+    glUseProgram(shaderProgram);
+
+    glDeleteShader(vertexShader);
+    vertexShader = 0U;
+
+    glDeleteShader(fragmentShader);
+    fragmentShader = 0U;
 
     startMainLoop();
     releaseGL();
@@ -129,6 +205,10 @@ void eventDispatch()
 void render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 void log(const string& msg)

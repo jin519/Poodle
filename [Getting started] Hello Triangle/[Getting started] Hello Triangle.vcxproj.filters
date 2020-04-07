@@ -36,5 +36,8 @@
     <None Include="triangle_vert.glsl">
       <Filter>소스 파일\shader</Filter>
     </None>
+    <None Include="triangle_frag.glsl">
+      <Filter>소스 파일\shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
