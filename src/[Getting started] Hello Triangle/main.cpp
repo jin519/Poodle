@@ -17,7 +17,6 @@ static void render();
 static void log(const string& msg);
 
 static GLFWwindow* pWindow = nullptr;
-
 static GLuint vao;
 static GLuint shaderProgram;
 
@@ -60,7 +59,7 @@ int main()
     glVertexAttribPointer(
         0, 3, GL_FLOAT, GL_FALSE,
         3 * sizeof(float), reinterpret_cast<const void *>(0));
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
@@ -138,7 +137,7 @@ bool initGL()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     pWindow = glfwCreateWindow(800, 600, "Hello Triangle", nullptr, nullptr);
