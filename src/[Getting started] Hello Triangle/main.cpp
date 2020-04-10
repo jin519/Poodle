@@ -27,18 +27,20 @@ int main()
 
     registerCallback();
 
-    float vertices[] = 
-    { 
-        // top
-        0.f, 0.8f, 0.f, 
-
-        // left
-        -0.4f, -0.8f, 0.f,
-
-        // right
-        0.4f, -0.8f, 0.f 
+    GLfloat vertices[] = 
+    {
+        0.5f, 0.5f, 0.0f,  // top right
+        0.5f, -0.5f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f,  // bottom left
+        -0.5f, 0.5f, 0.0f   // top left 
     };
 
+    GLuint indices[] = 
+    {  // note that we start from 0!
+        0, 1, 3,   // first triangle
+        1, 2, 3    // second triangle
+    };
+   
     glGenVertexArrays(1, &vao);
 
     /*
@@ -48,6 +50,7 @@ int main()
         2. glVertexAttribPointer 함수를 통해 기록되는 vertex attribute 정보
         3. glEnableVertexAttribArray 함수를 통해 활성화되는 vertex attribute 정보
         4. glDisableVertexAttribArray 함수를 통해 비활성화되는 vertex attribute 정보
+        5. ebo의 바인딩 상태
     */
     glBindVertexArray(vao);
 
@@ -55,6 +58,11 @@ int main()
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    GLuint ebo;
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(
         0, 3, GL_FLOAT, GL_FALSE,
@@ -204,10 +212,12 @@ void eventDispatch()
 void render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+    glPointSize(25.f);
 
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, reinterpret_cast<const void*>(0));
 }
 
 void log(const string& msg)
