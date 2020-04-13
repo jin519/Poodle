@@ -110,6 +110,9 @@ bool initGL()
         return false;
     }
 
+    // VSYNC 0: off, 1: on
+    glfwSwapInterval(1);
+
     return true;
 }
 
@@ -176,14 +179,14 @@ void updateShader()
 {
     if (accelerationFlag)
     {
-        acceleration += 0.001f;
+        acceleration += 0.0015f;
 
         if (acceleration > MAX_ACCELERATION)
             acceleration = MAX_ACCELERATION;
     }
     else 
     {
-        acceleration -= 0.001f;
+        acceleration -= 0.0015f;
 
         if (acceleration < MIN_ACCELERATION)
             acceleration = MIN_ACCELERATION;
