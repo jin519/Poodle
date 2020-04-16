@@ -20,11 +20,7 @@ static GLuint vao;
 static ShaderProgram* pShaderProgram = nullptr;
 
 static float displacement = 0.f;
-
 static float acceleration = 0.001f;
-static const float MAX_ACCELERATION = 0.5f;
-static const float MIN_ACCELERATION = 0.001f;
-
 static bool accelerationFlag = false;
 static bool colorFlag = false;
 
@@ -35,7 +31,7 @@ int main()
 
     registerCallback();
 
-    GLfloat vertices[] = 
+    constexpr GLfloat vertices[] = 
     {
         0.f, 0.577350259f, 0.f, // top
         1.f, 0.f, 0.f, // red
@@ -47,7 +43,7 @@ int main()
         0.f, 0.f, 1.f // blue
     };
 
-    GLuint indices[] = 
+    constexpr GLuint indices[] =
     {  
         0, 1, 2
     };
@@ -177,6 +173,10 @@ void eventDispatch()
 
 void updateShader() 
 {
+    constexpr float TWO_PI = 6.28318530718f;
+    constexpr float MAX_ACCELERATION = 0.5f;
+    constexpr float MIN_ACCELERATION = 0.001f;
+
     if (accelerationFlag)
     {
         acceleration += 0.0015f;
@@ -193,6 +193,9 @@ void updateShader()
     }
 
     displacement += acceleration;
+
+    if (displacement > TWO_PI)
+        displacement -= TWO_PI;
 
     pShaderProgram->setUniform1f("displacement", displacement);
     pShaderProgram->setUniform1i("colorFlag", colorFlag);

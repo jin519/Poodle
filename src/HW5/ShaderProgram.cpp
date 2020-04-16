@@ -100,6 +100,9 @@ void ShaderProgram::__link()
 	glAttachShader(__id, __vertexShader);
 	glAttachShader(__id, __fragmentShader);
 	glLinkProgram(__id);
+
+	__deleteShader();
+
 	glGetProgramiv(__id, GL_LINK_STATUS, &__success);
 	
 	if (!__success)
@@ -109,8 +112,6 @@ void ShaderProgram::__link()
 
 		throw ProgramException(infoLog);
 	}
-
-	__deleteShader();
 }
 
 void ShaderProgram::__deleteShader() 
