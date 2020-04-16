@@ -20,12 +20,7 @@ static void log(const string& msg);
 static GLFWwindow* pWindow = nullptr;
 static GLuint vao;
 static GLuint shaderProgram;
-
-const float RADIUS = 0.5f;
-const float THICKNESS = 0.3f;
-const float ANGLE = 2.f;
-const int VERTEX_SIZE = 180;
-const int SECTOR = 18;
+constexpr int VERTEX_SIZE = 180;
 
 int main()
 {
@@ -158,6 +153,11 @@ void registerCallback()
 
 void createVertices(float* const pVertices) 
 {
+    constexpr float RADIUS = 0.5f;
+    constexpr float THICKNESS = 0.3f;
+    constexpr float ANGLE = 2.f;
+    constexpr int SECTOR = 18;
+
     const float INNER_RADIUS = (RADIUS - THICKNESS);
     const int COUNT = (VERTEX_SIZE / SECTOR);
     const float UNIT_ANGLE = (ANGLE / static_cast<float>(COUNT));
@@ -171,26 +171,32 @@ void createVertices(float* const pVertices)
         // 0 
         pVertices[OFFSET] = (RADIUS * sinf(LEFT_ANGLE));
         pVertices[OFFSET + 1] = (RADIUS * cosf(LEFT_ANGLE));
+        pVertices[OFFSET + 2] = 0.f;
 
         // 1
         pVertices[OFFSET + 3] = (INNER_RADIUS * sinf(LEFT_ANGLE));
         pVertices[OFFSET + 4] = (INNER_RADIUS * cosf(LEFT_ANGLE));
-
+        pVertices[OFFSET + 5] = 0.f;
+        
         // 2
         pVertices[OFFSET + 6] = (RADIUS * sinf(RIGHT_ANGLE));
         pVertices[OFFSET + 7] = (RADIUS * cosf(RIGHT_ANGLE));
+        pVertices[OFFSET + 8] = 0.f;
 
         // 3
         pVertices[OFFSET + 9] = pVertices[OFFSET + 6];
         pVertices[OFFSET + 10] = pVertices[OFFSET + 7];
+        pVertices[OFFSET + 11] = 0.f;
 
         // 4
         pVertices[OFFSET + 12] = pVertices[OFFSET + 3];
         pVertices[OFFSET + 13] = pVertices[OFFSET + 4];
+        pVertices[OFFSET + 14] = 0.f;
 
         // 5
         pVertices[OFFSET + 15] = (INNER_RADIUS * sinf(RIGHT_ANGLE));
         pVertices[OFFSET + 16] = (INNER_RADIUS * cosf(RIGHT_ANGLE));
+        pVertices[OFFSET + 17] = 0.f;
     }
 }
 
