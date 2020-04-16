@@ -10,8 +10,8 @@ static bool initGL();
 static void registerCallback();
 static void startMainLoop();
 static void releaseGL();
-static void framebufferSizeCallback(GLFWwindow* pWindow, int width, int height);
-static void keyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mods);
+static void framebufferSizeCallback(GLFWwindow* pWindow, const int width, const int height);
+static void keyCallback(GLFWwindow* pWindow, const int key, const int scancode, const int action, const int mods);
 static void eventDispatch();
 static void render();
 static void log(const string& msg);
@@ -28,22 +28,21 @@ int main()
     registerCallback();
 
     cout << "화면에 정삼각형을 그리는 프로그램입니다." << endl;
-    cout << "변의 길이(정수)를 입력하세요: ";
+    cout << "변의 길이(float 타입 실수)를 입력하세요: ";
     
-    int side = 0;
+    float side = 0;
     cin >> side;
-    const float CASTED_SIDE = static_cast<float>(side);
 
-    float vertices[] = 
+    const float vertices[] = 
     { 
         // top
-        0.f, ((sqrtf(3.f) / 3.f) * CASTED_SIDE), 0.f,
+        0.f, ((sqrtf(3.f) / 3.f) * side), 0.f,
 
         // left
-       -(0.5f * CASTED_SIDE), -((sqrtf(3.f) / 6.f) * CASTED_SIDE), 0.f,
+       -(0.5f * side), -((sqrtf(3.f) / 6.f) * side), 0.f,
 
         // right
-        (0.5f * CASTED_SIDE), -((sqrtf(3.f) / 6.f) * CASTED_SIDE), 0.f
+        (0.5f * side), -((sqrtf(3.f) / 6.f) * side), 0.f
     };
 
     glGenVertexArrays(1, &vao);
@@ -66,11 +65,13 @@ int main()
 
     const string &vertexShaderSource = TextReader::read("triangle_vert.glsl");
     const char* const pRawVertexShaderSource = vertexShaderSource.c_str();
+
     glShaderSource(vertexShader, 1, &pRawVertexShaderSource, nullptr);
     glCompileShader(vertexShader);
 
     GLint success;
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+
     if (!success)
     {
         GLchar infoLog[512];
@@ -89,6 +90,7 @@ int main()
     glCompileShader(fragmentShader);
 
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+
     if (!success)
     {
         GLchar infoLog[512];
@@ -101,11 +103,19 @@ int main()
     }
 
     shaderProgram = glCreateProgram();
+
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
 
+    glDeleteShader(vertexShader);
+    vertexShader = 0U;
+
+    glDeleteShader(fragmentShader);
+    fragmentShader = 0U;
+
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+
     if (!success) 
     {
         GLchar infoLog[512];
@@ -118,12 +128,7 @@ int main()
     }
 
     glUseProgram(shaderProgram);
-
-    glDeleteShader(vertexShader);
-    vertexShader = 0U;
-
-    glDeleteShader(fragmentShader);
-    fragmentShader = 0U;
+    glClearColor(0.2f, 0.3f, 0.3f, 1.f);
 
     startMainLoop();
     releaseGL();
@@ -180,14 +185,14 @@ void releaseGL()
     glfwTerminate();
 }
 
-void framebufferSizeCallback(GLFWwindow* pWindow, int width, int height)
+void framebufferSizeCallback(GLFWwindow* const pWindow, const int width, const int height)
 {
     glViewport(0, 0, width, height);
 }
 
-void keyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mods)
+void keyCallback(GLFWwindow* const pWindow, const int key, const int scancode, const int action, const int mods)
 {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
     {
         glfwSetWindowShouldClose(pWindow, true);
         log("ESC 키를 누르셨습니다.");
@@ -201,7 +206,6 @@ void eventDispatch()
 
 void render()
 {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shaderProgram);
