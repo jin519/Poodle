@@ -22,11 +22,7 @@ static GLuint vao;
 static GLuint shaderProgram;
 
 static float displacement = 0.f;
-
 static float acceleration = 0.001f;
-static const float MAX_ACCELERATION = 0.5f;
-static const float MIN_ACCELERATION = 0.001f;
-
 static bool accelerationFlag = false;
 static bool colorFlag = false;
 
@@ -37,7 +33,7 @@ int main()
 
     registerCallback();
 
-    GLfloat vertices[] = 
+    constexpr GLfloat vertices[] = 
     {
         0.f, 0.577350259f, 0.f, // top
         1.f, 0.f, 0.f, // red
@@ -84,11 +80,13 @@ int main()
 
     const string &vertexShaderSource = TextReader::read("triangle_vert.glsl");
     const char* const pRawVertexShaderSource = vertexShaderSource.c_str();
+
     glShaderSource(vertexShader, 1, &pRawVertexShaderSource, nullptr);
     glCompileShader(vertexShader);
 
     GLint success;
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+
     if (!success)
     {
         GLchar infoLog[512];
@@ -103,10 +101,12 @@ int main()
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     const string& fragShaderSource = TextReader::read("triangle_frag.glsl");
     const char* const pRawFragShaderSource = fragShaderSource.c_str();
+    
     glShaderSource(fragmentShader, 1, &pRawFragShaderSource, nullptr);
     glCompileShader(fragmentShader);
 
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+
     if (!success)
     {
         GLchar infoLog[512];
@@ -119,11 +119,19 @@ int main()
     }
 
     shaderProgram = glCreateProgram();
+
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
 
+    glDeleteShader(vertexShader);
+    vertexShader = 0U;
+
+    glDeleteShader(fragmentShader);
+    fragmentShader = 0U;
+
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    
     if (!success) 
     {
         GLchar infoLog[512];
@@ -134,12 +142,6 @@ int main()
 
         return -1;
     }
-
-    glDeleteShader(vertexShader);
-    vertexShader = 0U;
-
-    glDeleteShader(fragmentShader);
-    fragmentShader = 0U;
 
     startMainLoop();
     releaseGL();
@@ -233,6 +235,10 @@ void eventDispatch()
 
 void updateShader() 
 {
+    constexpr float TWO_PI = 6.28318530718f;
+    constexpr float MAX_ACCELERATION = 0.5f;
+    constexpr float MIN_ACCELERATION = 0.001f;
+
     if (accelerationFlag)
     {
         acceleration += 0.000001f;
@@ -249,6 +255,9 @@ void updateShader()
     }
 
     displacement += acceleration;
+
+    if (displacement > TWO_PI)
+        displacement -= TWO_PI;
 
     glUseProgram(shaderProgram);
     glUniform1f(0, displacement);
