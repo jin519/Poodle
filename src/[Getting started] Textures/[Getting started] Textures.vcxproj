@@ -148,16 +148,18 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ProgramException.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="TextReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProgramException.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="TextReader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="triangle_frag.glsl" />
-    <None Include="triangle_vert.glsl" />
+    <None Include="rectangle_frag.glsl" />
+    <None Include="rectangle_vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

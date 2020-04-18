@@ -15,40 +15,55 @@
     <Filter Include="소스 파일\util">
       <UniqueIdentifier>{6003c8f2-6bae-4cda-be40-eab4b143a6b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\3rd party">
+      <UniqueIdentifier>{04df78cb-d0c9-4972-a403-0d304febfd66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\core">
+      <UniqueIdentifier>{4e980500-d141-4ba4-be32-7514d0752f24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\core\program">
+      <UniqueIdentifier>{ea3c1a56-50b0-4f76-9202-09a43717f23e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ProgramException.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderProgram.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TextReader.cpp">
       <Filter>소스 파일\util</Filter>
     </ClCompile>
     <ClCompile Include="glad\src\glad.c">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\3rd party</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.cpp">
+      <Filter>소스 파일\3rd party</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramException.cpp">
+      <Filter>소스 파일\core\program</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>소스 파일\core\program</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ProgramException.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderProgram.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TextReader.h">
       <Filter>소스 파일\util</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>소스 파일\3rd party</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramException.h">
+      <Filter>소스 파일\core\program</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>소스 파일\core\program</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="triangle_frag.glsl">
+    <None Include="rectangle_frag.glsl">
       <Filter>소스 파일\shader</Filter>
     </None>
-    <None Include="triangle_vert.glsl">
+    <None Include="rectangle_vert.glsl">
       <Filter>소스 파일\shader</Filter>
     </None>
   </ItemGroup>

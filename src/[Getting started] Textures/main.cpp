@@ -1,4 +1,5 @@
 #include "ShaderProgram.h"
+#include "stb_image.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 
@@ -17,16 +18,9 @@ static void log(const string& msg);
 
 static GLFWwindow* pWindow = nullptr;
 static GLuint vao;
+GLuint texture1;
+GLuint texture2;
 static ShaderProgram* pShaderProgram = nullptr;
-
-static float displacement = 0.f;
-
-static float acceleration = 0.001f;
-static const float MAX_ACCELERATION = 0.5f;
-static const float MIN_ACCELERATION = 0.001f;
-
-static bool accelerationFlag = false;
-static bool colorFlag = false;
 
 int main()
 {
@@ -35,21 +29,32 @@ int main()
 
     registerCallback();
 
-    GLfloat vertices[] = 
+    constexpr GLfloat vertices[] = 
     {
-        0.f, 0.577350259f, 0.f, // top
-        1.f, 0.f, 0.f, // red
+        // top-left
+        -0.5f, 0.5f, 0.f, // pos
+        1.f, 0.f, 0.f, // vert-color
+        0.f, 1.f, // tex-coordinate
 
-        -0.5f, -0.288675129f, 0.f, // left,
-        0.f, 1.f, 0.f, // green
+        // top-right
+        0.5f, 0.5f, 0.f,
+        0.f, 1.f, 0.f, 
+        1.f, 1.f, 
 
-        0.5f, -0.288675129f, 0.f, // right
-        0.f, 0.f, 1.f // blue
+        // bottom-right
+        0.5f, -0.5f, 0.f,
+        0.f, 0.f, 1.f,
+        1.f, 0.f, 
+
+        // bottom-left
+        -0.5f, -0.5f, 0.f,
+        1.f, 1.f, 0.f,
+        0.f, 0.f
     };
 
-    GLuint indices[] = 
-    {  
-        0, 1, 2
+    constexpr GLuint indices[] = 
+    { 
+        0, 3, 2, 1, 0, 2
     };
    
     glGenVertexArrays(1, &vao);
@@ -67,17 +72,111 @@ int main()
 
     glVertexAttribPointer(
         0, 3, GL_FLOAT, GL_FALSE,
-        6 * sizeof(float), reinterpret_cast<const void *>(0));
+        8 * sizeof(float), reinterpret_cast<const void *>(0));
     glEnableVertexAttribArray(0);
 
     glVertexAttribPointer(
         1, 3, GL_FLOAT, GL_FALSE,
-        6 * sizeof(float), reinterpret_cast<const void*>(3 * sizeof(float)));
+        8 * sizeof(float), reinterpret_cast<const void*>(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(
+        2, 2, GL_FLOAT, GL_FALSE,
+        8 * sizeof(float), reinterpret_cast<const void*>(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
 
-    pShaderProgram = new ShaderProgram("triangle_vert.glsl", "triangle_frag.glsl");
+    int width, height, nrChannels;
+    stbi_set_flip_vertically_on_load(true);
+    stbi_uc* pImg = stbi_load("./res/container.png", &width, &height, &nrChannels, 0);
+
+    if (!pImg) 
+    {
+        log("이미지 로드에 실패하였습니다.");
+        return -1;
+    }
+
+    // 1. 텍스처 오브젝트 생성
+    glGenTextures(1, &texture1);
+    glGenTextures(1, &texture2);
+
+    // 2. 텍스처 바인드
+    glBindTexture(GL_TEXTURE_2D, texture1);
+
+    GLenum format;
+    switch (nrChannels)
+    {
+    case 1:
+        format = GL_RED;
+        break;
+    case 3:
+        format = GL_RGB;
+        break;
+    case 4:
+        format = GL_RGBA;
+    }
+
+    // 3. 텍스처 메모리 할당(GPU 전송)
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pImg);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    //// 이 경우 추가적으로 border 색까지 입력해 주어야 한다.
+    //GLfloat textureBorderColor[] =
+    //{
+    //    1.f, 0.f, 0.f, 1.f
+    //};
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    //glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, textureBorderColor);
+
+    // 4. 텍스처 파라미터 설정
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    stbi_image_free(pImg);
+    pImg = nullptr;
+
+    /////////////////////// 텍스처 2
+
+    glBindTexture(GL_TEXTURE_2D, texture2);
+
+    pImg = stbi_load("./res/floral.jpg", &width, &height, &nrChannels, 0);
+
+    if (!pImg)
+    {
+        log("이미지 로드에 실패하였습니다.");
+        return -1;
+    }
+
+    switch (nrChannels)
+    {
+    case 1:
+        format = GL_RED;
+        break;
+    case 3:
+        format = GL_RGB;
+        break;
+    case 4:
+        format = GL_RGBA;
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pImg);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    stbi_image_free(pImg);
+    pImg = nullptr;
+
+    /////////////////////// 텍스처 2 끝
+
+    pShaderProgram = new ShaderProgram("rectangle_vert.glsl", "rectangle_frag.glsl");
 
     startMainLoop();
     releaseGL();
@@ -153,21 +252,6 @@ void keyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mod
         log("ESC 키를 누르셨습니다. 프로그램을 종료합니다.");
         glfwSetWindowShouldClose(pWindow, true);
     }
-    else if ((key == GLFW_KEY_SPACE) && (action == GLFW_PRESS))
-    {
-        log("SPACE 키를 누르셨습니다. 속도가 점진적으로 증가합니다.");
-        accelerationFlag = true;
-    }
-    else if ((key == GLFW_KEY_SPACE) && (action == GLFW_RELEASE)) 
-    {
-        log("SPACE 키가 해제되었습니다. 속도가 점진적으로 감소합니다.");
-        accelerationFlag = false;
-    }
-    else if ((key == GLFW_KEY_1) && (action == GLFW_PRESS)) 
-    {
-        log("1번 키를 누르셨습니다. 색상이 변경됩니다.");
-        colorFlag = !colorFlag;
-    }
 }
 
 void eventDispatch()
@@ -177,33 +261,8 @@ void eventDispatch()
 
 void updateShader() 
 {
-    if (accelerationFlag)
-    {
-        acceleration += 0.0015f;
-
-        if (acceleration > MAX_ACCELERATION)
-            acceleration = MAX_ACCELERATION;
-    }
-    else 
-    {
-        acceleration -= 0.0015f;
-
-        if (acceleration < MIN_ACCELERATION)
-            acceleration = MIN_ACCELERATION;
-    }
-
-    displacement += acceleration;
-
-    pShaderProgram->setUniform1f("displacement", displacement);
-    pShaderProgram->setUniform1i("colorFlag", colorFlag);
-
-    if (colorFlag) 
-    {
-        const float ACCUMULATED_TIME = static_cast<float>(glfwGetTime());
-        const float COLOR = ((sinf(ACCUMULATED_TIME) + 1.f) * 0.5f);
-
-        pShaderProgram->setUniform3f("uniformColor", COLOR, 0.f, 0.f);
-    }
+    pShaderProgram->setUniform1i("tex1", 0);
+    pShaderProgram->setUniform1i("tex2", 1);
 }
 
 void render()
@@ -211,8 +270,14 @@ void render()
     glClear(GL_COLOR_BUFFER_BIT);
 
     pShaderProgram->bind();
+
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    glActiveTexture(GL_TEXTURE1);
+
     glBindVertexArray(vao);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, reinterpret_cast<const void*>(0));
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, reinterpret_cast<const void*>(0));
 }
 
 void log(const string& msg)
