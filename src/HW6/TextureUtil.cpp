@@ -3,6 +3,7 @@
 
 using namespace std;
 
+/* static function */
 shared_ptr<Texture2D> TextureUtil::createTexture2DFromImage(
 	const string& imagePath, GLint mipmapLevel, bool autoMipmapCreation) 
 {

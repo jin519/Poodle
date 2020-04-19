@@ -185,11 +185,8 @@ void render()
 
     pShaderProgram->bind();
     
-    pTex1->activate(GL_TEXTURE0);
-    pTex1->bind();
-    
-    pTex2->activate(GL_TEXTURE1);
-    pTex2->bind();
+    pTex1->activate(0);
+    pTex2->activate(1);
 
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, reinterpret_cast<const void*>(0));

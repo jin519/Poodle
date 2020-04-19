@@ -6,12 +6,10 @@
 #include "stb_image.h"
 #include "Texture2D.h"
 
-class TextureUtil abstract
+class TextureUtil abstract final
 {
 public:
-	TextureUtil() = delete;
-	~TextureUtil() = delete;
-
+	/* static function */
 	static std::shared_ptr<Texture2D> createTexture2DFromImage(
 		const std::string& imagePath,
 		GLint mipmapLevel = 0,

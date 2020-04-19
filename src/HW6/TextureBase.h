@@ -13,11 +13,13 @@ public:
 	/* destructor */
 	virtual ~TextureBase();
 
+	/* static function */
+	static void unbind(const GLenum type);
+
 	/* member function */
 	TextureBase& operator=(const TextureBase& rhs) = delete;
 	TextureBase& operator=(TextureBase&& rhs) = delete;
 	void bind();
-	static void unbind(const GLenum type);
 	void activate(const GLuint index);
 	void setParameteri(const GLenum paramName, const GLint paramValue);
 	void setParameterfv(const GLenum paramName, const GLfloat* const pParamValues);
