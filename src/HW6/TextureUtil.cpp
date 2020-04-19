@@ -16,7 +16,6 @@ shared_ptr<Texture2D> TextureUtil::createTexture2DFromImage(
 		throw TextureException("Image loading failed.");
 
     shared_ptr<Texture2D> retVal = make_shared<Texture2D>();
-    retVal->bind();
 
     GLenum format;
     switch (channels) 
