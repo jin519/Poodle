@@ -10,12 +10,7 @@ public:
 		const GLuint location,
 		const VertexAttributeDataStructure& dataStructure,
 		const GLsizei stride,
-		const GLsizei offset) :
-		location(location), 
-		dataStructure(dataStructure), 
-		stride(stride), 
-		offset(offset)
-	{}
+		const GLsizei offset);
 
 	/* member variable */
 	GLuint location;
@@ -23,3 +18,15 @@ public:
 	GLsizei stride;
 	GLsizei offset;
 };
+
+/* constructor */
+constexpr VertexAttribute::VertexAttribute(
+	const GLuint location,
+	const VertexAttributeDataStructure& dataStructure,
+	const GLsizei stride,
+	const GLsizei offset) :
+	location(location),
+	dataStructure(dataStructure),
+	stride(stride),
+	offset(offset)
+{}

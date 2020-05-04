@@ -157,6 +157,7 @@
     <ClCompile Include="TextureBase.cpp" />
     <ClCompile Include="TextureException.cpp" />
     <ClCompile Include="TextureUtil.cpp" />
+    <ClCompile Include="VertexAttributeDataStructureFactory.cpp" />
     <ClCompile Include="VertexAttributeListFactory.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>

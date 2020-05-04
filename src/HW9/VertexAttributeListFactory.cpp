@@ -18,7 +18,7 @@ vector<VertexAttribute> VertexAttributeListFactory::get(const VertexAttributeFla
 		const GLsizei MEM_SIZE = DATA_STRUCTURE.memSize();
 
 		stride += MEM_SIZE;
-		retVal.emplace_back(VertexAttribute{ location++, DATA_STRUCTURE, 0, 0 });
+		retVal.emplace_back(location++, DATA_STRUCTURE, 0, 0);
 		offset += MEM_SIZE;
 	}
 	
@@ -28,7 +28,7 @@ vector<VertexAttribute> VertexAttributeListFactory::get(const VertexAttributeFla
 		const GLsizei MEM_SIZE = DATA_STRUCTURE.memSize();
 
 		stride += MEM_SIZE;
-		retVal.emplace_back(VertexAttribute{ location++, DATA_STRUCTURE, 0, offset });
+		retVal.emplace_back(location++, DATA_STRUCTURE, 0, offset);
 		offset += MEM_SIZE;
 	}
 
@@ -38,7 +38,7 @@ vector<VertexAttribute> VertexAttributeListFactory::get(const VertexAttributeFla
 		const GLsizei MEM_SIZE = DATA_STRUCTURE.memSize();
 
 		stride += MEM_SIZE;
-		retVal.emplace_back(VertexAttribute{ location++, DATA_STRUCTURE, 0, offset });
+		retVal.emplace_back(location++, DATA_STRUCTURE, 0, offset);
 		offset += MEM_SIZE;
 	}
 
@@ -47,7 +47,7 @@ vector<VertexAttribute> VertexAttributeListFactory::get(const VertexAttributeFla
 		const VertexAttributeDataStructure& DATA_STRUCTURE = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC2);
 
 		stride += DATA_STRUCTURE.memSize();
-		retVal.emplace_back(VertexAttribute{ location++, DATA_STRUCTURE, stride, offset });
+		retVal.emplace_back(location++, DATA_STRUCTURE, stride, offset);
 	}
 
 	for (auto& attribute : retVal) 

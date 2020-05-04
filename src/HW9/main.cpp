@@ -67,8 +67,8 @@ int main()
     IndexBuffer ebo;
     ebo.memoryAlloc(indices, sizeof(indices), GL_STATIC_DRAW);
 
-    vector<VertexAttribute> vertexAttributes = VertexAttributeListFactory::get(VertexAttributeFlag::POS3 | VertexAttributeFlag::COLOR4);
-    for (const auto& vertexAttribute : vertexAttributes) 
+    const vector<VertexAttribute>& VERTEX_ATTRIBUTES = VertexAttributeListFactory::get(VertexAttributeFlag::POS3 | VertexAttributeFlag::COLOR4);
+    for (const auto& vertexAttribute : VERTEX_ATTRIBUTES) 
     {
         glVertexAttribPointer(
             vertexAttribute.location, 

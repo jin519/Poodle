@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glad/glad.h>
+
 enum class VertexAttributeFlag : GLuint
 {
 	POS3 = 0b0000'0001U,     /* position attribute */

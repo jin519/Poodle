@@ -80,6 +80,9 @@
     <ClCompile Include="VertexAttributeListFactory.cpp">
       <Filter>소스 파일\core\vertex attribute</Filter>
     </ClCompile>
+    <ClCompile Include="VertexAttributeDataStructureFactory.cpp">
+      <Filter>소스 파일\core\vertex attribute</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
