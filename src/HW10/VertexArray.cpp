@@ -94,5 +94,5 @@ void VertexArray::__drawArrays()
 
 void VertexArray::__drawElements()
 {
-	glDrawElements(__mode, __count, GL_UNSIGNED_INT, reinterpret_cast<const void*>(sizeof(GLuint) * __first));
+	glDrawElements(__mode, __count, __pIndexBuffer->getIndexType(), reinterpret_cast<const void*>(__pIndexBuffer->getIndexStride() * __first));
 }

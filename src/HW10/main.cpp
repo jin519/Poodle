@@ -23,8 +23,8 @@ static void render();
 static void log(const string& msg);
 
 static GLFWwindow* pWindow = nullptr;
-static VertexArray* pVao = nullptr;
-static ShaderProgram* pShaderProgram = nullptr;
+static shared_ptr<VertexArray> pVao;
+static shared_ptr<ShaderProgram> pShaderProgram;
 
 int main()
 {
@@ -57,15 +57,13 @@ int main()
         0, 3, 2, 1, 0, 2
     };
 
-    pVao = new VertexArray(
+    pVao = make_shared<VertexArray>(
         VertexAttributeListFactory::get(VertexAttributeFlag::POS3 | VertexAttributeFlag::COLOR4),
         make_shared<VertexBuffer>(vertices, sizeof(vertices), GL_STATIC_DRAW),
         make_shared<IndexBuffer>(indices, sizeof(indices), GL_STATIC_DRAW),
         (sizeof(indices) / sizeof(indices[0])));
 
-    VertexArray::unbind();
-
-    pShaderProgram = new ShaderProgram("rectangle_vert.glsl", "rectangle_frag.glsl");
+    pShaderProgram = make_shared<ShaderProgram>("rectangle_vert.glsl", "rectangle_frag.glsl");
 
     startMainLoop();
     releaseGL();
@@ -80,7 +78,7 @@ bool initGL()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    pWindow = glfwCreateWindow(800, 800, "HW9", nullptr, nullptr);
+    pWindow = glfwCreateWindow(800, 800, "HW10", nullptr, nullptr);
 
     if (!pWindow)
     {
@@ -122,11 +120,8 @@ void startMainLoop()
 
 void releaseGL() 
 {
-    delete pVao;
-    pVao = nullptr;
-
-    delete pShaderProgram;
-    pShaderProgram = nullptr;
+    pVao.reset();
+    pShaderProgram.reset();
 
     glfwTerminate();
 }

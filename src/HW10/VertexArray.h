@@ -42,8 +42,8 @@ private:
 
 	/* member variable */
 	GLuint __id;
-	const std::shared_ptr<VertexBuffer> __pVertexBuffer = nullptr;
-	const std::shared_ptr<IndexBuffer> __pIndexBuffer = nullptr;
+	const std::shared_ptr<VertexBuffer> __pVertexBuffer;
+	const std::shared_ptr<IndexBuffer> __pIndexBuffer;
 	GLenum __mode = GL_TRIANGLES;
 	GLint __first = 0;
 	GLsizei __count;
