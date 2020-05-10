@@ -37,6 +37,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HW9", "HW9\HW9.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HW10", "HW10\HW10.vcxproj", "{694756CC-7F76-456E-9F35-6ABCFB53EC93}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "[Getting started] Coordinate Systems", "[Getting started] Coordinate Systems\[Getting started] Coordinate Systems.vcxproj", "{779A74C1-E24E-4A35-A49F-9C83FF0AAF8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -181,6 +183,14 @@ Global
 		{694756CC-7F76-456E-9F35-6ABCFB53EC93}.Release|x64.Build.0 = Release|x64
 		{694756CC-7F76-456E-9F35-6ABCFB53EC93}.Release|x86.ActiveCfg = Release|Win32
 		{694756CC-7F76-456E-9F35-6ABCFB53EC93}.Release|x86.Build.0 = Release|Win32
+		{779A74C1-E24E-4A35-A49F-9C83FF0AAF8E}.Debug|x64.ActiveCfg = Debug|x64
+		{779A74C1-E24E-4A35-A49F-9C83FF0AAF8E}.Debug|x64.Build.0 = Debug|x64
+		{779A74C1-E24E-4A35-A49F-9C83FF0AAF8E}.Debug|x86.ActiveCfg = Debug|Win32
+		{779A74C1-E24E-4A35-A49F-9C83FF0AAF8E}.Debug|x86.Build.0 = Debug|Win32
+		{779A74C1-E24E-4A35-A49F-9C83FF0AAF8E}.Release|x64.ActiveCfg = Release|x64
+		{779A74C1-E24E-4A35-A49F-9C83FF0AAF8E}.Release|x64.Build.0 = Release|x64
+		{779A74C1-E24E-4A35-A49F-9C83FF0AAF8E}.Release|x86.ActiveCfg = Release|Win32
+		{779A74C1-E24E-4A35-A49F-9C83FF0AAF8E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
