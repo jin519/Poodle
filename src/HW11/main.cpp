@@ -29,6 +29,13 @@ static shared_ptr<VertexArray> pVao;
 static shared_ptr<ShaderProgram> pShaderProgram;
 static shared_ptr<Texture2D> pTexture;
 
+static bool wFlag = false;
+static bool sFlag = false;
+static bool qFlag = false;
+static bool eFlag = false;
+static bool aFlag = false;
+static bool dFlag = false;
+
 int main()
 {
     if (!initGL())
@@ -223,6 +230,85 @@ void keyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mod
         log("ESC 키를 누르셨습니다. 프로그램을 종료합니다.");
         glfwSetWindowShouldClose(pWindow, true);
     }
+
+    if (key == GLFW_KEY_W)
+    {
+        if (action == GLFW_PRESS)
+        {
+            log("W 키를 누르셨습니다. 씬이 가까워 집니다.");
+            wFlag = true;
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            log("W 키가 해제되었습니다.");
+            wFlag = false;
+        }
+    }
+    else if (key == GLFW_KEY_S)
+    {
+        if (action == GLFW_PRESS)
+        {
+            log("S 키를 누르셨습니다. 씬이 멀어집니다.");
+            sFlag = true;
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            log("S 키가 해제되었습니다.");
+            sFlag = false;
+        }
+    }
+    else if (key == GLFW_KEY_Q)
+    {
+        if (action == GLFW_PRESS)
+        {
+            log("Q 키를 누르셨습니다. 카메라가 아래로 이동합니다.");
+            qFlag = true;
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            log("Q 키가 해제되었습니다.");
+            qFlag = false;
+        }
+    }
+    else if (key == GLFW_KEY_E)
+    {
+        if (action == GLFW_PRESS)
+        {
+            log("E 키를 누르셨습니다. 카메라가 위로 이동합니다.");
+            eFlag = true;
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            log("E 키가 해제되었습니다.");
+            eFlag = false;
+        }
+    }
+    else if (key == GLFW_KEY_A)
+    {
+        if (action == GLFW_PRESS)
+        {
+            log("A 키를 누르셨습니다. 카메라가 왼쪽으로 이동합니다.");
+            aFlag = true;
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            log("A 키가 해제되었습니다.");
+            aFlag = false;
+        }
+    }
+    else if (key == GLFW_KEY_D)
+    {
+        if (action == GLFW_PRESS)
+        {
+            log("D 키를 누르셨습니다. 카메라가 오른쪽으로 이동합니다.");
+            dFlag = true;
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            log("D 키가 해제되었습니다.");
+            dFlag = false;
+        }
+    }
 }
 
 void eventDispatch()
@@ -233,11 +319,65 @@ void eventDispatch()
 void updateShader() 
 {
     mat4 modelMat{ 1.f };
+    mat4 viewMat{ 1.f };
+    mat4 projectionMat{ 1.f };
 
     const float ELAPSED_TIME = static_cast<float>(glfwGetTime());
     modelMat = rotate(modelMat, ELAPSED_TIME, vec3{ 1.f, 1.f, 1.f });
 
+    static float sceneX = 0.f;
+    static float sceneY = 0.f;
+    static float sceneZ = -3.f;
+
+    if (wFlag)
+    {
+        sceneZ += 0.05f;
+
+        if (sceneZ > -1.f)
+            sceneZ = -1.f;
+    }
+    else if (sFlag)
+    {
+        sceneZ -= 0.05f;
+
+        if (sceneZ < -5.f)
+            sceneZ = -5.f;
+    }
+    else if (qFlag)
+    {
+        sceneY += 0.02f;
+
+        if (sceneY > 1.f)
+            sceneY = 1.f;
+    }
+    else if (eFlag)
+    {
+        sceneY -= 0.02f;
+
+        if (sceneY < -1.f)
+            sceneY = -1.f;
+    }
+    else if (aFlag)
+    {
+        sceneX += 0.02f;
+
+        if (sceneX > 1.f)
+            sceneX = 1.f;
+    }
+    else if (dFlag)
+    {
+        sceneX -= 0.02f;
+
+        if (sceneX < -1.f)
+            sceneX = -1.f;
+    }
+
+    viewMat = translate(viewMat, vec3{ sceneX, sceneY, sceneZ });
+    projectionMat = perspective(quarter_pi<float>(), (float(WIDTH) / float(HEIGHT)), 0.1f, 100.f);
+
     pShaderProgram->setUniformMatrix4f("modelMat", modelMat);
+    pShaderProgram->setUniformMatrix4f("viewMat", viewMat);
+    pShaderProgram->setUniformMatrix4f("projectionMat", projectionMat);
     pShaderProgram->setUniform1i("tex", 0);
 }
 
