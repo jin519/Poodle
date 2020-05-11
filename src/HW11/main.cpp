@@ -155,8 +155,6 @@ int main()
 
     pShaderProgram = make_shared<ShaderProgram>("rectangle_vert.glsl", "rectangle_frag.glsl");
 
-    glEnable(GL_DEPTH_TEST);
-
     startMainLoop();
     releaseGL();
 
@@ -189,6 +187,7 @@ bool initGL()
     }
 
     glfwSwapInterval(1); // VSYNC 0: off, 1: on
+    glEnable(GL_DEPTH_TEST);
 
     return true;
 }
@@ -330,49 +329,25 @@ void updateShader()
     static float sceneZ = -3.f;
 
     if (wFlag)
-    {
         sceneZ += 0.05f;
-
-        if (sceneZ > -1.f)
-            sceneZ = -1.f;
-    }
     else if (sFlag)
-    {
         sceneZ -= 0.05f;
-
-        if (sceneZ < -5.f)
-            sceneZ = -5.f;
-    }
     else if (qFlag)
-    {
         sceneY += 0.02f;
-
-        if (sceneY > 1.f)
-            sceneY = 1.f;
-    }
     else if (eFlag)
-    {
         sceneY -= 0.02f;
-
-        if (sceneY < -1.f)
-            sceneY = -1.f;
-    }
     else if (aFlag)
-    {
         sceneX += 0.02f;
-
-        if (sceneX > 1.f)
-            sceneX = 1.f;
-    }
     else if (dFlag)
-    {
         sceneX -= 0.02f;
 
-        if (sceneX < -1.f)
-            sceneX = -1.f;
-    }
+    viewMat = translate(
+        viewMat, 
+        vec3{ 
+            clamp<float>(sceneX, -1.f, 1.f), 
+            clamp<float>(sceneY, -1.f, 1.f),
+            clamp<float>(sceneZ, -5.f, -1.f) });
 
-    viewMat = translate(viewMat, vec3{ sceneX, sceneY, sceneZ });
     projectionMat = perspective(quarter_pi<float>(), (float(WIDTH) / float(HEIGHT)), 0.1f, 100.f);
 
     pShaderProgram->setUniformMatrix4f("modelMat", modelMat);
@@ -387,8 +362,6 @@ void render()
 
     pShaderProgram->bind();
     pTexture->activate(0);
-    pTexture->bind();
-
     pVao->draw();
 }
 
