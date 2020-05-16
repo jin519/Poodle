@@ -33,10 +33,10 @@ GLWindow::GLWindow(
 	if (!__pWindow)
 		throw GLWindowException("Failed to create GLFW window.");
 
+	getWindowMap().emplace(__pWindow, this);
+
 	glfwSetFramebufferSizeCallback(__pWindow, framebufferSizeCallback);
 	glfwSetKeyCallback(__pWindow, keyCallback);
-
-	getWindowMap().emplace(__pWindow, this);
 }
 
 /* destructor */
