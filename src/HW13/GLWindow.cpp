@@ -11,12 +11,12 @@ static unordered_map<GLFWwindow*, GLWindow*>& getWindowMap()
 	return windowMap;
 }
 
-static void framebufferSizeCallback(GLFWwindow* pWindow, int width, int height)
+static void framebufferSizeCallback(GLFWwindow* const pWindow, const int width, const int height)
 {
 	getWindowMap().at(pWindow)->getEventHandler().onResize(width, height);
 }
 
-static void keyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mods)
+static void keyCallback(GLFWwindow* const pWindow, const int key, const int scancode, const int action, const int mods)
 {
 	getWindowMap().at(pWindow)->getEventHandler().onKey(key, scancode, action, mods);
 }
@@ -42,7 +42,7 @@ GLWindow::GLWindow(
 /* destructor */
 GLWindow::~GLWindow() 
 {
-	setCloseFlag(true);
+	glfwDestroyWindow(__pWindow);
 	getWindowMap().erase(__pWindow);
 }
 
@@ -54,10 +54,12 @@ void GLWindow::bind()
 	
 void GLWindow::startMainLoop() 
 {
+	GLWindow* const pWindow = getWindowMap().at(__pWindow);
+
 	while (!glfwWindowShouldClose(__pWindow))
 	{
 		glfwPollEvents();
-		getWindowMap().at(__pWindow)->getEventHandler().onIdle(static_cast<float>(glfwGetTime()));
+		pWindow->getEventHandler().onIdle(static_cast<float>(glfwGetTime()));
 	}
 }
 

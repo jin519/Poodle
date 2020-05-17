@@ -10,7 +10,7 @@ public:
 	explicit Scene(GLWindow& window);
 
 	/* member function */
-	GLWindow* getWindow() const;
+	constexpr GLWindow& getWindow() const;
 	virtual void onUpdate(const float deltaTime) = 0;
 	virtual void onRender() = 0;
 	virtual void onResize(const int width, const int height) override;
@@ -20,3 +20,8 @@ private:
 	/* member variable */
 	GLWindow* __pWindow = nullptr;
 };
+
+constexpr GLWindow& Scene::getWindow() const 
+{
+	return *__pWindow;
+}

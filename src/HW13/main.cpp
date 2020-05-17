@@ -17,8 +17,8 @@ int main()
     pWindow->setEventHandler(*pScene);
     pWindow->startMainLoop();
 
-    pWindow.release();
     pScene.release();
+    pWindow.release();
     
     GLInitializer::releaseGL();
 

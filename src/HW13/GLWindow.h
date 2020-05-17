@@ -13,7 +13,7 @@ public:
 		const char* const title);
 
 	/* destructor */
-	~GLWindow();
+	virtual ~GLWindow();
 
 	/* member function */
 	void bind();

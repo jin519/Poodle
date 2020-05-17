@@ -19,7 +19,7 @@ void TestScene::onKey(const int key, const int scancode, const int action, const
     if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
     {
         cout << "ESC 키를 누르셨습니다. 프로그램을 종료합니다." << endl;
-        getWindow()->setCloseFlag(true);
+        getWindow().setCloseFlag(true);
     }
 
     if ((key == GLFW_KEY_ENTER) && (action == GLFW_PRESS))
@@ -31,21 +31,11 @@ void TestScene::onKey(const int key, const int scancode, const int action, const
 
 void TestScene::onUpdate(const float deltaTime) 
 {
-    __pShaderProgram->setUniform1i("tex", 0);
+    const GLWindow& WINDOW = getWindow();
+    const float WIDTH = static_cast<float>(WINDOW.getWidth());
+    const float HEIGHT = static_cast<float>(WINDOW.getHeight());
 
-    mat4 viewMat{ 1.f };
-    viewMat = translate(viewMat, vec3{ 0.f, 0.f, -50.f });
-    __pShaderProgram->setUniformMatrix4f("viewMat", viewMat);
-
-    GLWindow* pWindow = getWindow();
-    const float WIDTH = static_cast<float>(pWindow->getWidth());
-    const float HEIGHT = static_cast<float>(pWindow->getHeight());
-
-    mat4 projectionMat = perspective(quarter_pi<float>(), (WIDTH / HEIGHT), 0.1f, 200.f);
-    __pShaderProgram->setUniformMatrix4f("projectionMat", projectionMat);
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    __pTexture->activate(0);
+    __projectionMat = perspective(quarter_pi<float>(), (WIDTH / HEIGHT), 0.1f, 200.f);
 
     for (auto& cube : __cubes)
     {
@@ -57,21 +47,28 @@ void TestScene::onUpdate(const float deltaTime)
         modelMat = scale(modelMat, vec3{ CUBE.side });
         
         cube.second = modelMat;
-        __pShaderProgram->bind();
-        __pVao->draw();
     }
 }
 
 void TestScene::onRender() 
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    __pTexture->activate(0);
+
+    __pShaderProgram->setUniform1i("tex", 0);
+    __pShaderProgram->setUniformMatrix4f("viewMat", __viewMat);
+    __pShaderProgram->setUniformMatrix4f("projectionMat", __projectionMat);
+    
     for (const auto& cube : __cubes)
     {
         __pShaderProgram->setUniformMatrix4f("modelMat", cube.second);
         __pShaderProgram->bind();
+
         __pVao->draw();
     }
 
-    getWindow()->swapBuffers();
+    getWindow().swapBuffers();
 }
 
 void TestScene::__init() 
@@ -183,13 +180,14 @@ void TestScene::__init()
         static_cast<GLsizei>(size(vertices)));
 
     __pTexture = TextureUtil::createTexture2DFromImage("./res/container.jpg");
-
     __pTexture->setParameteri(GL_TEXTURE_WRAP_S, GL_REPEAT);
     __pTexture->setParameteri(GL_TEXTURE_WRAP_T, GL_REPEAT);
     __pTexture->setParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     __pTexture->setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
     __pShaderProgram = make_shared<ShaderProgram>("rectangle_vert.glsl", "rectangle_frag.glsl");
+    
+    __viewMat = translate(__viewMat, vec3{ 0.f, 0.f, -50.f });
 
     __setCubes();
 }

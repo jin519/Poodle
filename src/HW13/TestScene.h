@@ -26,8 +26,9 @@ private:
 	std::shared_ptr<ShaderProgram> __pShaderProgram;
 	std::shared_ptr<Texture2D> __pTexture;
 	std::array<std::pair<Cube, glm::mat4>, 10> __cubes;
-	std::array<glm::mat4, 10> __modelMat;
 	glm::mat4 __viewMat{ 1.f };
+	glm::mat4 __projectionMat{ 1.f };
+	std::array<glm::mat4, 10> __modelMat;
 
 	/* member function */
 	void __init();
