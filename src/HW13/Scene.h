@@ -19,6 +19,7 @@ public:
 private:
 	/* member variable */
 	GLWindow* __pWindow = nullptr;
+	float __elapsedTime = 0.f;
 };
 
 constexpr GLWindow& Scene::getWindow() const 

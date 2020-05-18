@@ -55,11 +55,27 @@ void GLWindow::bind()
 void GLWindow::startMainLoop() 
 {
 	GLWindow* const pWindow = getWindowMap().at(__pWindow);
+	static float prevElapsedTime = 0.f;
+	bool firstLoop = true;
 
 	while (!glfwWindowShouldClose(__pWindow))
 	{
 		glfwPollEvents();
-		pWindow->getEventHandler().onIdle(static_cast<float>(glfwGetTime()));
+
+		const float ELAPSED_TIME = static_cast<float>(glfwGetTime());
+
+		if (firstLoop)
+		{
+			pWindow->getEventHandler().onIdle(0.f);
+			firstLoop = false;
+		}
+		else
+		{
+			const float DELTA_TIME = (ELAPSED_TIME - prevElapsedTime);
+			pWindow->getEventHandler().onIdle(DELTA_TIME);
+		}
+
+		prevElapsedTime = ELAPSED_TIME;
 	}
 }
 

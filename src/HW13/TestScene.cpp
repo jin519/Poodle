@@ -31,6 +31,9 @@ void TestScene::onKey(const int key, const int scancode, const int action, const
 
 void TestScene::onUpdate(const float deltaTime) 
 {
+    static float elapsedTime = 0.f;
+    elapsedTime += deltaTime;
+
     const GLWindow& WINDOW = getWindow();
     const float WIDTH = static_cast<float>(WINDOW.getWidth());
     const float HEIGHT = static_cast<float>(WINDOW.getHeight());
@@ -43,7 +46,7 @@ void TestScene::onUpdate(const float deltaTime)
         mat4 modelMat{ 1.f };
 
         modelMat = translate(modelMat, CUBE.position);
-        modelMat = rotate(modelMat, (deltaTime * CUBE.rotationSpeed), CUBE.rotationAxis);
+        modelMat = rotate(modelMat, (elapsedTime * CUBE.rotationSpeed), CUBE.rotationAxis);
         modelMat = scale(modelMat, vec3{ CUBE.side });
         
         cube.second = modelMat;
