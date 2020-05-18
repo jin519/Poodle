@@ -156,12 +156,13 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="HW14Scene.cpp" />
+    <ClCompile Include="HW15Scene.cpp" />
     <ClCompile Include="TextReader.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureBase.cpp" />
     <ClCompile Include="TextureException.cpp" />
     <ClCompile Include="TextureUtil.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexArrayException.cpp" />
     <ClCompile Include="VertexAttributeDataStructureFactory.cpp" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="BufferBase.h" />
     <ClInclude Include="BufferException.h" />
+    <ClInclude Include="Constant.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="GLInitializer.h" />
     <ClInclude Include="GLWindow.h" />
@@ -181,12 +183,13 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="HW14Scene.h" />
+    <ClInclude Include="HW15Scene.h" />
     <ClInclude Include="TextReader.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureBase.h" />
     <ClInclude Include="TextureException.h" />
     <ClInclude Include="TextureUtil.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexArrayException.h" />
     <ClInclude Include="VertexAttribute.h" />

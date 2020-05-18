@@ -1,6 +1,7 @@
-#include "HW14Scene.h"
+#include "HW15Scene.h"
 #include "VertexAttributeListFactory.h"
 #include "TextureUtil.h"
+#include "Constant.h"
 #include <iostream>
 #include <random>
 
@@ -8,13 +9,13 @@ using namespace std;
 using namespace glm;
 
 /* constructor */
-HW14Scene::HW14Scene(GLWindow& window) : Scene(window)
+HW15Scene::HW15Scene(GLWindow& window) : Scene(window)
 {
     __init();
 }
 
 /* member function */
-void HW14Scene::onKey(const int key, const int scancode, const int action, const int mods) 
+void HW15Scene::onKey(const int key, const int scancode, const int action, const int mods) 
 {
     if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
     {
@@ -29,7 +30,7 @@ void HW14Scene::onKey(const int key, const int scancode, const int action, const
     }
 }
 
-void HW14Scene::onUpdate(const float deltaTime) 
+void HW15Scene::onUpdate(const float deltaTime) 
 {
     static float elapsedTime = 0.f;
     elapsedTime += deltaTime;
@@ -42,18 +43,15 @@ void HW14Scene::onUpdate(const float deltaTime)
 
     for (auto& cube : __cubes)
     {
-        const Cube& CUBE = cube.first;
-        mat4 modelMat{ 1.f };
+        const vec3& ROTATION = (elapsedTime * cube.rotationSpeed);
+        Transform& transform = cube.transform;
 
-        modelMat = translate(modelMat, CUBE.position);
-        modelMat = rotate(modelMat, (elapsedTime * CUBE.rotationSpeed), CUBE.rotationAxis);
-        modelMat = scale(modelMat, vec3{ CUBE.side });
-        
-        cube.second = modelMat;
+        transform.setRotation(ROTATION);
+        transform.updateMatrix(); 
     }
 }
 
-void HW14Scene::onRender() 
+void HW15Scene::onRender() 
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -65,7 +63,7 @@ void HW14Scene::onRender()
     
     for (const auto& cube : __cubes)
     {
-        __pShaderProgram->setUniformMatrix4f("modelMat", cube.second);
+        __pShaderProgram->setUniformMatrix4f("modelMat", cube.transform.getModelMatrix());
         __pShaderProgram->bind();
 
         __pVao->draw();
@@ -74,7 +72,7 @@ void HW14Scene::onRender()
     getWindow().swapBuffers();
 }
 
-void HW14Scene::__init() 
+void HW15Scene::__init() 
 {
     glfwSwapInterval(1); // VSYNC 0: off, 1: on
     glEnable(GL_DEPTH_TEST);
@@ -195,28 +193,24 @@ void HW14Scene::__init()
     __setCubes();
 }
 
-void HW14Scene::__setCubes() 
+void HW15Scene::__setCubes() 
 {
     static default_random_engine generator;
-    static const uniform_real_distribution<float> RAND_POSITION(-15.f, 15.f);
-    static const uniform_real_distribution<float> RAND_SIDE(0.5f, 5.f);
-    static const uniform_real_distribution<float> RAND_ROTATION_AXIS(-1.f, 1.f);
-    static const uniform_real_distribution<float> RAND_ROTATION_SPEED(0.2f, 5.f);
+    static const uniform_real_distribution<float> RAND_POSITION(MIN_POSITION, MAX_POSITION);
+    static const uniform_real_distribution<float> RAND_SIDE(MIN_SIDE, MAX_SIDE);
+    static const uniform_real_distribution<float> RAND_ROTATION_SPEED(MIN_ROTATION_SPEED, MAX_ROTATION_SPEED);
 
     for (auto& cube : __cubes)
     {
-        Cube& currentCube = cube.first;
+        Transform& transform = cube.transform;
 
-        currentCube.position.x = RAND_POSITION(generator);
-        currentCube.position.y = RAND_POSITION(generator);
-        currentCube.position.z = RAND_POSITION(generator);
+        transform.setPosition(
+            RAND_POSITION(generator), RAND_POSITION(generator), RAND_POSITION(generator));
+        
+        transform.setScale(RAND_SIDE(generator));
 
-        currentCube.side = RAND_SIDE(generator);
-
-        currentCube.rotationAxis.x = RAND_ROTATION_AXIS(generator);
-        currentCube.rotationAxis.y = RAND_ROTATION_AXIS(generator);
-        currentCube.rotationAxis.z = RAND_ROTATION_AXIS(generator);
-
-        currentCube.rotationSpeed = RAND_ROTATION_SPEED(generator);
+        cube.rotationSpeed.x = RAND_ROTATION_SPEED(generator);
+        cube.rotationSpeed.y = RAND_ROTATION_SPEED(generator);
+        cube.rotationSpeed.z = RAND_ROTATION_SPEED(generator);
     }
 }
