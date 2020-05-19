@@ -51,7 +51,7 @@ constexpr void Transform::setPosition(const glm::vec3& position)
 
 constexpr void Transform::adjustPosition(const glm::vec3& delta) 
 {
-	__position += delta; 
+	setPosition((__position.x + delta.x), (__position.y + delta.y), (__position.z + delta.z));
 }
 
 constexpr const glm::vec3& Transform::getRotation() const
@@ -63,26 +63,24 @@ constexpr void Transform::setRotation(const float x, const float y, const float 
 {
 	constexpr float TWO_PI = glm::two_pi<float>();
 
-	if (x < 0.f)
-		__rotation.x = (x + TWO_PI);
-	else if (x > TWO_PI)
-		__rotation.x = (x - TWO_PI);
-	else
-		__rotation.x = x;
+	// constexpr 접두사는 validateAngle 함수 포인터(람다 함수를 가리키는)를 리터럴 상수화 하겠다는 뜻
+    // 뒤쪽의 -> float는 람다식에서 return type을 명시하는 문법. 
+	// 생략시 return 구문을 통해 return type을 자동 추론함.
+	constexpr auto validateAngle = [](const float angle) -> float
+	{
+		constexpr float TWO_PI = glm::two_pi<float>();
 
-	if (y < 0.f)
-		__rotation.y = (y + TWO_PI);
-	else if (y > TWO_PI)
-		__rotation.y = (y - TWO_PI);
-	else
-		__rotation.y = y;
+		if (angle < 0.f)
+			return (angle + TWO_PI);
+		else if (angle > TWO_PI)
+			return  (angle - TWO_PI);
 
-	if (z < 0.f)
-		__rotation.z = (z + TWO_PI);
-	else if (z > TWO_PI)
-		__rotation.z = (z - TWO_PI);
-	else
-		__rotation.z = z;
+		return angle;
+	};
+
+	__rotation.x = validateAngle(x);
+	__rotation.y = validateAngle(y);
+	__rotation.z = validateAngle(z);
 }
 	
 constexpr void Transform::setRotation(const glm::vec3& rotation) 
@@ -102,14 +100,9 @@ constexpr const glm::vec3& Transform::getScale() const
 
 constexpr void Transform::setScale(const float x, const float y, const float z) 
 {
-	__scale.x = x; 
-	glm::clamp(__scale.x, MIN_SCALE, MAX_SCALE);
-
-	__scale.y = y; 
-	glm::clamp(__scale.y, MIN_SCALE, MAX_SCALE);
-
-	__scale.z = z; 
-	glm::clamp(__scale.z, MIN_SCALE, MAX_SCALE);
+	__scale.x = glm::clamp(x, Constant::MIN_SCALE, Constant::MAX_SCALE);
+	__scale.y = glm::clamp(y, Constant::MIN_SCALE, Constant::MAX_SCALE);
+	__scale.z = glm::clamp(z, Constant::MIN_SCALE, Constant::MAX_SCALE);
 }
 
 constexpr void Transform::setScale(const float value)

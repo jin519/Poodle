@@ -196,9 +196,9 @@ void HW15Scene::__init()
 void HW15Scene::__setCubes() 
 {
     static default_random_engine generator;
-    static const uniform_real_distribution<float> RAND_POSITION(MIN_POSITION, MAX_POSITION);
-    static const uniform_real_distribution<float> RAND_SIDE(MIN_SIDE, MAX_SIDE);
-    static const uniform_real_distribution<float> RAND_ROTATION_SPEED(MIN_ROTATION_SPEED, MAX_ROTATION_SPEED);
+    static const uniform_real_distribution<float> RAND_POSITION(Constant::MIN_POSITION, Constant::MAX_POSITION);
+    static const uniform_real_distribution<float> RAND_SIDE(Constant::MIN_SIDE, Constant::MAX_SIDE);
+    static const uniform_real_distribution<float> RAND_ROTATION_SPEED(Constant::MIN_ROTATION_SPEED, Constant::MAX_ROTATION_SPEED);
 
     for (auto& cube : __cubes)
     {
