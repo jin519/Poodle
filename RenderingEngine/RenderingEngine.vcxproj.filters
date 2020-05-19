@@ -66,6 +66,9 @@
     <Filter Include="소스 파일\engine\data structure">
       <UniqueIdentifier>{71a4471c-6151-45fd-ba90-530cde089045}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\engine\core\transform">
+      <UniqueIdentifier>{c0e8e5d6-6fb3-4e6d-bc12-f0a040f43a4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -134,7 +137,10 @@
     <ClCompile Include="Scene.cpp">
       <Filter>소스 파일\engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="HW14Scene.cpp">
+    <ClCompile Include="Transform.cpp">
+      <Filter>소스 파일\engine\core\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="HW15Scene.cpp">
       <Filter>소스 파일\client\demo\scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -214,11 +220,17 @@
     <ClInclude Include="Scene.h">
       <Filter>소스 파일\engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="HW14Scene.h">
-      <Filter>소스 파일\client\demo\scene</Filter>
-    </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>소스 파일\engine\data structure</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>소스 파일\engine\core\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Constant.h">
+      <Filter>소스 파일\engine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="HW15Scene.h">
+      <Filter>소스 파일\client\demo\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
