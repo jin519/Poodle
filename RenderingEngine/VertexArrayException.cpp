@@ -2,12 +2,15 @@
 
 using namespace std;
 
-/* constructor */
-VertexArrayException::VertexArrayException(const string& message) noexcept
-{}
-
-/* member function */
-const char* VertexArrayException::what() const noexcept 
+namespace GLCore
 {
-	return __message.c_str();
+	/* constructor */
+	VertexArrayException::VertexArrayException(const string& message) noexcept
+	{}
+
+	/* member function */
+	const char* VertexArrayException::what() const noexcept
+	{
+		return __message.c_str();
+	}
 }

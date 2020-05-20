@@ -2,13 +2,16 @@
 
 #include "BufferBase.h"
 
-class VertexBuffer : public BufferBase 
+namespace GLCore
 {
-public:
-	/* constructor */
-	VertexBuffer();
-	VertexBuffer(
-		const void* const pData, 
-		const GLsizeiptr size, 
-		const GLenum updatePattern);
-};
+	class VertexBuffer : public BufferBase
+	{
+	public:
+		/* constructor */
+		VertexBuffer();
+		VertexBuffer(
+			const void* const pData,
+			const GLsizeiptr size,
+			const GLenum updatePattern);
+	};
+}

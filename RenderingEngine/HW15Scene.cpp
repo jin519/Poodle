@@ -7,6 +7,8 @@
 
 using namespace std;
 using namespace glm;
+using namespace GLCore;
+using namespace Poodle; 
 
 /* constructor */
 HW15Scene::HW15Scene(GLWindow& window) : Scene(window)

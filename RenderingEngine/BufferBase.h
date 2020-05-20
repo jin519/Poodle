@@ -2,31 +2,34 @@
 
 #include <glad/glad.h>
 
-class BufferBase abstract 
+namespace GLCore
 {
-public:
-	/* constructor */
-	explicit BufferBase(const GLenum type);
-	BufferBase(const BufferBase& src) = delete;
-	BufferBase(BufferBase&& src) noexcept = delete; 
+	class BufferBase abstract
+	{
+	public:
+		/* constructor */
+		explicit BufferBase(const GLenum type);
+		BufferBase(const BufferBase& src) = delete;
+		BufferBase(BufferBase&& src) noexcept = delete;
 
-	/* destructor */
-	virtual ~BufferBase();
+		/* destructor */
+		virtual ~BufferBase();
 
-	/* static function */
-	static void unbind(const GLenum type);
+		/* static function */
+		static void unbind(const GLenum type);
 
-	/* member function */
-	BufferBase& operator=(const BufferBase& rhs) = delete;
-	BufferBase& operator=(BufferBase&& rhs) noexcept = delete;
-	void bind();
-	void memoryAlloc(const void* const pData, const GLsizeiptr size, const GLenum updatePattern);
+		/* member function */
+		BufferBase& operator=(const BufferBase& rhs) = delete;
+		BufferBase& operator=(BufferBase&& rhs) noexcept = delete;
+		void bind();
+		void memoryAlloc(const void* const pData, const GLsizeiptr size, const GLenum updatePattern);
 
-protected:
-	/* member variable */
-	GLuint _id;
+	protected:
+		/* member variable */
+		GLuint _id;
 
-private:
-	/* member variable */
-	GLenum __type;
-};
+	private:
+		/* member variable */
+		GLenum __type;
+	};
+}

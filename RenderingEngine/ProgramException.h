@@ -3,16 +3,19 @@
 #include <string>
 #include <exception>
 
-class ProgramException : public std::exception
+namespace GLCore
 {
-public:
-    /* constructor */
-    ProgramException(const std::string& message) noexcept;
+    class ProgramException : public std::exception
+    {
+    public:
+        /* constructor */
+        ProgramException(const std::string& message) noexcept;
 
-    /* member function */
-    virtual const char* what() const noexcept override;
+        /* member function */
+        virtual const char* what() const noexcept override;
 
-private:
-    /* member variable */
-    const std::string __message;
-};
+    private:
+        /* member variable */
+        const std::string __message;
+    };
+}
