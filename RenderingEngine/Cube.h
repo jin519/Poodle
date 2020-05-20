@@ -3,11 +3,14 @@
 #include <glm/glm.hpp>
 #include "Transform.h"
 
-class Cube 
+namespace Poodle
 {
-public:
-	/* member variable */
-	Transform transform; 
-	float side;
-	glm::vec3 rotationSpeed;
-};
+	class Cube
+	{
+	public:
+		/* member variable */
+		Transform transform;
+		float side;
+		glm::vec3 rotationSpeed;
+	};
+}

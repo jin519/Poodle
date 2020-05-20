@@ -9,11 +9,11 @@
 #include "Texture2D.h"
 #include "Cube.h"
 
-class HW15Scene : public Scene 
+class HW15Scene : public Poodle::Scene 
 {
 public:
 	/* constructor */
-	explicit HW15Scene(GLWindow& window);
+	explicit HW15Scene(GLCore::GLWindow& window);
 
 	/* member function */
 	virtual void onKey(const int key, const int scancode, const int action, const int mods) override;
@@ -22,10 +22,10 @@ public:
 
 private:
 	/* member variable */
-	std::shared_ptr<VertexArray> __pVao;
-	std::shared_ptr<ShaderProgram> __pShaderProgram;
-	std::shared_ptr<Texture2D> __pTexture;
-	std::array<Cube, 10> __cubes;
+	std::shared_ptr<GLCore::VertexArray> __pVao;
+	std::shared_ptr<GLCore::ShaderProgram> __pShaderProgram;
+	std::shared_ptr<GLCore::Texture2D> __pTexture;
+	std::array<Poodle::Cube, 10> __cubes;
 	glm::mat4 __viewMat{ 1.f };
 	glm::mat4 __projectionMat{ 1.f };
 

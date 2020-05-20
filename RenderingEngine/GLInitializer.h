@@ -1,13 +1,16 @@
 #pragma once
 
-class GLInitializer abstract final
+namespace GLCore 
 {
-public:
-	/* static function */
-	static bool initGL(
-		const int renderContextVersionMajor,
-		const int renderContextVersionMinor,
-		const int profileMode);
+	class GLInitializer abstract final
+	{
+	public:
+		/* static function */
+		static bool initGL(
+			const int renderContextVersionMajor,
+			const int renderContextVersionMinor,
+			const int profileMode);
 
-	static void releaseGL();
-};
+		static void releaseGL();
+	};
+}

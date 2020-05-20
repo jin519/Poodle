@@ -4,9 +4,12 @@
 #include "VertexAttribute.h"
 #include "VertexAttributeFlag.h"
 
-class VertexAttributeListFactory abstract final
+namespace Poodle
 {
-public:
-	/* static function */
-	static std::vector<VertexAttribute> get(const VertexAttributeFlag flags);
-};
+	class VertexAttributeListFactory abstract final
+	{
+	public:
+		/* static function */
+		static std::vector<GLCore::VertexAttribute> get(const VertexAttributeFlag flags);
+	};
+}

@@ -3,6 +3,8 @@
 #include <memory>
 
 using namespace std;
+using namespace GLCore;
+using namespace Poodle;
 
 int main()
 {

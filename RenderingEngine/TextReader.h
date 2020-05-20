@@ -2,8 +2,11 @@
 
 #include <string>
 
-class TextReader abstract
+namespace GLCore
 {
-public:
-	static std::string read(const std::string_view &path);
-};
+	class TextReader abstract
+	{
+	public:
+		static std::string read(const std::string_view& path);
+	};
+}

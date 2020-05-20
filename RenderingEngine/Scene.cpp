@@ -1,18 +1,23 @@
 #include <glad/glad.h>
 #include "Scene.h"
 
-/* constructor */
-Scene::Scene(GLWindow& window) : __pWindow(&window)
-{}
+using namespace GLCore; 
 
-/* member function */
-void Scene::onResize(const int width, const int height)
+namespace Poodle
 {
-	glViewport(0, 0, width, height);
-}
+	/* constructor */
+	Scene::Scene(GLWindow& window) : __pWindow(&window)
+	{}
 
-void Scene::onIdle(const float deltaTime)
-{
-	onUpdate(deltaTime);
-	onRender(); 
+	/* member function */
+	void Scene::onResize(const int width, const int height)
+	{
+		glViewport(0, 0, width, height);
+	}
+
+	void Scene::onIdle(const float deltaTime)
+	{
+		onUpdate(deltaTime);
+		onRender();
+	}
 }

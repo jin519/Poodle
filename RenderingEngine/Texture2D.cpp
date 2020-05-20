@@ -1,26 +1,29 @@
 #include "Texture2D.h"
 
-/* constructor */
-Texture2D::Texture2D() : TextureBase(GL_TEXTURE_2D) {}
-
-/* member function */
-void Texture2D::memoryAlloc(
-	GLsizei width, GLsizei height, const void* const pData,
-	GLint internalFormat, GLenum externalFormat,
-	GLenum dataType, GLint mipmapLevel, bool autoMipmapCreation)
+namespace GLCore
 {
-	bind();
+	/* constructor */
+	Texture2D::Texture2D() : TextureBase(GL_TEXTURE_2D) {}
 
-	if (autoMipmapCreation)
+	/* member function */
+	void Texture2D::memoryAlloc(
+		GLsizei width, GLsizei height, const void* const pData,
+		GLint internalFormat, GLenum externalFormat,
+		GLenum dataType, GLint mipmapLevel, bool autoMipmapCreation)
 	{
-		glTexImage2D(
-			GL_TEXTURE_2D, 0, internalFormat,
-			width, height, 0, externalFormat, dataType, pData);
+		bind();
 
-		glGenerateMipmap(GL_TEXTURE_2D);
+		if (autoMipmapCreation)
+		{
+			glTexImage2D(
+				GL_TEXTURE_2D, 0, internalFormat,
+				width, height, 0, externalFormat, dataType, pData);
+
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		else
+			glTexImage2D(
+				GL_TEXTURE_2D, mipmapLevel, internalFormat,
+				width, height, 0, externalFormat, dataType, pData);
 	}
-	else
-		glTexImage2D(
-			GL_TEXTURE_2D, mipmapLevel, internalFormat,
-			width, height, 0, externalFormat, dataType, pData);
 }

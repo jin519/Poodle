@@ -3,16 +3,19 @@
 #include <string>
 #include <exception>
 
-class BufferException : public std::exception
+namespace GLCore
 {
-public:
-	/* constructor */
-	BufferException(const std::string& message) noexcept;
+	class BufferException : public std::exception
+	{
+	public:
+		/* constructor */
+		BufferException(const std::string& message) noexcept;
 
-	/* member function */
-	virtual const char* what() const noexcept override;
+		/* member function */
+		virtual const char* what() const noexcept override;
 
-private:
-	/* member variable */
-	const std::string __message;
-};
+	private:
+		/* member variable */
+		const std::string __message;
+	};
+}
