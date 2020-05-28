@@ -1,7 +1,6 @@
 #pragma once
 
 #include <glad/glad.h>
-#include <array>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "VertexArray.h"
@@ -25,11 +24,11 @@ private:
 	std::shared_ptr<GLCore::VertexArray> __pVao;
 	std::shared_ptr<GLCore::ShaderProgram> __pShaderProgram;
 	std::shared_ptr<GLCore::Texture2D> __pTexture;
-	std::array<Poodle::Cube, 10> __cubes;
+	Poodle::Cube __cube; 
 	glm::mat4 __viewMat{ 1.f };
 	glm::mat4 __projectionMat{ 1.f };
 
 	/* member function */
 	void __init();
-	void __setCubes();
+	void __setCube();
 };

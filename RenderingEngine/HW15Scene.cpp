@@ -27,8 +27,17 @@ void HW15Scene::onKey(const int key, const int scancode, const int action, const
 
     if ((key == GLFW_KEY_SPACE) && (action == GLFW_PRESS))
     {
-        cout << "스페이스 키를 누르셨습니다. Cube가 재배치됩니다." << endl;
-        __setCubes();
+        cout << "스페이스 키를 누르셨습니다. Cube가 임의 방향으로 회전합니다." << endl;
+        __setCube();
+    }
+
+    if ((key == GLFW_KEY_W) && (action == GLFW_PRESS))
+    {
+        cout << "W 키를 누르셨습니다. Cube가 전진합니다." << endl;
+
+        Transform& transform = __cube.transform;
+        transform.advanceZ(-Constant::STEP);
+        transform.updateMatrix(); 
     }
 }
 
@@ -43,14 +52,7 @@ void HW15Scene::onUpdate(const float deltaTime)
 
     __projectionMat = perspective(quarter_pi<float>(), (WIDTH / HEIGHT), 0.1f, 200.f);
 
-    for (auto& cube : __cubes)
-    {
-        const vec3& ROTATION = (elapsedTime * cube.rotationSpeed);
-        Transform& transform = cube.transform;
-
-        transform.setRotation(ROTATION);
-        transform.updateMatrix(); 
-    }
+    __cube.transform.updateMatrix();
 }
 
 void HW15Scene::onRender() 
@@ -62,14 +64,10 @@ void HW15Scene::onRender()
     __pShaderProgram->setUniform1i("tex", 0);
     __pShaderProgram->setUniformMatrix4f("viewMat", __viewMat);
     __pShaderProgram->setUniformMatrix4f("projectionMat", __projectionMat);
+    __pShaderProgram->setUniformMatrix4f("modelMat", __cube.transform.getModelMatrix());
     
-    for (const auto& cube : __cubes)
-    {
-        __pShaderProgram->setUniformMatrix4f("modelMat", cube.transform.getModelMatrix());
-        __pShaderProgram->bind();
-
-        __pVao->draw();
-    }
+    __pShaderProgram->bind();
+    __pVao->draw();
 
     getWindow().swapBuffers();
 }
@@ -190,29 +188,17 @@ void HW15Scene::__init()
 
     __pShaderProgram = make_shared<ShaderProgram>("rectangle_vert.glsl", "rectangle_frag.glsl");
     
-    __viewMat = translate(__viewMat, vec3{ 0.f, 0.f, -50.f });
+    __viewMat = translate(__viewMat, vec3{ 0.f, 0.f, -10.f });
 
-    __setCubes();
+    __setCube();
 }
 
-void HW15Scene::__setCubes() 
+void HW15Scene::__setCube() 
 {
     static default_random_engine generator;
-    static const uniform_real_distribution<float> RAND_POSITION(Constant::MIN_POSITION, Constant::MAX_POSITION);
-    static const uniform_real_distribution<float> RAND_SIDE(Constant::MIN_SIDE, Constant::MAX_SIDE);
     static const uniform_real_distribution<float> RAND_ROTATION_SPEED(Constant::MIN_ROTATION_SPEED, Constant::MAX_ROTATION_SPEED);
 
-    for (auto& cube : __cubes)
-    {
-        Transform& transform = cube.transform;
-
-        transform.setPosition(
-            RAND_POSITION(generator), RAND_POSITION(generator), RAND_POSITION(generator));
-        
-        transform.setScale(RAND_SIDE(generator));
-
-        cube.rotationSpeed.x = RAND_ROTATION_SPEED(generator);
-        cube.rotationSpeed.y = RAND_ROTATION_SPEED(generator);
-        cube.rotationSpeed.z = RAND_ROTATION_SPEED(generator);
-    }
+    Transform& transform = __cube.transform;
+    transform.setRotation({ RAND_ROTATION_SPEED(generator), RAND_ROTATION_SPEED(generator), RAND_ROTATION_SPEED(generator) });
+    transform.updateMatrix();
 }

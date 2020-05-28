@@ -150,19 +150,16 @@ namespace Poodle
 
 	constexpr void Transform::advanceX(const float delta) 
 	{
-		const glm::vec4& BASIS_X = getBasisX(); 
-		adjustPosition({ (BASIS_X.x + delta), (BASIS_X.y + delta), (BASIS_X.z + delta) });
+		adjustPosition(getBasisX() * delta);
 	}
 
 	constexpr void Transform::advanceY(const float delta) 
 	{
-		const glm::vec4& BASIS_Y = getBasisY();
-		adjustPosition({ (BASIS_Y.x + delta), (BASIS_Y.y + delta), (BASIS_Y.z + delta) });
+		adjustPosition(getBasisY() * delta);
 	}
 
 	constexpr void Transform::advanceZ(const float delta) 
 	{
-		const glm::vec4& BASIS_Z = getBasisZ();
-		adjustPosition({ (BASIS_Z.x + delta), (BASIS_Z.y + delta), (BASIS_Z.z + delta) });
+		adjustPosition(getBasisZ() * delta);
 	}
 }
