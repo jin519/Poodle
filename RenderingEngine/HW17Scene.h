@@ -8,11 +8,11 @@
 #include "Texture2D.h"
 #include "Cube.h"
 
-class HW15Scene : public Poodle::Scene 
+class HW17Scene : public Poodle::Scene 
 {
 public:
 	/* constructor */
-	explicit HW15Scene(GLCore::GLWindow& window);
+	explicit HW17Scene(GLCore::GLWindow& window);
 
 	/* member function */
 	virtual void onKey(const int key, const int scancode, const int action, const int mods) override;

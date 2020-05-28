@@ -1,5 +1,5 @@
 #include "GLInitializer.h"
-#include "HW15Scene.h"
+#include "HW17Scene.h"
 #include <memory>
 
 using namespace std;
@@ -14,7 +14,7 @@ int main()
     unique_ptr<GLWindow> pWindow = make_unique<GLWindow>(800, 800, "HW15");
     pWindow->bind();
 
-    unique_ptr<HW15Scene> pScene = make_unique<HW15Scene>(*pWindow);
+    unique_ptr<HW17Scene> pScene = make_unique<HW17Scene>(*pWindow);
 
     pWindow->setEventHandler(*pScene);
     pWindow->startMainLoop();

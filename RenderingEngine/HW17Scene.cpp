@@ -1,4 +1,4 @@
-#include "HW15Scene.h"
+#include "HW17Scene.h"
 #include "VertexAttributeListFactory.h"
 #include "TextureUtil.h"
 #include "Constant.h"
@@ -11,13 +11,13 @@ using namespace GLCore;
 using namespace Poodle; 
 
 /* constructor */
-HW15Scene::HW15Scene(GLWindow& window) : Scene(window)
+HW17Scene::HW17Scene(GLWindow& window) : Scene(window)
 {
     __init();
 }
 
 /* member function */
-void HW15Scene::onKey(const int key, const int scancode, const int action, const int mods) 
+void HW17Scene::onKey(const int key, const int scancode, const int action, const int mods) 
 {
     if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
     {
@@ -41,7 +41,7 @@ void HW15Scene::onKey(const int key, const int scancode, const int action, const
     }
 }
 
-void HW15Scene::onUpdate(const float deltaTime) 
+void HW17Scene::onUpdate(const float deltaTime) 
 {
     static float elapsedTime = 0.f;
     elapsedTime += deltaTime;
@@ -55,7 +55,7 @@ void HW15Scene::onUpdate(const float deltaTime)
     __cube.transform.updateMatrix();
 }
 
-void HW15Scene::onRender() 
+void HW17Scene::onRender() 
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -72,7 +72,7 @@ void HW15Scene::onRender()
     getWindow().swapBuffers();
 }
 
-void HW15Scene::__init() 
+void HW17Scene::__init() 
 {
     glfwSwapInterval(1); // VSYNC 0: off, 1: on
     glEnable(GL_DEPTH_TEST);
@@ -193,7 +193,7 @@ void HW15Scene::__init()
     __setCube();
 }
 
-void HW15Scene::__setCube() 
+void HW17Scene::__setCube() 
 {
     static default_random_engine generator;
     static const uniform_real_distribution<float> RAND_ROTATION_SPEED(Constant::MIN_ROTATION_SPEED, Constant::MAX_ROTATION_SPEED);
