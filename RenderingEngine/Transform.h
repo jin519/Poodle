@@ -24,6 +24,12 @@ namespace Poodle
 		constexpr void setScale(const glm::vec3& scale);
 		constexpr void adjustScale(const glm::vec3& delta);
 		constexpr const glm::mat4& getModelMatrix() const;
+		constexpr const glm::vec4& getBasisX() const; 
+		constexpr const glm::vec4& getBasisY() const; 
+		constexpr const glm::vec4& getBasisZ() const; 
+		constexpr void advanceX(const float delta); 
+		constexpr void advanceY(const float delta); 
+		constexpr void advanceZ(const float delta); 
 		void updateMatrix();
 
 	private:
@@ -125,5 +131,38 @@ namespace Poodle
 	constexpr const glm::mat4& Transform::getModelMatrix() const
 	{
 		return __modelMatrix;
+	}
+
+	constexpr const glm::vec4& Transform::getBasisX() const 
+	{
+		return __modelMatrix[0];
+	}
+
+	constexpr const glm::vec4& Transform::getBasisY() const 
+	{
+		return __modelMatrix[1];
+	}
+
+	constexpr const glm::vec4& Transform::getBasisZ() const 
+	{
+		return __modelMatrix[2];
+	}
+
+	constexpr void Transform::advanceX(const float delta) 
+	{
+		const glm::vec4& BASIS_X = getBasisX(); 
+		adjustPosition({ (BASIS_X.x + delta), (BASIS_X.y + delta), (BASIS_X.z + delta) });
+	}
+
+	constexpr void Transform::advanceY(const float delta) 
+	{
+		const glm::vec4& BASIS_Y = getBasisY();
+		adjustPosition({ (BASIS_Y.x + delta), (BASIS_Y.y + delta), (BASIS_Y.z + delta) });
+	}
+
+	constexpr void Transform::advanceZ(const float delta) 
+	{
+		const glm::vec4& BASIS_Z = getBasisZ();
+		adjustPosition({ (BASIS_Z.x + delta), (BASIS_Z.y + delta), (BASIS_Z.z + delta) });
 	}
 }
