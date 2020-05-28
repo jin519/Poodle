@@ -34,10 +34,10 @@ namespace Poodle
 
 	private:
 		/* member variable */
-		glm::vec3 __position;
-		glm::vec3 __rotation;
-		glm::vec3 __scale;
-		glm::mat4 __modelMatrix;
+		glm::vec3 __position{ 0.f };
+		glm::vec3 __rotation{ 0.f };
+		glm::vec3 __scale{ 1.f };
+		glm::mat4 __modelMatrix{ 1.f };
 	};
 
 	constexpr const glm::vec3& Transform::getPosition() const
