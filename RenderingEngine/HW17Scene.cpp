@@ -34,10 +34,73 @@ void HW17Scene::onKey(const int key, const int scancode, const int action, const
     if ((key == GLFW_KEY_W) && (action == GLFW_PRESS))
     {
         cout << "W 키를 누르셨습니다. Cube가 전진합니다." << endl;
+        __wFlag = true;
+    }
 
-        Transform& transform = __cube.transform;
-        transform.advanceZ(-Constant::STEP);
-        transform.updateMatrix(); 
+    if ((key == GLFW_KEY_W) && (action == GLFW_RELEASE))
+    {
+        cout << "W 키가 해제되었습니다." << endl;
+        __wFlag = false; 
+    }
+    
+    if ((key == GLFW_KEY_S) && (action == GLFW_PRESS))
+    {
+        cout << "S 키를 누르셨습니다. Cube가 후진합니다." << endl;
+        __sFlag = true;
+    }
+
+    if ((key == GLFW_KEY_S) && (action == GLFW_RELEASE))
+    {
+        cout << "S 키가 해제되었습니다." << endl;
+        __sFlag = false;
+    }
+
+    if ((key == GLFW_KEY_D) && (action == GLFW_PRESS))
+    {
+        cout << "D 키를 누르셨습니다. Cube가 우측으로 이동합니다." << endl;
+        __dFlag = true;
+    }
+
+    if ((key == GLFW_KEY_D) && (action == GLFW_RELEASE))
+    {
+        cout << "D 키가 해제되었습니다." << endl;
+        __dFlag = false;
+    }
+
+    if ((key == GLFW_KEY_A) && (action == GLFW_PRESS))
+    {
+        cout << "A 키를 누르셨습니다. Cube가 좌측으로 이동합니다." << endl;
+        __aFlag = true;
+    }
+
+    if ((key == GLFW_KEY_A) && (action == GLFW_RELEASE))
+    {
+        cout << "A 키가 해제되었습니다." << endl;
+        __aFlag = false;
+    }
+
+    if ((key == GLFW_KEY_E) && (action == GLFW_PRESS))
+    {
+        cout << "E 키를 누르셨습니다. Cube가 위로 이동합니다." << endl;
+        __eFlag = true;
+    }
+
+    if ((key == GLFW_KEY_E) && (action == GLFW_RELEASE))
+    {
+        cout << "E 키가 해제되었습니다." << endl;
+        __eFlag = false;
+    }
+
+    if ((key == GLFW_KEY_Q) && (action == GLFW_PRESS))
+    {
+        cout << "Q 키를 누르셨습니다. Cube가 아래로 이동합니다." << endl;
+        __qFlag = true;
+    }
+
+    if ((key == GLFW_KEY_Q) && (action == GLFW_RELEASE))
+    {
+        cout << "Q 키가 해제되었습니다." << endl;
+        __qFlag = false;
     }
 }
 
@@ -52,7 +115,24 @@ void HW17Scene::onUpdate(const float deltaTime)
 
     __projectionMat = perspective(quarter_pi<float>(), (WIDTH / HEIGHT), 0.1f, 200.f);
 
-    __cube.transform.updateMatrix();
+    Transform& transform = __cube.transform;
+
+    if (__wFlag)
+        transform.advanceZ(Constant::STEP);
+    if (__sFlag)
+        transform.advanceZ(-Constant::STEP);
+
+    if (__dFlag)
+        transform.advanceX(-Constant::STEP);
+    if (__aFlag)
+        transform.advanceX(Constant::STEP);
+
+    if (__eFlag)
+        transform.advanceY(Constant::STEP);
+    if (__qFlag)
+        transform.advanceY(-Constant::STEP);
+
+    transform.updateMatrix();
 }
 
 void HW17Scene::onRender() 
@@ -196,7 +276,7 @@ void HW17Scene::__init()
 void HW17Scene::__setCube() 
 {
     static default_random_engine generator;
-    static const uniform_real_distribution<float> RAND_ROTATION_SPEED(Constant::MIN_ROTATION_SPEED, Constant::MAX_ROTATION_SPEED);
+    static const uniform_real_distribution<float> RAND_ROTATION_SPEED(Constant::MIN_ANGLE, Constant::MAX_ANGLE);
 
     Transform& transform = __cube.transform;
     transform.setRotation({ RAND_ROTATION_SPEED(generator), RAND_ROTATION_SPEED(generator), RAND_ROTATION_SPEED(generator) });

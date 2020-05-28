@@ -20,6 +20,10 @@ public:
 	virtual void onRender() override;
 
 private:
+	/* member function */
+	void __init();
+	void __setCube();
+
 	/* member variable */
 	std::shared_ptr<GLCore::VertexArray> __pVao;
 	std::shared_ptr<GLCore::ShaderProgram> __pShaderProgram;
@@ -28,7 +32,10 @@ private:
 	glm::mat4 __viewMat{ 1.f };
 	glm::mat4 __projectionMat{ 1.f };
 
-	/* member function */
-	void __init();
-	void __setCube();
+	bool __wFlag = false;
+	bool __sFlag = false; 
+	bool __dFlag = false;
+	bool __aFlag = false;
+	bool __eFlag = false;
+	bool __qFlag = false; 
 };
