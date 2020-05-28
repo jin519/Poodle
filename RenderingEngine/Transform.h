@@ -37,6 +37,10 @@ namespace Poodle
 		glm::vec3 __position{ 0.f };
 		glm::vec3 __rotation{ 0.f };
 		glm::vec3 __scale{ 1.f };
+
+		glm::mat4 __scaleMatrix{ 1.f };
+		glm::mat4 __rotationMatrix{ 1.f };
+		glm::mat4 __translationMatrix{ 1.f };
 		glm::mat4 __modelMatrix{ 1.f };
 	};
 
@@ -135,17 +139,17 @@ namespace Poodle
 
 	constexpr const glm::vec4& Transform::getBasisX() const 
 	{
-		return __modelMatrix[0];
+		return __rotationMatrix[0];
 	}
 
 	constexpr const glm::vec4& Transform::getBasisY() const 
 	{
-		return __modelMatrix[1];
+		return __rotationMatrix[1];
 	}
 
 	constexpr const glm::vec4& Transform::getBasisZ() const 
 	{
-		return __modelMatrix[2];
+		return __rotationMatrix[2];
 	}
 
 	constexpr void Transform::advanceX(const float delta) 
