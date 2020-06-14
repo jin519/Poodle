@@ -143,6 +143,9 @@
     <ClCompile Include="HW17Scene.cpp">
       <Filter>소스 파일\client\demo\scene</Filter>
     </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>소스 파일\engine\core\transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -231,6 +234,9 @@
     </ClInclude>
     <ClInclude Include="HW17Scene.h">
       <Filter>소스 파일\client\demo\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>소스 파일\engine\core\transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
