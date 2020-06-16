@@ -10,7 +10,7 @@ namespace Poodle
 	Quaternion::Quaternion(const vec3& eulerAngles) : __quaternion(eulerAngles)
 	{}
 
-	Quaternion::Quaternion(const float pitch, const float yaw, const float roll) : Quaternion({ pitch, yaw, roll })
+	Quaternion::Quaternion(const float pitch, const float yaw, const float roll) : __quaternion({ pitch, yaw, roll })
 	{}
 
 	Quaternion::Quaternion(const float angle, const vec3& axis) : __quaternion(angleAxis(angle, axis))
@@ -25,7 +25,7 @@ namespace Poodle
 	/* member function */
 	void Quaternion::set(const vec3& eulerAngles)
 	{
-		__quaternion = eulerAngles;
+		__quaternion = quat{ eulerAngles };
 	}
 
 	void Quaternion::set(const float pitch, const float yaw, const float roll)
@@ -84,7 +84,7 @@ namespace Poodle
 
 	void Quaternion::rotateLocal(const float pitch, const float yaw, const float roll)
 	{
-		const mat4& ROTATION_MATRIX = getMatrix(); 
+		const mat4& ROTATION_MATRIX = toMatrix(); 
 		const vec3& BASIS_X = ROTATION_MATRIX[0];
 		const vec3& BASIS_Y = ROTATION_MATRIX[1];
 		const vec3& BASIS_Z = ROTATION_MATRIX[2];
@@ -98,7 +98,7 @@ namespace Poodle
 	void Quaternion::rotateFPS(const float pitch, const float yaw, const vec3& referenceUp)
 	{
 		const vec3& UP = normalize(referenceUp);
-		const vec3& HORIZONTAL = getMatrix()[0];
+		const vec3& HORIZONTAL = toMatrix()[0];
 		const vec3& PROJ_UP_HORIZONTAL = normalize(dot(HORIZONTAL, UP) * UP);
 		const vec3& PERP_UP_HORIZONTAL = (HORIZONTAL - PROJ_UP_HORIZONTAL);
 
@@ -112,7 +112,7 @@ namespace Poodle
 		return eulerAngles(__quaternion);
 	}
 
-	mat4 Quaternion::getMatrix() const
+	mat4 Quaternion::toMatrix() const
 	{
 		return mat4_cast(__quaternion);
 	}

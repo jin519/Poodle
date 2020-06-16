@@ -35,7 +35,7 @@ namespace Poodle
 		void rotateLocal(const float pitch, const float yaw, const float roll);
 		void rotateFPS(const float pitch, const float yaw, const glm::vec3& referenceUp = { 0.f, 1.f, 0.f });
 		glm::vec3 getEularAngles() const;
-		glm::mat4 getMatrix() const;
+		glm::mat4 toMatrix() const;
 		std::pair<float, glm::vec3> getAngleAxis() const;
 		friend Quaternion operator*(const Quaternion& lhs, const Quaternion& rhs);
 
@@ -48,17 +48,20 @@ namespace Poodle
 	constexpr Quaternion::Quaternion(const glm::quat& src) : __quaternion(src)
 	{}
 
-	constexpr Quaternion::Quaternion(const float w, const float x, const float y, const float z) : Quaternion({ w, x, y, z })
+	constexpr Quaternion::Quaternion(const float w, const float x, const float y, const float z) : __quaternion(w, x, y, z)
 	{}
 
 	/* member function */
 	constexpr void Quaternion::set(const glm::quat& src)
 	{
-		__quaternion = src;
+		set(src.w, src.x, src.y, src.z);
 	}
 
 	constexpr void Quaternion::set(const float w, const float x, const float y, const float z)
 	{
-		set({ w, x, y, z });
+		__quaternion.w = w;
+		__quaternion.x = x;
+		__quaternion.y = y;
+		__quaternion.z = z;
 	}
 }

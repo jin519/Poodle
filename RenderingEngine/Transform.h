@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 #include "Constant.h"
+#include "Quaternion.h"
 
 namespace Poodle
 {
@@ -14,15 +15,27 @@ namespace Poodle
 		constexpr void setPosition(const float x, const float y, const float z);
 		constexpr void setPosition(const glm::vec3& position);
 		constexpr void adjustPosition(const glm::vec3& delta);
-		constexpr const glm::vec3& getRotation() const;
-		constexpr void setRotation(const float x, const float y, const float z);
-		constexpr void setRotation(const glm::vec3& rotation);
-		constexpr void adjustRotation(const glm::vec3& delta);
+
+		constexpr const Quaternion& getRotation() const;
+		constexpr void setRotation(const float w, const float x, const float y, const float z);
+		constexpr void setRotation(const glm::quat& src);
+		void setRotation(const float pitch, const float yaw, const float roll);
+		void setRotation(const glm::vec3& eulerAngles);
+		void setRotation(const glm::mat3& rotationMatrix);
+		void setRotation(const glm::mat4& rotationMatrix);
+		void rotateGlobal(const glm::vec3& eularAngles);
+		void rotateGlobal(const float pitch, const float yaw, const float roll);
+		void rotateGlobal(const float angle, const glm::vec3& axis);
+		void rotateLocal(const glm::vec3& eulerAngles);
+		void rotateLocal(const float pitch, const float yaw, const float roll);
+		void rotateFPS(const float pitch, const float yaw, const glm::vec3& referenceUp = { 0.f, 1.f, 0.f });
+		
 		constexpr const glm::vec3& getScale() const;
 		constexpr void setScale(const float x, const float y, const float z);
 		constexpr void setScale(const float value);
 		constexpr void setScale(const glm::vec3& scale);
 		constexpr void adjustScale(const glm::vec3& delta);
+		
 		constexpr const glm::mat4& getModelMatrix() const;
 		constexpr const glm::vec4& getBasisX() const; 
 		constexpr const glm::vec4& getBasisY() const; 
@@ -35,7 +48,7 @@ namespace Poodle
 	private:
 		/* member variable */
 		glm::vec3 __position{ 0.f };
-		glm::vec3 __rotation{ 0.f };
+		Quaternion __rotation;
 		glm::vec3 __scale{ 1.f };
 
 		glm::mat4 __scaleMatrix{ 1.f };
@@ -66,43 +79,19 @@ namespace Poodle
 		setPosition((__position.x + delta.x), (__position.y + delta.y), (__position.z + delta.z));
 	}
 
-	constexpr const glm::vec3& Transform::getRotation() const
+	constexpr const Quaternion& Transform::getRotation() const
 	{
 		return __rotation;
 	}
 
-	constexpr void Transform::setRotation(const float x, const float y, const float z)
+	constexpr void Transform::setRotation(const float w, const float x, const float y, const float z) 
 	{
-		constexpr float TWO_PI = glm::two_pi<float>();
-
-		// constexpr 접두사는 validateAngle 함수 포인터(람다 함수를 가리키는)를 리터럴 상수화 하겠다는 뜻
-		// 뒤쪽의 -> float는 람다식에서 return type을 명시하는 문법. 
-		// 생략시 return 구문을 통해 return type을 자동 추론함.
-		constexpr auto validateAngle = [](const float angle) -> float
-		{
-			constexpr float TWO_PI = glm::two_pi<float>();
-
-			if (angle < 0.f)
-				return (angle + TWO_PI);
-			else if (angle > TWO_PI)
-				return  (angle - TWO_PI);
-
-			return angle;
-		};
-
-		__rotation.x = validateAngle(x);
-		__rotation.y = validateAngle(y);
-		__rotation.z = validateAngle(z);
+		__rotation.set(w, x, y, z);
 	}
 
-	constexpr void Transform::setRotation(const glm::vec3& rotation)
+	constexpr void Transform::setRotation(const glm::quat& src) 
 	{
-		setRotation(rotation.x, rotation.y, rotation.z);
-	}
-
-	constexpr void Transform::adjustRotation(const glm::vec3& delta)
-	{
-		setRotation((__rotation.x + delta.x), (__rotation.y + delta.y), (__rotation.z + delta.z));
+		__rotation.set(src);
 	}
 
 	constexpr const glm::vec3& Transform::getScale() const
