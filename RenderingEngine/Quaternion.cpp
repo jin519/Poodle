@@ -50,16 +50,16 @@ namespace Poodle
 
 	void Quaternion::orient(const vec3& forward, const vec3& referenceUp)
 	{
-		const vec3& NORM_FORWARD = normalize(forward);
-		const vec3& NORM_UP = normalize(referenceUp);
+		const vec3& FORWARD = normalize(forward);
+		const vec3& UP = normalize(referenceUp);
 
-		if (epsilonEqual(dot(NORM_FORWARD, NORM_UP), 1.f, epsilon<float>()))
+		if (epsilonEqual(dot(FORWARD, UP), 1.f, epsilon<float>()))
 			throw QuaternionException("The forward vector and up vector are on a straight line.");
 
-		const vec3& HORIZONTAL = normalize(cross(NORM_UP, NORM_FORWARD));
-		const vec3& VERTICAL = normalize(cross(NORM_FORWARD, HORIZONTAL));
+		const vec3& HORIZONTAL = normalize(cross(UP, FORWARD));
+		const vec3& VERTICAL = normalize(cross(FORWARD, HORIZONTAL));
 
-		__quaternion = quat(mat3{ HORIZONTAL, VERTICAL, NORM_FORWARD });
+		__quaternion = quat(mat3{ HORIZONTAL, VERTICAL, FORWARD });
 	}
 
 	void Quaternion::rotateGlobal(const vec3& eularAngles)
@@ -95,11 +95,16 @@ namespace Poodle
 			angleAxis(pitch, BASIS_X) * __quaternion);
 	}
 
-	// 롤이 없음
-	// 업이 머가리 위로 고정
 	void Quaternion::rotateFPS(const float pitch, const float yaw, const vec3& referenceUp)
 	{
-		
+		const vec3& UP = normalize(referenceUp);
+		const vec3& HORIZONTAL = getMatrix()[0];
+		const vec3& PROJ_UP_HORIZONTAL = normalize(dot(HORIZONTAL, UP) * UP);
+		const vec3& PERP_UP_HORIZONTAL = (HORIZONTAL - PROJ_UP_HORIZONTAL);
+
+		__quaternion = (
+			angleAxis(yaw, UP) *
+			angleAxis(pitch, PERP_UP_HORIZONTAL) * __quaternion);
 	}
 
 	vec3 Quaternion::getEularAngles() const
