@@ -10,7 +10,7 @@ Quaternion::Quaternion(const vec3& eulerAngles) : __quaternion(eulerAngles)
 Quaternion::Quaternion(const float pitch, const float yaw, const float roll) : Quaternion({ pitch, yaw, roll })
 {}
 
-Quaternion::Quaternion(const float angle, const vec3& axis) : __quaternion(angle, axis)
+Quaternion::Quaternion(const float angle, const vec3& axis) : __quaternion(angleAxis(angle, axis))
 {}
 
 Quaternion::Quaternion(const mat3& rotationMatrix) : __quaternion(rotationMatrix)
@@ -46,25 +46,24 @@ void Quaternion::set(const mat4& rotationMatrix)
 }
 
 // 현재 객체를 forward 방향으로 틀음
-void Quaternion::orient(const vec3& forward, const vec3& referenceUp = { 0.f, 1.f, 0.f }) 
+void Quaternion::orient(const vec3& forward, const vec3& referenceUp) 
 {
 		
 }
 
-// 절대 수치를 돌림
 void Quaternion::rotateGlobal(const vec3& eularAngles) 
 {
-	
+	__quaternion = (quat{ eularAngles } * __quaternion);
 }
 
 void Quaternion::rotateGlobal(const float pitch, const float yaw, const float roll) 
 {
-	
+	rotateGlobal({ pitch, yaw, roll });
 }
 
 void Quaternion::rotateGlobal(const float angle, const vec3& axis) 
 {
-	
+	__quaternion = (angleAxis(angle, axis) * __quaternion);
 }
 
 // 현재 객체 기저를 기준으로 돌림
@@ -80,7 +79,7 @@ void Quaternion::rotateLocal(const float pitch, const float yaw, const float rol
 
 // 롤이 없음
 // 업이 머가리 위로 고정
-void Quaternion::rotateFPS(const float pitch, const float yaw, const vec3& referenceUp = { 0.f, 1.f, 0.f }) 
+void Quaternion::rotateFPS(const float pitch, const float yaw, const vec3& referenceUp) 
 {
 	
 }

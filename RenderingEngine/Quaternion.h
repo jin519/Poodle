@@ -13,7 +13,7 @@ public:
 	constexpr Quaternion(const float w, const float x, const float y, const float z);
 	Quaternion(const glm::vec3& eulerAngles);
 	Quaternion(const float pitch, const float yaw, const float roll);
-	Quaternion(const float angle, const glm::vec3 & axis);
+	Quaternion(const float angle, const glm::vec3& axis);
 	Quaternion(const glm::mat3& rotationMatrix);
 	Quaternion(const glm::mat4& rotationMatrix);
 
