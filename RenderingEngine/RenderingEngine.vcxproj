@@ -154,6 +154,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ProgramException.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="QuaternionException.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="ProgramException.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="QuaternionException.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="stb_image.h" />

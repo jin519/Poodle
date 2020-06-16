@@ -1,4 +1,5 @@
 #include "Quaternion.h"
+#include "QuaternionException.h"
 
 using namespace glm;
 using namespace std;
@@ -47,10 +48,18 @@ namespace Poodle
 		__quaternion = rotationMatrix;
 	}
 
-	// 현재 객체를 forward 방향으로 틀음
 	void Quaternion::orient(const vec3& forward, const vec3& referenceUp)
 	{
+		const vec3& NORM_FORWARD = normalize(forward);
+		const vec3& NORM_UP = normalize(referenceUp);
 
+		if (epsilonEqual(dot(NORM_FORWARD, NORM_UP), 1.f, epsilon<float>()))
+			throw QuaternionException("The forward vector and up vector are on a straight line.");
+
+		const vec3& HORIZONTAL = normalize(cross(NORM_UP, NORM_FORWARD));
+		const vec3& VERTICAL = normalize(cross(NORM_FORWARD, HORIZONTAL));
+
+		__quaternion = quat(mat3{ HORIZONTAL, VERTICAL, NORM_FORWARD });
 	}
 
 	void Quaternion::rotateGlobal(const vec3& eularAngles)
@@ -90,7 +99,7 @@ namespace Poodle
 	// 업이 머가리 위로 고정
 	void Quaternion::rotateFPS(const float pitch, const float yaw, const vec3& referenceUp)
 	{
-
+		
 	}
 
 	vec3 Quaternion::getEularAngles() const
