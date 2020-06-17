@@ -180,53 +180,47 @@ void DemoScene::onUpdate(const float deltaTime)
 
     Transform& transform = __cube.transform;
 
-    static float pitch = 0.f;
-    static float yaw = 0.f;
-    static float roll = 0.f; 
-
     if (__globalRotateMode) 
     {
         if (__insertFlag) 
-            pitch += Constant::ANGLE_AUGEND;
+            transform.rotateGlobal(Constant::ANGLE_AUGEND, 0.f, 0.f);
         if (__deleteFlag)
-            pitch -= Constant::ANGLE_AUGEND;
+            transform.rotateGlobal(-Constant::ANGLE_AUGEND, 0.f, 0.f);
         if (__homeFlag)
-            yaw += Constant::ANGLE_AUGEND;
+            transform.rotateGlobal(0.f, Constant::ANGLE_AUGEND, 0.f);
         if (__endFlag)
-            yaw -= Constant::ANGLE_AUGEND;
+            transform.rotateGlobal(0.f, -Constant::ANGLE_AUGEND, 0.f);
         if (__pageUpFlag)
-            roll += Constant::ANGLE_AUGEND;
+            transform.rotateGlobal(0.f, 0.f, Constant::ANGLE_AUGEND);
         if (__pageDownFlag)
-            roll -= Constant::ANGLE_AUGEND;
+            transform.rotateGlobal(0.f, 0.f, -Constant::ANGLE_AUGEND);
     }
     else if (__localRotateMode) 
     {
         if (__insertFlag)
-            pitch += Constant::ANGLE_AUGEND;
+            transform.rotateLocal(Constant::ANGLE_AUGEND, 0.f, 0.f);
         if (__deleteFlag)
-            pitch -= Constant::ANGLE_AUGEND;
+            transform.rotateLocal(-Constant::ANGLE_AUGEND, 0.f, 0.f);
         if (__homeFlag)
-            yaw += Constant::ANGLE_AUGEND;
+            transform.rotateLocal(0.f, Constant::ANGLE_AUGEND, 0.f);
         if (__endFlag)
-            yaw -= Constant::ANGLE_AUGEND;
+            transform.rotateLocal(0.f, -Constant::ANGLE_AUGEND, 0.f);
         if (__pageUpFlag)
-            roll += Constant::ANGLE_AUGEND;
+            transform.rotateLocal(0.f, 0.f, Constant::ANGLE_AUGEND);
         if (__pageDownFlag)
-            roll -= Constant::ANGLE_AUGEND;
+            transform.rotateLocal(0.f, 0.f, -Constant::ANGLE_AUGEND);
     }
     else if (__fpsRotateMode) 
     {
         if (__insertFlag)
-            pitch += Constant::ANGLE_AUGEND;
+            transform.rotateFPS(Constant::ANGLE_AUGEND, 0.f);
         if (__deleteFlag)
-            pitch -= Constant::ANGLE_AUGEND;
+            transform.rotateFPS(-Constant::ANGLE_AUGEND, 0.f);
         if (__homeFlag)
-            yaw += Constant::ANGLE_AUGEND;
+            transform.rotateFPS(0.f, Constant::ANGLE_AUGEND);
         if (__endFlag)
-            yaw -= Constant::ANGLE_AUGEND;
+            transform.rotateFPS(0.f, -Constant::ANGLE_AUGEND);
     }
-
-    transform.setRotation(pitch, yaw, roll);
 
     if (__upFlag)
         transform.advanceZ(Constant::STEP);

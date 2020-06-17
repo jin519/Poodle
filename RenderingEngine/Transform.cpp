@@ -43,12 +43,12 @@ namespace Poodle
 
 	void Transform::rotateGlobal(const vec3& eularAngles) 
 	{
-		__rotation.set(eularAngles);
+		__rotation.rotateGlobal(eularAngles);
 	}
 
 	void Transform::rotateGlobal(const float pitch, const float yaw, const float roll) 
 	{
-		__rotation.set(pitch, yaw, roll);
+		__rotation.rotateGlobal(pitch, yaw, roll);
 	}
 
 	void Transform::rotateGlobal(const float angle, const vec3& axis) 

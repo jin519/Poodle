@@ -99,8 +99,8 @@ namespace Poodle
 	{
 		const vec3& UP = normalize(referenceUp);
 		const vec3& HORIZONTAL = toMatrix()[0];
-		const vec3& PROJ_UP_HORIZONTAL = normalize(dot(HORIZONTAL, UP) * UP);
-		const vec3& PERP_UP_HORIZONTAL = (HORIZONTAL - PROJ_UP_HORIZONTAL);
+		const vec3& PROJ_UP_HORIZONTAL = (dot(HORIZONTAL, UP) * UP);
+		const vec3& PERP_UP_HORIZONTAL = normalize(HORIZONTAL - PROJ_UP_HORIZONTAL);
 
 		__quaternion = (
 			angleAxis(yaw, UP) *
