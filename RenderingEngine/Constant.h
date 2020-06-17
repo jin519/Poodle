@@ -10,6 +10,7 @@ namespace Poodle
 		// cube setting
 		constexpr float MIN_ANGLE = 0.2f;
 		constexpr float MAX_ANGLE = 0.5f;
+		constexpr float ANGLE_AUGEND = 0.01f;
 		constexpr float STEP = 0.05f;
 	}
 }

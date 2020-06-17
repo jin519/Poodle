@@ -159,7 +159,6 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="HW17Scene.cpp" />
     <ClCompile Include="TextReader.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureBase.cpp" />
@@ -189,7 +188,6 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="HW17Scene.h" />
     <ClInclude Include="TextReader.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureBase.h" />

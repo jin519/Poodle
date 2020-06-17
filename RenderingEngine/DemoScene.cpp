@@ -3,7 +3,6 @@
 #include "TextureUtil.h"
 #include "Constant.h"
 #include <iostream>
-#include <random>
 
 using namespace std;
 using namespace glm;
@@ -21,86 +20,150 @@ void DemoScene::onKey(const int key, const int scancode, const int action, const
 {
     if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
     {
-        cout << "ESC 키를 누르셨습니다. 프로그램을 종료합니다." << endl;
+        cout << "[ESC 활성] 프로그램 종료" << endl;
         getWindow().setCloseFlag(true);
     }
 
-    if ((key == GLFW_KEY_SPACE) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_1) && (action == GLFW_PRESS)) 
     {
-        cout << "스페이스 키를 누르셨습니다. Cube가 임의 방향으로 회전합니다." << endl;
-        __setCube();
+        cout << "[1 활성] global rotate mode" << endl;
+        __globalRotateMode = true;
+        __localRotateMode = false;
+        __fpsRotateMode = false;
+    }
+    else if ((key == GLFW_KEY_2) && (action == GLFW_PRESS)) 
+    {
+        cout << "[2 활성] local rotate mode" << endl;
+        __globalRotateMode = false;
+        __localRotateMode = true;
+        __fpsRotateMode = false;
+    }
+    else if ((key == GLFW_KEY_3) && (action == GLFW_PRESS)) 
+    {
+        cout << "[3 활성] fps rotate mode" << endl;
+        __globalRotateMode = false;
+        __localRotateMode = false;
+        __fpsRotateMode = true;
     }
 
-    if ((key == GLFW_KEY_W) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_INSERT) && (action == GLFW_PRESS)) 
     {
-        cout << "W 키를 누르셨습니다. Cube가 전진합니다." << endl;
-        __wFlag = true;
+        cout << "[INSERT 활성] pitch 증가" << endl;
+        __insertFlag = true; 
     }
 
-    if ((key == GLFW_KEY_W) && (action == GLFW_RELEASE))
+    if ((key == GLFW_KEY_INSERT) && (action == GLFW_RELEASE))
     {
-        cout << "W 키가 해제되었습니다." << endl;
-        __wFlag = false;
+        cout << "[INSERT 해제]" << endl;
+        __insertFlag = false;
     }
 
-    if ((key == GLFW_KEY_S) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_DELETE) && (action == GLFW_PRESS))
     {
-        cout << "S 키를 누르셨습니다. Cube가 후진합니다." << endl;
-        __sFlag = true;
+        cout << "[DELETE 활성] pitch 감소" << endl;
+        __deleteFlag = true;
     }
 
-    if ((key == GLFW_KEY_S) && (action == GLFW_RELEASE))
+    if ((key == GLFW_KEY_DELETE) && (action == GLFW_RELEASE))
     {
-        cout << "S 키가 해제되었습니다." << endl;
-        __sFlag = false;
+        cout << "[DELETE 해제]" << endl;
+        __deleteFlag = false;
     }
 
-    if ((key == GLFW_KEY_D) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_HOME) && (action == GLFW_PRESS))
     {
-        cout << "D 키를 누르셨습니다. Cube가 우측으로 이동합니다." << endl;
-        __dFlag = true;
+        cout << "[HOME 활성] yaw 증가" << endl;
+        __homeFlag = true;
     }
 
-    if ((key == GLFW_KEY_D) && (action == GLFW_RELEASE))
+    if ((key == GLFW_KEY_HOME) && (action == GLFW_RELEASE))
     {
-        cout << "D 키가 해제되었습니다." << endl;
-        __dFlag = false;
+        cout << "[HOME 해제]" << endl;
+        __homeFlag = false;
     }
 
-    if ((key == GLFW_KEY_A) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_END) && (action == GLFW_PRESS))
     {
-        cout << "A 키를 누르셨습니다. Cube가 좌측으로 이동합니다." << endl;
-        __aFlag = true;
+        cout << "[END 활성] yaw 감소" << endl;
+        __endFlag = true;
     }
 
-    if ((key == GLFW_KEY_A) && (action == GLFW_RELEASE))
+    if ((key == GLFW_KEY_END) && (action == GLFW_RELEASE))
     {
-        cout << "A 키가 해제되었습니다." << endl;
-        __aFlag = false;
+        cout << "[END 해제]" << endl;
+        __endFlag = false;
     }
 
-    if ((key == GLFW_KEY_E) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_PAGE_UP) && (action == GLFW_PRESS))
     {
-        cout << "E 키를 누르셨습니다. Cube가 위로 이동합니다." << endl;
-        __eFlag = true;
+        cout << "[PAGE UP 활성] roll 증가" << endl;
+        __pageUpFlag = true;
     }
 
-    if ((key == GLFW_KEY_E) && (action == GLFW_RELEASE))
+    if ((key == GLFW_KEY_PAGE_UP) && (action == GLFW_RELEASE))
     {
-        cout << "E 키가 해제되었습니다." << endl;
-        __eFlag = false;
+        cout << "[PAGE UP 해제]" << endl;
+        __pageUpFlag = false;
     }
 
-    if ((key == GLFW_KEY_Q) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_PAGE_DOWN) && (action == GLFW_PRESS))
     {
-        cout << "Q 키를 누르셨습니다. Cube가 아래로 이동합니다." << endl;
-        __qFlag = true;
+        cout << "[PAGE DOWN 활성] roll 감소" << endl;
+        __pageDownFlag = true;
     }
 
-    if ((key == GLFW_KEY_Q) && (action == GLFW_RELEASE))
+    if ((key == GLFW_KEY_PAGE_DOWN) && (action == GLFW_RELEASE))
     {
-        cout << "Q 키가 해제되었습니다." << endl;
-        __qFlag = false;
+        cout << "[PAGE DOWN 해제]" << endl;
+        __pageDownFlag = false;
+    }
+
+    if ((key == GLFW_KEY_UP) && (action == GLFW_PRESS))
+    {
+        cout << "[UP 활성] forward 기준으로 전진" << endl;
+        __upFlag = true;
+    }
+
+    if ((key == GLFW_KEY_UP) && (action == GLFW_RELEASE))
+    {
+        cout << "[UP 해제]" << endl;
+        __upFlag = false;
+    }
+
+    if ((key == GLFW_KEY_DOWN) && (action == GLFW_PRESS))
+    {
+        cout << "[DOWN 활성] forward 기준으로 후진" << endl;
+        __downFlag = true;
+    }
+
+    if ((key == GLFW_KEY_DOWN) && (action == GLFW_RELEASE))
+    {
+        cout << "[DOWN 해제]" << endl;
+        __downFlag = false;
+    }
+
+    if ((key == GLFW_KEY_RIGHT) && (action == GLFW_PRESS))
+    {
+        cout << "[RIGHT 활성] HORIZONTAL 기준으로 우측 이동" << endl;
+        __rightFlag = true;
+    }
+
+    if ((key == GLFW_KEY_RIGHT) && (action == GLFW_RELEASE))
+    {
+        cout << "[RIGHT 해제]" << endl;
+        __rightFlag = false;
+    }
+
+    if ((key == GLFW_KEY_LEFT) && (action == GLFW_PRESS))
+    {
+        cout << "[LEFT 활성] HORIZONTAL 기준으로 좌측 이동" << endl;
+        __leftFlag = true;
+    }
+
+    if ((key == GLFW_KEY_LEFT) && (action == GLFW_RELEASE))
+    {
+        cout << "[LEFT 해제]" << endl;
+        __leftFlag = false;
     }
 }
 
@@ -117,20 +180,62 @@ void DemoScene::onUpdate(const float deltaTime)
 
     Transform& transform = __cube.transform;
 
-    if (__wFlag)
+    static float pitch = 0.f;
+    static float yaw = 0.f;
+    static float roll = 0.f; 
+
+    if (__globalRotateMode) 
+    {
+        if (__insertFlag) 
+            pitch += Constant::ANGLE_AUGEND;
+        if (__deleteFlag)
+            pitch -= Constant::ANGLE_AUGEND;
+        if (__homeFlag)
+            yaw += Constant::ANGLE_AUGEND;
+        if (__endFlag)
+            yaw -= Constant::ANGLE_AUGEND;
+        if (__pageUpFlag)
+            roll += Constant::ANGLE_AUGEND;
+        if (__pageDownFlag)
+            roll -= Constant::ANGLE_AUGEND;
+    }
+    else if (__localRotateMode) 
+    {
+        if (__insertFlag)
+            pitch += Constant::ANGLE_AUGEND;
+        if (__deleteFlag)
+            pitch -= Constant::ANGLE_AUGEND;
+        if (__homeFlag)
+            yaw += Constant::ANGLE_AUGEND;
+        if (__endFlag)
+            yaw -= Constant::ANGLE_AUGEND;
+        if (__pageUpFlag)
+            roll += Constant::ANGLE_AUGEND;
+        if (__pageDownFlag)
+            roll -= Constant::ANGLE_AUGEND;
+    }
+    else if (__fpsRotateMode) 
+    {
+        if (__insertFlag)
+            pitch += Constant::ANGLE_AUGEND;
+        if (__deleteFlag)
+            pitch -= Constant::ANGLE_AUGEND;
+        if (__homeFlag)
+            yaw += Constant::ANGLE_AUGEND;
+        if (__endFlag)
+            yaw -= Constant::ANGLE_AUGEND;
+    }
+
+    transform.setRotation(pitch, yaw, roll);
+
+    if (__upFlag)
         transform.advanceZ(Constant::STEP);
-    if (__sFlag)
+    if (__downFlag)
         transform.advanceZ(-Constant::STEP);
-
-    if (__dFlag)
-        transform.advanceX(-Constant::STEP);
-    if (__aFlag)
+    if (__rightFlag)
         transform.advanceX(Constant::STEP);
-
-    if (__eFlag)
-        transform.advanceY(Constant::STEP);
-    if (__qFlag)
-        transform.advanceY(-Constant::STEP);
+    if (__leftFlag)
+        transform.advanceX(-Constant::STEP);
 
     transform.updateMatrix();
 }
@@ -269,16 +374,4 @@ void DemoScene::__init()
     __pShaderProgram = make_shared<ShaderProgram>("rectangle_vert.glsl", "rectangle_frag.glsl");
 
     __viewMat = translate(__viewMat, vec3{ 0.f, 0.f, -10.f });
-
-    __setCube();
-}
-
-void DemoScene::__setCube()
-{
-    static default_random_engine generator;
-    static const uniform_real_distribution<float> RAND_ROTATION_SPEED(Constant::MIN_ANGLE, Constant::MAX_ANGLE);
-
-    Transform& transform = __cube.transform;
-    transform.setRotation({ RAND_ROTATION_SPEED(generator), RAND_ROTATION_SPEED(generator), RAND_ROTATION_SPEED(generator) });
-    transform.updateMatrix();
 }

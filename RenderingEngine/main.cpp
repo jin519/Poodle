@@ -11,7 +11,7 @@ int main()
     if (!GLInitializer::initGL(4, 4, GLFW_OPENGL_CORE_PROFILE))
         return -1;
 
-    unique_ptr<GLWindow> pWindow = make_unique<GLWindow>(800, 800, "HW18");
+    unique_ptr<GLWindow> pWindow = make_unique<GLWindow>(800, 800, "Quaternion");
     pWindow->bind();
 
     unique_ptr<DemoScene> pScene = make_unique<DemoScene>(*pWindow);

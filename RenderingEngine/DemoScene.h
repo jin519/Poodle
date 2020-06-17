@@ -22,7 +22,6 @@ public:
 private:
 	/* member function */
 	void __init();
-	void __setCube();
 
 	/* member variable */
 	std::shared_ptr<GLCore::VertexArray> __pVao;
@@ -32,10 +31,17 @@ private:
 	glm::mat4 __viewMat{ 1.f };
 	glm::mat4 __projectionMat{ 1.f };
 
-	bool __wFlag = false;
-	bool __sFlag = false;
-	bool __dFlag = false;
-	bool __aFlag = false;
-	bool __eFlag = false;
-	bool __qFlag = false;
+	bool __globalRotateMode = true;
+	bool __localRotateMode = false;
+	bool __fpsRotateMode = false; 
+	bool __insertFlag = false;
+	bool __deleteFlag = false;
+	bool __homeFlag = false;
+	bool __endFlag = false;
+	bool __pageUpFlag = false;
+	bool __pageDownFlag = false;
+	bool __upFlag = false;
+	bool __downFlag = false;
+	bool __rightFlag = false;
+	bool __leftFlag = false;
 };
