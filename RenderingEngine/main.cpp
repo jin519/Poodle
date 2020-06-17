@@ -1,5 +1,5 @@
 #include "GLInitializer.h"
-#include "HW17Scene.h"
+#include "DemoScene.h"
 #include <memory>
 
 using namespace std;
@@ -11,10 +11,10 @@ int main()
     if (!GLInitializer::initGL(4, 4, GLFW_OPENGL_CORE_PROFILE))
         return -1;
 
-    unique_ptr<GLWindow> pWindow = make_unique<GLWindow>(800, 800, "HW17");
+    unique_ptr<GLWindow> pWindow = make_unique<GLWindow>(800, 800, "HW18");
     pWindow->bind();
 
-    unique_ptr<HW17Scene> pScene = make_unique<HW17Scene>(*pWindow);
+    unique_ptr<DemoScene> pScene = make_unique<DemoScene>(*pWindow);
 
     pWindow->setEventHandler(*pScene);
     pWindow->startMainLoop();

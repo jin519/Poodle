@@ -1,4 +1,4 @@
-#include "HW17Scene.h"
+#include "DemoScene.h"
 #include "VertexAttributeListFactory.h"
 #include "TextureUtil.h"
 #include "Constant.h"
@@ -8,16 +8,16 @@
 using namespace std;
 using namespace glm;
 using namespace GLCore;
-using namespace Poodle; 
+using namespace Poodle;
 
 /* constructor */
-HW17Scene::HW17Scene(GLWindow& window) : Scene(window)
+DemoScene::DemoScene(GLWindow& window) : Scene(window)
 {
     __init();
 }
 
 /* member function */
-void HW17Scene::onKey(const int key, const int scancode, const int action, const int mods) 
+void DemoScene::onKey(const int key, const int scancode, const int action, const int mods)
 {
     if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
     {
@@ -40,9 +40,9 @@ void HW17Scene::onKey(const int key, const int scancode, const int action, const
     if ((key == GLFW_KEY_W) && (action == GLFW_RELEASE))
     {
         cout << "W 키가 해제되었습니다." << endl;
-        __wFlag = false; 
+        __wFlag = false;
     }
-    
+
     if ((key == GLFW_KEY_S) && (action == GLFW_PRESS))
     {
         cout << "S 키를 누르셨습니다. Cube가 후진합니다." << endl;
@@ -104,7 +104,7 @@ void HW17Scene::onKey(const int key, const int scancode, const int action, const
     }
 }
 
-void HW17Scene::onUpdate(const float deltaTime) 
+void DemoScene::onUpdate(const float deltaTime)
 {
     static float elapsedTime = 0.f;
     elapsedTime += deltaTime;
@@ -135,7 +135,7 @@ void HW17Scene::onUpdate(const float deltaTime)
     transform.updateMatrix();
 }
 
-void HW17Scene::onRender() 
+void DemoScene::onRender()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -145,14 +145,14 @@ void HW17Scene::onRender()
     __pShaderProgram->setUniformMatrix4f("viewMat", __viewMat);
     __pShaderProgram->setUniformMatrix4f("projectionMat", __projectionMat);
     __pShaderProgram->setUniformMatrix4f("modelMat", __cube.transform.getModelMatrix());
-    
+
     __pShaderProgram->bind();
     __pVao->draw();
 
     getWindow().swapBuffers();
 }
 
-void HW17Scene::__init() 
+void DemoScene::__init()
 {
     glfwSwapInterval(1); // VSYNC 0: off, 1: on
     glEnable(GL_DEPTH_TEST);
@@ -267,13 +267,13 @@ void HW17Scene::__init()
     __pTexture->setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
     __pShaderProgram = make_shared<ShaderProgram>("rectangle_vert.glsl", "rectangle_frag.glsl");
-    
+
     __viewMat = translate(__viewMat, vec3{ 0.f, 0.f, -10.f });
 
     __setCube();
 }
 
-void HW17Scene::__setCube() 
+void DemoScene::__setCube()
 {
     static default_random_engine generator;
     static const uniform_real_distribution<float> RAND_ROTATION_SPEED(Constant::MIN_ANGLE, Constant::MAX_ANGLE);

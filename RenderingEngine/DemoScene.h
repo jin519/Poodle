@@ -8,11 +8,11 @@
 #include "Texture2D.h"
 #include "Cube.h"
 
-class HW17Scene : public Poodle::Scene 
+class DemoScene : public Poodle::Scene 
 {
 public:
 	/* constructor */
-	explicit HW17Scene(GLCore::GLWindow& window);
+	explicit DemoScene(GLCore::GLWindow& window);
 
 	/* member function */
 	virtual void onKey(const int key, const int scancode, const int action, const int mods) override;
@@ -28,14 +28,14 @@ private:
 	std::shared_ptr<GLCore::VertexArray> __pVao;
 	std::shared_ptr<GLCore::ShaderProgram> __pShaderProgram;
 	std::shared_ptr<GLCore::Texture2D> __pTexture;
-	Poodle::Cube __cube; 
+	Poodle::Cube __cube;
 	glm::mat4 __viewMat{ 1.f };
 	glm::mat4 __projectionMat{ 1.f };
 
 	bool __wFlag = false;
-	bool __sFlag = false; 
+	bool __sFlag = false;
 	bool __dFlag = false;
 	bool __aFlag = false;
 	bool __eFlag = false;
-	bool __qFlag = false; 
+	bool __qFlag = false;
 };

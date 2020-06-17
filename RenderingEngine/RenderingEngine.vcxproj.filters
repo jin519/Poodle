@@ -149,6 +149,9 @@
     <ClCompile Include="QuaternionException.cpp">
       <Filter>소스 파일\engine\core\transform</Filter>
     </ClCompile>
+    <ClCompile Include="DemoScene.cpp">
+      <Filter>소스 파일\client\demo\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -243,6 +246,9 @@
     </ClInclude>
     <ClInclude Include="QuaternionException.h">
       <Filter>소스 파일\engine\core\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="DemoScene.h">
+      <Filter>소스 파일\client\demo\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
