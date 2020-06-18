@@ -140,7 +140,13 @@
     <ClCompile Include="Transform.cpp">
       <Filter>소스 파일\engine\core\transform</Filter>
     </ClCompile>
-    <ClCompile Include="HW17Scene.cpp">
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>소스 파일\engine\core\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="QuaternionException.cpp">
+      <Filter>소스 파일\engine\core\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoScene.cpp">
       <Filter>소스 파일\client\demo\scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -229,7 +235,13 @@
     <ClInclude Include="Constant.h">
       <Filter>소스 파일\engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="HW17Scene.h">
+    <ClInclude Include="Quaternion.h">
+      <Filter>소스 파일\engine\core\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="QuaternionException.h">
+      <Filter>소스 파일\engine\core\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="DemoScene.h">
       <Filter>소스 파일\client\demo\scene</Filter>
     </ClInclude>
   </ItemGroup>

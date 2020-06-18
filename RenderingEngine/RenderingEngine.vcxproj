@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="BufferBase.cpp" />
     <ClCompile Include="BufferException.cpp" />
+    <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="glad\src\glad.c" />
     <ClCompile Include="GLInitializer.cpp" />
     <ClCompile Include="GLWindow.cpp" />
@@ -153,10 +154,11 @@
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ProgramException.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="QuaternionException.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="HW17Scene.cpp" />
     <ClCompile Include="TextReader.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureBase.cpp" />
@@ -174,16 +176,18 @@
     <ClInclude Include="BufferException.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="DemoScene.h" />
     <ClInclude Include="GLInitializer.h" />
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="GLWindowEventHandler.h" />
     <ClInclude Include="GLWindowException.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="ProgramException.h" />
+    <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="QuaternionException.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="HW17Scene.h" />
     <ClInclude Include="TextReader.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureBase.h" />
