@@ -45,11 +45,15 @@ namespace Poodle
 	};
 
 	/* constructor */
-	constexpr Quaternion::Quaternion(const glm::quat& src) : __quaternion(src)
-	{}
+	constexpr Quaternion::Quaternion(const glm::quat& src)
+	{
+		set(src);
+	}
 
-	constexpr Quaternion::Quaternion(const float w, const float x, const float y, const float z) : __quaternion(w, x, y, z)
-	{}
+	constexpr Quaternion::Quaternion(const float w, const float x, const float y, const float z)
+	{
+		set(w, x, y, z);
+	}
 
 	/* member function */
 	constexpr void Quaternion::set(const glm::quat& src)

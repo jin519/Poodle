@@ -7,20 +7,30 @@ using namespace std;
 namespace Poodle 
 {
 	/* constructor */
-	Quaternion::Quaternion(const vec3& eulerAngles) : __quaternion(eulerAngles)
-	{}
+	Quaternion::Quaternion(const vec3& eulerAngles)
+	{
+		set(eulerAngles);
+	}
 
-	Quaternion::Quaternion(const float pitch, const float yaw, const float roll) : __quaternion({ pitch, yaw, roll })
-	{}
+	Quaternion::Quaternion(const float pitch, const float yaw, const float roll)
+	{
+		set(pitch, yaw, roll);
+	}
 
-	Quaternion::Quaternion(const float angle, const vec3& axis) : __quaternion(angleAxis(angle, axis))
-	{}
+	Quaternion::Quaternion(const float angle, const vec3& axis)
+	{
+		set(angle, axis);
+	}
 
-	Quaternion::Quaternion(const mat3& rotationMatrix) : __quaternion(rotationMatrix)
-	{}
+	Quaternion::Quaternion(const mat3& rotationMatrix)
+	{
+		set(rotationMatrix);
+	}
 
-	Quaternion::Quaternion(const mat4& rotationMatrix) : __quaternion(rotationMatrix)
-	{}
+	Quaternion::Quaternion(const mat4& rotationMatrix) 
+	{
+		set(rotationMatrix);
+	}
 
 	/* member function */
 	void Quaternion::set(const vec3& eulerAngles)
@@ -35,17 +45,17 @@ namespace Poodle
 
 	void Quaternion::set(const float angle, const vec3& axis)
 	{
-		__quaternion = { angle, axis };
+		__quaternion = angleAxis(angle, axis);
 	}
 
 	void Quaternion::set(const mat3& rotationMatrix)
 	{
-		__quaternion = rotationMatrix;
+		__quaternion = quat_cast(rotationMatrix);
 	}
 
 	void Quaternion::set(const mat4& rotationMatrix)
 	{
-		__quaternion = rotationMatrix;
+		__quaternion = quat_cast(rotationMatrix);
 	}
 
 	void Quaternion::orient(const vec3& forward, const vec3& referenceUp)
@@ -53,7 +63,7 @@ namespace Poodle
 		const vec3& FORWARD = normalize(forward);
 		const vec3& UP = normalize(referenceUp);
 
-		if (epsilonEqual(dot(FORWARD, UP), 1.f, epsilon<float>()))
+		if (epsilonEqual(fabsf(dot(FORWARD, UP)), 1.f, epsilon<float>()))
 			throw QuaternionException("The forward vector and up vector are on a straight line.");
 
 		const vec3& HORIZONTAL = normalize(cross(UP, FORWARD));
@@ -64,7 +74,7 @@ namespace Poodle
 
 	void Quaternion::rotateGlobal(const vec3& eularAngles)
 	{
-		__quaternion = (quat(eularAngles) * __quaternion);
+		__quaternion = (quat{ eularAngles } * __quaternion);
 	}
 
 	void Quaternion::rotateGlobal(const float pitch, const float yaw, const float roll)
@@ -74,7 +84,7 @@ namespace Poodle
 
 	void Quaternion::rotateGlobal(const float angle, const vec3& axis)
 	{
-		__quaternion = (angleAxis(angle, axis) * __quaternion);
+		__quaternion = (angleAxis(angle, normalize(axis)) * __quaternion);
 	}
 
 	void Quaternion::rotateLocal(const vec3& eulerAngles)
