@@ -1,5 +1,4 @@
 #include "Transform.h"
-#include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
 
 using namespace glm; 
