@@ -35,7 +35,7 @@ namespace Poodle
 	/* member function */
 	void Quaternion::set(const vec3& eulerAngles)
 	{
-		__quaternion = quat{ eulerAngles };
+		__quaternion = { eulerAngles };
 	}
 
 	void Quaternion::set(const float pitch, const float yaw, const float roll)

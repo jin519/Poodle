@@ -47,9 +47,9 @@ namespace Poodle
 
 	private:
 		/* member variable */
-		glm::vec3 __position{ 0.f };
+		glm::vec3 __position{ 0.f, 0.f, 0.f };
 		Quaternion __rotation;
-		glm::vec3 __scale{ 1.f };
+		glm::vec3 __scale{ 1.f, 1.f, 1.f };
 
 		glm::mat4 __scaleMatrix{ 1.f };
 		glm::mat4 __rotationMatrix{ 1.f };
