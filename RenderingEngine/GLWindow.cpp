@@ -21,6 +21,16 @@ static void keyCallback(GLFWwindow* const pWindow, const int key, const int scan
 	getWindowMap().at(pWindow)->getEventHandler().onKey(key, scancode, action, mods);
 }
 
+static void mouseButtonCallback(GLFWwindow* const pWindow, const int button, const int action, const int mods)
+{
+	getWindowMap().at(pWindow)->getEventHandler().onMouseButton(button, action, mods);
+}
+
+static void cursorPosCallback(GLFWwindow* const pWindow, const double xPos, const double yPos) 
+{
+	getWindowMap().at(pWindow)->getEventHandler().onMouseMove(xPos, yPos);
+}
+
 namespace GLCore
 {
 	/* constructor */
@@ -39,6 +49,8 @@ namespace GLCore
 
 		glfwSetFramebufferSizeCallback(__pWindow, framebufferSizeCallback);
 		glfwSetKeyCallback(__pWindow, keyCallback);
+		glfwSetMouseButtonCallback(__pWindow, mouseButtonCallback);
+		glfwSetCursorPosCallback(__pWindow, cursorPosCallback);
 	}
 
 	/* destructor */
@@ -89,5 +101,13 @@ namespace GLCore
 	void GLWindow::swapBuffers()
 	{
 		glfwSwapBuffers(__pWindow);
+	}
+
+	void GLWindow::showMouseCursor(const bool state) 
+	{
+		if (state)
+			glfwSetInputMode(__pWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		else
+			glfwSetInputMode(__pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 }

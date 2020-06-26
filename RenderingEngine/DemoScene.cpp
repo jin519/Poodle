@@ -3,6 +3,7 @@
 #include "TextureUtil.h"
 #include "Constant.h"
 #include <iostream>
+#include <random>
 
 using namespace std;
 using namespace glm;
@@ -22,100 +23,6 @@ void DemoScene::onKey(const int key, const int scancode, const int action, const
     {
         cout << "[ESC 활성] 프로그램 종료" << endl;
         getWindow().setCloseFlag(true);
-    }
-
-    if ((key == GLFW_KEY_1) && (action == GLFW_PRESS)) 
-    {
-        cout << "[1 활성] global rotate mode" << endl;
-        __globalRotateMode = true;
-        __localRotateMode = false;
-        __fpsRotateMode = false;
-    }
-    else if ((key == GLFW_KEY_2) && (action == GLFW_PRESS)) 
-    {
-        cout << "[2 활성] local rotate mode" << endl;
-        __globalRotateMode = false;
-        __localRotateMode = true;
-        __fpsRotateMode = false;
-    }
-    else if ((key == GLFW_KEY_3) && (action == GLFW_PRESS)) 
-    {
-        cout << "[3 활성] fps rotate mode" << endl;
-        __globalRotateMode = false;
-        __localRotateMode = false;
-        __fpsRotateMode = true;
-    }
-
-    if ((key == GLFW_KEY_INSERT) && (action == GLFW_PRESS)) 
-    {
-        cout << "[INSERT 활성] pitch 증가" << endl;
-        __insertFlag = true; 
-    }
-
-    if ((key == GLFW_KEY_INSERT) && (action == GLFW_RELEASE))
-    {
-        cout << "[INSERT 해제]" << endl;
-        __insertFlag = false;
-    }
-
-    if ((key == GLFW_KEY_DELETE) && (action == GLFW_PRESS))
-    {
-        cout << "[DELETE 활성] pitch 감소" << endl;
-        __deleteFlag = true;
-    }
-
-    if ((key == GLFW_KEY_DELETE) && (action == GLFW_RELEASE))
-    {
-        cout << "[DELETE 해제]" << endl;
-        __deleteFlag = false;
-    }
-
-    if ((key == GLFW_KEY_HOME) && (action == GLFW_PRESS))
-    {
-        cout << "[HOME 활성] yaw 증가" << endl;
-        __homeFlag = true;
-    }
-
-    if ((key == GLFW_KEY_HOME) && (action == GLFW_RELEASE))
-    {
-        cout << "[HOME 해제]" << endl;
-        __homeFlag = false;
-    }
-
-    if ((key == GLFW_KEY_END) && (action == GLFW_PRESS))
-    {
-        cout << "[END 활성] yaw 감소" << endl;
-        __endFlag = true;
-    }
-
-    if ((key == GLFW_KEY_END) && (action == GLFW_RELEASE))
-    {
-        cout << "[END 해제]" << endl;
-        __endFlag = false;
-    }
-
-    if ((key == GLFW_KEY_PAGE_UP) && (action == GLFW_PRESS))
-    {
-        cout << "[PAGE UP 활성] roll 증가" << endl;
-        __pageUpFlag = true;
-    }
-
-    if ((key == GLFW_KEY_PAGE_UP) && (action == GLFW_RELEASE))
-    {
-        cout << "[PAGE UP 해제]" << endl;
-        __pageUpFlag = false;
-    }
-
-    if ((key == GLFW_KEY_PAGE_DOWN) && (action == GLFW_PRESS))
-    {
-        cout << "[PAGE DOWN 활성] roll 감소" << endl;
-        __pageDownFlag = true;
-    }
-
-    if ((key == GLFW_KEY_PAGE_DOWN) && (action == GLFW_RELEASE))
-    {
-        cout << "[PAGE DOWN 해제]" << endl;
-        __pageDownFlag = false;
     }
 
     if ((key == GLFW_KEY_UP) && (action == GLFW_PRESS))
@@ -169,69 +76,30 @@ void DemoScene::onKey(const int key, const int scancode, const int action, const
 
 void DemoScene::onUpdate(const float deltaTime)
 {
-    static float elapsedTime = 0.f;
-    elapsedTime += deltaTime;
-
     const GLWindow& WINDOW = getWindow();
     const float WIDTH = static_cast<float>(WINDOW.getWidth());
     const float HEIGHT = static_cast<float>(WINDOW.getHeight());
 
     __projectionMat = perspective(quarter_pi<float>(), (WIDTH / HEIGHT), 0.1f, 200.f);
 
-    Transform& transform = __cube.transform;
-
-    if (__globalRotateMode) 
+    for (auto& cube : __cubes) 
     {
-        if (__insertFlag) 
-            transform.rotateGlobal(Constant::ANGLE_AUGEND, 0.f, 0.f);
-        if (__deleteFlag)
-            transform.rotateGlobal(-Constant::ANGLE_AUGEND, 0.f, 0.f);
-        if (__homeFlag)
-            transform.rotateGlobal(0.f, Constant::ANGLE_AUGEND, 0.f);
-        if (__endFlag)
-            transform.rotateGlobal(0.f, -Constant::ANGLE_AUGEND, 0.f);
-        if (__pageUpFlag)
-            transform.rotateGlobal(0.f, 0.f, Constant::ANGLE_AUGEND);
-        if (__pageDownFlag)
-            transform.rotateGlobal(0.f, 0.f, -Constant::ANGLE_AUGEND);
-    }
-    else if (__localRotateMode) 
-    {
-        if (__insertFlag)
-            transform.rotateLocal(Constant::ANGLE_AUGEND, 0.f, 0.f);
-        if (__deleteFlag)
-            transform.rotateLocal(-Constant::ANGLE_AUGEND, 0.f, 0.f);
-        if (__homeFlag)
-            transform.rotateLocal(0.f, Constant::ANGLE_AUGEND, 0.f);
-        if (__endFlag)
-            transform.rotateLocal(0.f, -Constant::ANGLE_AUGEND, 0.f);
-        if (__pageUpFlag)
-            transform.rotateLocal(0.f, 0.f, Constant::ANGLE_AUGEND);
-        if (__pageDownFlag)
-            transform.rotateLocal(0.f, 0.f, -Constant::ANGLE_AUGEND);
-    }
-    else if (__fpsRotateMode) 
-    {
-        if (__insertFlag)
-            transform.rotateFPS(Constant::ANGLE_AUGEND, 0.f);
-        if (__deleteFlag)
-            transform.rotateFPS(-Constant::ANGLE_AUGEND, 0.f);
-        if (__homeFlag)
-            transform.rotateFPS(0.f, Constant::ANGLE_AUGEND);
-        if (__endFlag)
-            transform.rotateFPS(0.f, -Constant::ANGLE_AUGEND);
-    }
+        Transform& transform = cube.transform;
+        const float ANGLE = (deltaTime * cube.rotationSpeed);
 
-    if (__upFlag)
-        transform.advanceZ(Constant::STEP);
-    if (__downFlag)
-        transform.advanceZ(-Constant::STEP);
-    if (__rightFlag)
-        transform.advanceX(Constant::STEP);
-    if (__leftFlag)
-        transform.advanceX(-Constant::STEP);
+        transform.rotateLocal(ANGLE, ANGLE, ANGLE);
 
-    transform.updateMatrix();
+        if (__upFlag)
+            transform.advanceZ(Constant::Cube::TRANSLATION_STEP);
+        if (__downFlag)
+            transform.advanceZ(-Constant::Cube::TRANSLATION_STEP);
+        if (__rightFlag)
+            transform.advanceX(Constant::Cube::TRANSLATION_STEP);
+        if (__leftFlag)
+            transform.advanceX(-Constant::Cube::TRANSLATION_STEP);
+
+        transform.updateMatrix();
+    }
 }
 
 void DemoScene::onRender()
@@ -243,16 +111,32 @@ void DemoScene::onRender()
     __pShaderProgram->setUniform1i("tex", 0);
     __pShaderProgram->setUniformMatrix4f("viewMat", __viewMat);
     __pShaderProgram->setUniformMatrix4f("projectionMat", __projectionMat);
-    __pShaderProgram->setUniformMatrix4f("modelMat", __cube.transform.getModelMatrix());
+    
+    for (const auto& CUBE : __cubes)
+    {
+        __pShaderProgram->setUniformMatrix4f("modelMat", CUBE.transform.getModelMatrix());
+        __pShaderProgram->bind();
 
-    __pShaderProgram->bind();
-    __pVao->draw();
-
+        __pVao->draw();
+    }
+    
     getWindow().swapBuffers();
+}
+
+void DemoScene::onMouseButton(const int button, const int action, const int mods) 
+{
+
+}
+
+void DemoScene::onMouseMove(const double xPos, const double yPos) 
+{
+    
 }
 
 void DemoScene::__init()
 {
+    showMouseCursor(false);
+
     glfwSwapInterval(1); // VSYNC 0: off, 1: on
     glEnable(GL_DEPTH_TEST);
 
@@ -366,6 +250,35 @@ void DemoScene::__init()
     __pTexture->setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
     __pShaderProgram = make_shared<ShaderProgram>("rectangle_vert.glsl", "rectangle_frag.glsl");
+    __viewMat = translate(__viewMat, vec3{ 0.f, 0.f, -70.f });
+    
+    __createCubes();
+}
 
-    __viewMat = translate(__viewMat, vec3{ 0.f, 0.f, -10.f });
+void DemoScene::__createCubes() 
+{
+    static default_random_engine generator;
+    static const uniform_real_distribution<float> RAND_POSITION(-20.f, 20.f);
+    static const uniform_real_distribution<float> RAND_SIDE(0.5f, 5.f);
+    static const uniform_real_distribution<float> RAND_ROTATION_AXIS(-1.f, 1.f);
+    static const uniform_real_distribution<float> RAND_ROTATION_SPEED(0.2f, 5.f);
+
+    for (auto& cube : __cubes)
+    {
+        Transform& transform = cube.transform;
+
+        transform.setPosition(
+            RAND_POSITION(generator), 
+            RAND_POSITION(generator),
+            RAND_POSITION(generator));
+
+        transform.setScale(RAND_SIDE(generator));
+
+        transform.orient({
+            RAND_ROTATION_AXIS(generator),
+            RAND_ROTATION_AXIS(generator),
+            RAND_ROTATION_AXIS(generator)});
+
+        cube.rotationSpeed = RAND_ROTATION_SPEED(generator);
+    }
 }

@@ -40,6 +40,11 @@ namespace Poodle
 		__rotation.set(rotationMatrix);
 	}
 
+	void Transform::orient(const vec3& forward, const vec3& referenceUp)
+	{
+		__rotation.orient(forward, referenceUp);
+	}
+
 	void Transform::rotateGlobal(const vec3& eularAngles) 
 	{
 		__rotation.rotateGlobal(eularAngles);

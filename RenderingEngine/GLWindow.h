@@ -26,6 +26,7 @@ namespace GLCore
 		void startMainLoop();
 		void setCloseFlag(const bool flag);
 		void swapBuffers();
+		void showMouseCursor(const bool state);
 
 	private:
 		/* member variable */

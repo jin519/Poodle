@@ -158,6 +158,12 @@
     <ClCompile Include="TransformableCamera.cpp">
       <Filter>소스 파일\engine\core\camera</Filter>
     </ClCompile>
+    <ClCompile Include="OrthoCamera.cpp">
+      <Filter>소스 파일\engine\core\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="PerspectiveCamera.cpp">
+      <Filter>소스 파일\engine\core\camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -257,6 +263,12 @@
       <Filter>소스 파일\engine\core\camera</Filter>
     </ClInclude>
     <ClInclude Include="TransformableCamera.h">
+      <Filter>소스 파일\engine\core\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="OrthoCamera.h">
+      <Filter>소스 파일\engine\core\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="PerspectiveCamera.h">
       <Filter>소스 파일\engine\core\camera</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,6 +10,11 @@ namespace Poodle
 	{}
 
 	/* member function */
+	void Scene::showMouseCursor(const bool state) 
+	{
+		__pWindow->showMouseCursor(state);
+	}
+
 	void Scene::onResize(const int width, const int height)
 	{
 		glViewport(0, 0, width, height);

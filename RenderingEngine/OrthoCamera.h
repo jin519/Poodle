@@ -31,7 +31,7 @@ namespace Poodle
 	/* member function */
 	constexpr void OrthoCamera::setOrthoHeight(const float height) noexcept 
 	{
-		__orthoHeight = clamp(
+		__orthoHeight = glm::clamp(
 			height,
 			Constant::Camera::MIN_ORTHO_HEIGHT,
 			Constant::Camera::MAX_ORTHO_HEIGHT);

@@ -154,6 +154,8 @@
     <ClCompile Include="GLWindowException.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OrthoCamera.cpp" />
+    <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="ProgramException.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="QuaternionException.cpp" />
@@ -185,6 +187,8 @@
     <ClInclude Include="GLWindowEventHandler.h" />
     <ClInclude Include="GLWindowException.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="OrthoCamera.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="ProgramException.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="QuaternionException.h" />
