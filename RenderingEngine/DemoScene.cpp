@@ -169,14 +169,19 @@ void DemoScene::onMouseMove(const double xPos, const double yPos)
         __mouseMoved = true;
     }
 
-    const GLfloat PITCH = (static_cast<GLfloat>(__mouseYPos - yPos) * 0.001f);
-    const GLfloat YAW = (static_cast<GLfloat>(__mouseXPos - xPos) * 0.001f);
+    const GLfloat PITCH = (static_cast<GLfloat>(__mouseYPos - yPos) * 0.002f);
+    const GLfloat YAW = (static_cast<GLfloat>(__mouseXPos - xPos) * 0.002f);
 
     Transform& transform = __pCamera->getTransform();
     transform.rotateFPS(PITCH, YAW);
 
     __mouseXPos = xPos;
     __mouseYPos = yPos;
+}
+
+void DemoScene::onScroll(const double delta) 
+{
+    __pCamera->adjustFov(static_cast<float>(delta) * 0.03f);
 }
 
 void DemoScene::__init()

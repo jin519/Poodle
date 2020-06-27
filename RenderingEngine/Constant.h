@@ -20,6 +20,8 @@ namespace Poodle
 	namespace Constant::Camera 
 	{
 		constexpr float DEFAULT_FOV = glm::quarter_pi<float>();
+		constexpr float MIN_FOV = (glm::quarter_pi<float>() * 0.3f);
+		constexpr float MAX_FOV = glm::half_pi<float>();
 		constexpr float DEFAULT_ORTHO_HEIGHT = 40.f;
 		constexpr float MAX_ORTHO_HEIGHT = 400.f;
 		constexpr float MIN_ORTHO_HEIGHT = 10.f;

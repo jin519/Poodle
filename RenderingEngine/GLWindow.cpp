@@ -31,6 +31,11 @@ static void cursorPosCallback(GLFWwindow* const pWindow, const double xPos, cons
 	getWindowMap().at(pWindow)->getEventHandler().onMouseMove(xPos, yPos);
 }
 
+static void scrollCallback(GLFWwindow* const pWindow, const double xOffset, const double yOffset) 
+{
+	getWindowMap().at(pWindow)->getEventHandler().onScroll(yOffset);
+}
+
 namespace GLCore
 {
 	/* constructor */
@@ -51,6 +56,7 @@ namespace GLCore
 		glfwSetKeyCallback(__pWindow, keyCallback);
 		glfwSetMouseButtonCallback(__pWindow, mouseButtonCallback);
 		glfwSetCursorPosCallback(__pWindow, cursorPosCallback);
+		glfwSetScrollCallback(__pWindow, scrollCallback);
 	}
 
 	/* destructor */

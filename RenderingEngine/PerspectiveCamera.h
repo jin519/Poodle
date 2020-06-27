@@ -30,7 +30,7 @@ namespace Poodle
 	/* member function */
 	constexpr void PerspectiveCamera::setFov(const float fov) noexcept 
 	{
-		__fov = fov;
+		__fov = glm::clamp(fov, Constant::Camera::MIN_FOV, Constant::Camera::MAX_FOV);
 	}
 
 	constexpr void PerspectiveCamera::adjustFov(const float delta) noexcept 

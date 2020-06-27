@@ -23,6 +23,7 @@ public:
 	virtual void onResize(const int width, const int height) override;
 	virtual void onMouseButton(const int button, const int action, const int mods) override;
 	virtual void onMouseMove(const double xPos, const double yPos) override;
+	virtual void onScroll(const double delta) override;
 
 private:
 	/* member function */
