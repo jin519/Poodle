@@ -181,7 +181,7 @@ void DemoScene::onMouseMove(const double xPos, const double yPos)
 
 void DemoScene::onScroll(const double delta) 
 {
-    __pCamera->adjustFov(static_cast<float>(delta) * 0.03f);
+    __pCamera->adjustFov(-(static_cast<float>(delta) * 0.03f));
 }
 
 void DemoScene::__init()
