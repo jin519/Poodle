@@ -15,7 +15,6 @@ namespace Poodle
 		constexpr float MIN_ANGLE = 0.2f;
 		constexpr float MAX_ANGLE = 0.5f;
 		constexpr float ROTATION_STEP = 0.05f;
-		constexpr float TRANSLATION_STEP = 0.05f;
 	}
 
 	namespace Constant::Camera 
@@ -27,5 +26,6 @@ namespace Poodle
 		constexpr float DEFAULT_ASPECT_RATIO = 1.f;
 		constexpr float DEFAULT_Z_NEAR = 1.f;
 		constexpr float DEFAULT_Z_FAR = 1000.f;
+		constexpr float TRANSLATION_STEP = 30.f;
 	}
 }

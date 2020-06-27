@@ -5,7 +5,7 @@
 
 namespace Poodle 
 {
-	class TransformableCamera abstract : Camera
+	class TransformableCamera abstract : public Camera
 	{
 	public:
 		/* member function */

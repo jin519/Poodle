@@ -25,79 +25,105 @@ void DemoScene::onKey(const int key, const int scancode, const int action, const
         getWindow().setCloseFlag(true);
     }
 
-    if ((key == GLFW_KEY_UP) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_W) && (action == GLFW_PRESS))
     {
-        cout << "[UP 활성] forward 기준으로 전진" << endl;
-        __upFlag = true;
+        cout << "[W 활성] 카메라 전진" << endl;
+        __wPressed = true;
     }
 
-    if ((key == GLFW_KEY_UP) && (action == GLFW_RELEASE))
+    if ((key == GLFW_KEY_W) && (action == GLFW_RELEASE))
     {
-        cout << "[UP 해제]" << endl;
-        __upFlag = false;
+        cout << "[W 해제]" << endl;
+        __wPressed = false;
     }
 
-    if ((key == GLFW_KEY_DOWN) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_S) && (action == GLFW_PRESS))
     {
-        cout << "[DOWN 활성] forward 기준으로 후진" << endl;
-        __downFlag = true;
+        cout << "[S 활성] 카메라 후진" << endl;
+        __sPressed = true;
     }
 
-    if ((key == GLFW_KEY_DOWN) && (action == GLFW_RELEASE))
+    if ((key == GLFW_KEY_S) && (action == GLFW_RELEASE))
     {
-        cout << "[DOWN 해제]" << endl;
-        __downFlag = false;
+        cout << "[S 해제]" << endl;
+        __sPressed = false;
     }
 
-    if ((key == GLFW_KEY_RIGHT) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_A) && (action == GLFW_PRESS))
     {
-        cout << "[RIGHT 활성] HORIZONTAL 기준으로 우측 이동" << endl;
-        __rightFlag = true;
+        cout << "[A 활성] 카메라 좌측 이동" << endl;
+        __aPressed = true;
     }
 
-    if ((key == GLFW_KEY_RIGHT) && (action == GLFW_RELEASE))
+    if ((key == GLFW_KEY_A) && (action == GLFW_RELEASE))
     {
-        cout << "[RIGHT 해제]" << endl;
-        __rightFlag = false;
+        cout << "[A 해제]" << endl;
+        __aPressed = false;
     }
 
-    if ((key == GLFW_KEY_LEFT) && (action == GLFW_PRESS))
+    if ((key == GLFW_KEY_D) && (action == GLFW_PRESS))
     {
-        cout << "[LEFT 활성] HORIZONTAL 기준으로 좌측 이동" << endl;
-        __leftFlag = true;
+        cout << "[D 활성] 카메라 우측 이동" << endl;
+        __dPressed = true;
     }
 
-    if ((key == GLFW_KEY_LEFT) && (action == GLFW_RELEASE))
+    if ((key == GLFW_KEY_D) && (action == GLFW_RELEASE))
     {
-        cout << "[LEFT 해제]" << endl;
-        __leftFlag = false;
+        cout << "[D 해제]" << endl;
+        __dPressed = false;
+    }
+
+    if ((key == GLFW_KEY_Q) && (action == GLFW_PRESS))
+    {
+        cout << "[Q 활성] 카메라 하강" << endl;
+        __qPressed = true;
+    }
+
+    if ((key == GLFW_KEY_Q) && (action == GLFW_RELEASE))
+    {
+        cout << "[Q 해제]" << endl;
+        __qPressed = false;
+    }
+
+    if ((key == GLFW_KEY_E) && (action == GLFW_PRESS))
+    {
+        cout << "[E 활성] 카메라 상승" << endl;
+        __ePressed = true;
+    }
+
+    if ((key == GLFW_KEY_E) && (action == GLFW_RELEASE))
+    {
+        cout << "[E 해제]" << endl;
+        __ePressed = false;
     }
 }
 
 void DemoScene::onUpdate(const float deltaTime)
 {
-    const GLWindow& WINDOW = getWindow();
-    const float WIDTH = static_cast<float>(WINDOW.getWidth());
-    const float HEIGHT = static_cast<float>(WINDOW.getHeight());
+    Transform& cameraTransform = __pCamera->getTransform();
+    const GLfloat TRANSLATION_STEP = (deltaTime * Constant::Camera::TRANSLATION_STEP);
 
-    __projectionMat = perspective(quarter_pi<float>(), (WIDTH / HEIGHT), 0.1f, 200.f);
+    if (__wPressed)
+        cameraTransform.advanceZ(-TRANSLATION_STEP);
+    if (__sPressed)
+        cameraTransform.advanceZ(TRANSLATION_STEP);
+    if (__aPressed)
+        cameraTransform.advanceX(-TRANSLATION_STEP);
+    if (__dPressed)
+        cameraTransform.advanceX(TRANSLATION_STEP);
+    if (__qPressed)
+        cameraTransform.advanceY(TRANSLATION_STEP);
+    if (__ePressed)
+        cameraTransform.advanceY(-TRANSLATION_STEP);
+
+    __pCamera->update();
 
     for (auto& cube : __cubes) 
     {
-        Transform& transform = cube.transform;
         const float ANGLE = (deltaTime * cube.rotationSpeed);
 
+        Transform& transform = cube.transform;
         transform.rotateLocal(ANGLE, ANGLE, ANGLE);
-
-        if (__upFlag)
-            transform.advanceZ(Constant::Cube::TRANSLATION_STEP);
-        if (__downFlag)
-            transform.advanceZ(-Constant::Cube::TRANSLATION_STEP);
-        if (__rightFlag)
-            transform.advanceX(Constant::Cube::TRANSLATION_STEP);
-        if (__leftFlag)
-            transform.advanceX(-Constant::Cube::TRANSLATION_STEP);
-
         transform.updateMatrix();
     }
 }
@@ -109,8 +135,8 @@ void DemoScene::onRender()
     __pTexture->activate(0);
 
     __pShaderProgram->setUniform1i("tex", 0);
-    __pShaderProgram->setUniformMatrix4f("viewMat", __viewMat);
-    __pShaderProgram->setUniformMatrix4f("projectionMat", __projectionMat);
+    __pShaderProgram->setUniformMatrix4f("viewMat", __pCamera->getViewMatrix());
+    __pShaderProgram->setUniformMatrix4f("projectionMat", __pCamera->getProjectionMatrix());
     
     for (const auto& CUBE : __cubes)
     {
@@ -123,6 +149,13 @@ void DemoScene::onRender()
     getWindow().swapBuffers();
 }
 
+void DemoScene::onResize(const int width, const int height) 
+{
+    __super::onResize(width, height);
+    __pCamera->setAspectRatio(width, height);
+    __pCamera->update();
+}
+
 void DemoScene::onMouseButton(const int button, const int action, const int mods) 
 {
 
@@ -130,7 +163,28 @@ void DemoScene::onMouseButton(const int button, const int action, const int mods
 
 void DemoScene::onMouseMove(const double xPos, const double yPos) 
 {
+    GLfloat pitch = 0.f, yaw = 0.f;
+
+    if (__mouseMoved) 
+    {
+        pitch = static_cast<GLfloat>(__mouseYPos - yPos);
+        yaw = static_cast<GLfloat>(__mouseXPos - xPos);
+    }
+    else 
+    {
+        pitch = static_cast<GLfloat>(__mouseYPos);
+        yaw = static_cast<GLfloat>(__mouseXPos);
+        __mouseMoved = true;
+    }
     
+    pitch *= 0.001f;
+    yaw *= 0.001f;
+
+    Transform& transform = __pCamera->getTransform();
+    transform.rotateFPS(pitch, yaw);
+
+    __mouseXPos = xPos;
+    __mouseYPos = yPos;
 }
 
 void DemoScene::__init()
@@ -243,6 +297,11 @@ void DemoScene::__init()
         make_shared<IndexBuffer>(indices, sizeof(indices), GL_STATIC_DRAW),
         static_cast<GLsizei>(size(vertices)));
 
+    __pCamera = make_unique<PerspectiveCamera>();
+    __pCamera->setNear(0.1f);
+    __pCamera->setFar(200.f);
+    __pCamera->getTransform().advanceZ(70.f);
+
     __pTexture = TextureUtil::createTexture2DFromImage("./res/container.jpg");
     __pTexture->setParameteri(GL_TEXTURE_WRAP_S, GL_REPEAT);
     __pTexture->setParameteri(GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -250,7 +309,6 @@ void DemoScene::__init()
     __pTexture->setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
     __pShaderProgram = make_shared<ShaderProgram>("rectangle_vert.glsl", "rectangle_frag.glsl");
-    __viewMat = translate(__viewMat, vec3{ 0.f, 0.f, -70.f });
     
     __createCubes();
 }

@@ -45,17 +45,17 @@ namespace Poodle
 
 	void Quaternion::set(const float angle, const vec3& axis)
 	{
-		__quaternion = angleAxis(angle, axis);
+		__quaternion = angleAxis(angle, normalize(axis));
 	}
 
 	void Quaternion::set(const mat3& rotationMatrix)
 	{
-		__quaternion = quat_cast(rotationMatrix);
+		__quaternion = normalize(quat_cast(rotationMatrix));
 	}
 
 	void Quaternion::set(const mat4& rotationMatrix)
 	{
-		__quaternion = quat_cast(rotationMatrix);
+		__quaternion = normalize(quat_cast(rotationMatrix));
 	}
 
 	void Quaternion::orient(const vec3& forward, const vec3& referenceUp)
@@ -74,7 +74,7 @@ namespace Poodle
 
 	void Quaternion::rotateGlobal(const vec3& eularAngles)
 	{
-		__quaternion = (quat{ eularAngles } * __quaternion);
+		__quaternion = normalize(quat{ eularAngles } * __quaternion);
 	}
 
 	void Quaternion::rotateGlobal(const float pitch, const float yaw, const float roll)
@@ -84,7 +84,7 @@ namespace Poodle
 
 	void Quaternion::rotateGlobal(const float angle, const vec3& axis)
 	{
-		__quaternion = (angleAxis(angle, normalize(axis)) * __quaternion);
+		__quaternion = normalize(angleAxis(angle, normalize(axis)) * __quaternion);
 	}
 
 	void Quaternion::rotateLocal(const vec3& eulerAngles)
@@ -99,7 +99,7 @@ namespace Poodle
 		const vec3& BASIS_Y = ROTATION_MATRIX[1];
 		const vec3& BASIS_Z = ROTATION_MATRIX[2];
 
-		__quaternion = (
+		__quaternion = normalize(
 			angleAxis(roll, BASIS_Z) * 
 			angleAxis(yaw, BASIS_Y) * 
 			angleAxis(pitch, BASIS_X) * __quaternion);
@@ -112,7 +112,7 @@ namespace Poodle
 		const vec3& PROJ_UP_HORIZONTAL = (dot(HORIZONTAL, UP) * UP);
 		const vec3& PERP_UP_HORIZONTAL = normalize(HORIZONTAL - PROJ_UP_HORIZONTAL);
 
-		__quaternion = (
+		__quaternion = normalize(
 			angleAxis(yaw, UP) *
 			angleAxis(pitch, PERP_UP_HORIZONTAL) * __quaternion);
 	}
@@ -134,6 +134,6 @@ namespace Poodle
 
 	Quaternion operator*(const Quaternion& lhs, const Quaternion& rhs)
 	{
-		return (lhs.__quaternion * rhs.__quaternion);
+		return normalize(lhs.__quaternion * rhs.__quaternion);
 	}
 }
