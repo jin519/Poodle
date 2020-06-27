@@ -1,8 +1,8 @@
-# LearnOpenGL
+# Demo
+<kbd><img src="demo/demo.gif" width="550px"></kbd>
 
-> Getting started
+# Learning History
 
-- OpenGL
 - Creating a window <a href="https://github.com/Twin-Monkeys/LearnOpenGL/tree/6cd5a30c9173bff1a898f76627be978946fc9cc5/GettingStarted-CreatingAWindow">소스</a> <a href="https://github.com/Twin-Monkeys/LearnOpenGL/tree/1fa6012bbdca74dc7dbb2f81b06174f3d07d5412/WindowApplication">Window Application</a>
 - Hello Window <a href="https://github.com/Twin-Monkeys/LearnOpenGL/tree/1fa6012bbdca74dc7dbb2f81b06174f3d07d5412/%5BGetting%20started%5D%20Hello%20Window">소스</a> <a href="https://github.com/Twin-Monkeys/LearnOpenGL/tree/19cb83fe7201af4a6acdeb1e2983f1fe53268a70/HW1">HW1</a>
 - Hello Triangle <a href="https://github.com/Twin-Monkeys/LearnOpenGL/tree/01165dafcd248bddfb8a83a170d011e3f695853d/src/%5BGetting%20started%5D%20Hello%20Triangle">소스</a> <a href="https://github.com/Twin-Monkeys/LearnOpenGL/tree/204a8f042e4327a8156b56543f71b3b6247abd1b/src/HW2">HW2</a> <a href="https://github.com/Twin-Monkeys/LearnOpenGL/tree/4de0d51c2077229192ac10c28715dc8bd5c590ac/src/HW3">HW3</a>
