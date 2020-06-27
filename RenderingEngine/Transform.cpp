@@ -1,5 +1,4 @@
 #include "Transform.h"
-#include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
 
 using namespace glm; 
@@ -39,6 +38,11 @@ namespace Poodle
 	void Transform::setRotation(const mat4& rotationMatrix) 
 	{
 		__rotation.set(rotationMatrix);
+	}
+
+	void Transform::orient(const vec3& forward, const vec3& referenceUp)
+	{
+		__rotation.orient(forward, referenceUp);
 	}
 
 	void Transform::rotateGlobal(const vec3& eularAngles) 

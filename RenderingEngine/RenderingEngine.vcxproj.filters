@@ -69,6 +69,9 @@
     <Filter Include="소스 파일\gl core\util">
       <UniqueIdentifier>{2adf111d-06d8-444b-957a-fa258fe4a954}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\engine\core\camera">
+      <UniqueIdentifier>{37e4b2fd-9d06-448e-a67d-9066360c70c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -148,6 +151,18 @@
     </ClCompile>
     <ClCompile Include="DemoScene.cpp">
       <Filter>소스 파일\client\demo\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일\engine\core\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformableCamera.cpp">
+      <Filter>소스 파일\engine\core\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="OrthoCamera.cpp">
+      <Filter>소스 파일\engine\core\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="PerspectiveCamera.cpp">
+      <Filter>소스 파일\engine\core\camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +258,18 @@
     </ClInclude>
     <ClInclude Include="DemoScene.h">
       <Filter>소스 파일\client\demo\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>소스 파일\engine\core\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformableCamera.h">
+      <Filter>소스 파일\engine\core\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="OrthoCamera.h">
+      <Filter>소스 파일\engine\core\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="PerspectiveCamera.h">
+      <Filter>소스 파일\engine\core\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

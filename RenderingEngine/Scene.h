@@ -13,6 +13,7 @@ namespace Poodle
 
 		/* member function */
 		constexpr GLCore::GLWindow& getWindow() const;
+		void showMouseCursor(const bool state);
 		virtual void onUpdate(const float deltaTime) = 0;
 		virtual void onRender() = 0;
 		virtual void onResize(const int width, const int height) override;

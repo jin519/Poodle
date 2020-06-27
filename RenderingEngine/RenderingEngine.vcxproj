@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="BufferBase.cpp" />
     <ClCompile Include="BufferException.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="glad\src\glad.c" />
     <ClCompile Include="GLInitializer.cpp" />
@@ -153,6 +154,8 @@
     <ClCompile Include="GLWindowException.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OrthoCamera.cpp" />
+    <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="ProgramException.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="QuaternionException.cpp" />
@@ -165,6 +168,7 @@
     <ClCompile Include="TextureException.cpp" />
     <ClCompile Include="TextureUtil.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="TransformableCamera.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexArrayException.cpp" />
     <ClCompile Include="VertexAttributeDataStructureFactory.cpp" />
@@ -174,6 +178,7 @@
   <ItemGroup>
     <ClInclude Include="BufferBase.h" />
     <ClInclude Include="BufferException.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DemoScene.h" />
@@ -182,6 +187,8 @@
     <ClInclude Include="GLWindowEventHandler.h" />
     <ClInclude Include="GLWindowException.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="OrthoCamera.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="ProgramException.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="QuaternionException.h" />
@@ -194,6 +201,7 @@
     <ClInclude Include="TextureException.h" />
     <ClInclude Include="TextureUtil.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="TransformableCamera.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexArrayException.h" />
     <ClInclude Include="VertexAttribute.h" />

@@ -10,5 +10,6 @@ namespace Poodle
 	public:
 		/* member variable */
 		Transform transform;
+		GLfloat rotationSpeed;
 	};
 }

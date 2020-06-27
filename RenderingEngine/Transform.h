@@ -23,6 +23,7 @@ namespace Poodle
 		void setRotation(const glm::vec3& eulerAngles);
 		void setRotation(const glm::mat3& rotationMatrix);
 		void setRotation(const glm::mat4& rotationMatrix);
+		void orient(const glm::vec3& forward, const glm::vec3& referenceUp = { 0.f, 1.f, 0.f });
 		void rotateGlobal(const glm::vec3& eularAngles);
 		void rotateGlobal(const float pitch, const float yaw, const float roll);
 		void rotateGlobal(const float angle, const glm::vec3& axis);
