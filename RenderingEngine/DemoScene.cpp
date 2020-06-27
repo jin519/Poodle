@@ -112,9 +112,9 @@ void DemoScene::onUpdate(const float deltaTime)
     if (__dPressed)
         cameraTransform.advanceX(TRANSLATION_STEP);
     if (__qPressed)
-        cameraTransform.advanceY(TRANSLATION_STEP);
-    if (__ePressed)
         cameraTransform.advanceY(-TRANSLATION_STEP);
+    if (__ePressed)
+        cameraTransform.advanceY(TRANSLATION_STEP);
 
     __pCamera->update();
 
@@ -153,7 +153,6 @@ void DemoScene::onResize(const int width, const int height)
 {
     __super::onResize(width, height);
     __pCamera->setAspectRatio(width, height);
-    __pCamera->update();
 }
 
 void DemoScene::onMouseButton(const int button, const int action, const int mods) 
@@ -163,25 +162,18 @@ void DemoScene::onMouseButton(const int button, const int action, const int mods
 
 void DemoScene::onMouseMove(const double xPos, const double yPos) 
 {
-    GLfloat pitch = 0.f, yaw = 0.f;
-
-    if (__mouseMoved) 
+    if (!__mouseMoved) 
     {
-        pitch = static_cast<GLfloat>(__mouseYPos - yPos);
-        yaw = static_cast<GLfloat>(__mouseXPos - xPos);
-    }
-    else 
-    {
-        pitch = static_cast<GLfloat>(__mouseYPos);
-        yaw = static_cast<GLfloat>(__mouseXPos);
+        __mouseXPos = xPos;
+        __mouseYPos = yPos;
         __mouseMoved = true;
     }
-    
-    pitch *= 0.001f;
-    yaw *= 0.001f;
+
+    const GLfloat PITCH = (static_cast<GLfloat>(__mouseYPos - yPos) * 0.001f);
+    const GLfloat YAW = (static_cast<GLfloat>(__mouseXPos - xPos) * 0.001f);
 
     Transform& transform = __pCamera->getTransform();
-    transform.rotateFPS(pitch, yaw);
+    transform.rotateFPS(PITCH, YAW);
 
     __mouseXPos = xPos;
     __mouseYPos = yPos;
