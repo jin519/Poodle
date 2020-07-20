@@ -25,6 +25,13 @@ void DemoScene::onKey(const int key, const int scancode, const int action, const
         getWindow().setCloseFlag(true);
     }
 
+    if ((key == GLFW_KEY_SPACE) && (action == GLFW_PRESS)) 
+    {
+        cout << "[SPACE] 마우스 커서 토글" << endl;
+        __mouseCursor = !__mouseCursor;
+        showMouseCursor(__mouseCursor);
+    }
+
     if ((key == GLFW_KEY_W) && (action == GLFW_PRESS))
     {
         cout << "[W 활성] 카메라 전진" << endl;

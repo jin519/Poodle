@@ -40,7 +40,7 @@ private:
 	bool __mouseMoved = false;
 	double __mouseXPos = 0.0;
 	double __mouseYPos = 0.0;
-
+	bool __mouseCursor = false;
 	bool __wPressed = false;
 	bool __sPressed = false;
 	bool __aPressed = false;
