@@ -161,6 +161,7 @@
     <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="GLWindowException.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="LightingTestScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OrthoCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="GLWindowEventHandler.h" />
     <ClInclude Include="GLWindowException.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="LightingTestScene.h" />
     <ClInclude Include="OrthoCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="ProgramException.h" />
@@ -221,6 +223,8 @@
     <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="lighting_test_rectangle_frag.glsl" />
+    <None Include="lighting_test_rectangle_vert.glsl" />
     <None Include="rectangle_frag.glsl" />
     <None Include="rectangle_vert.glsl" />
   </ItemGroup>

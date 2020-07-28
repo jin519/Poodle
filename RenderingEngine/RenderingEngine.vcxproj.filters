@@ -164,6 +164,9 @@
     <ClCompile Include="PerspectiveCamera.cpp">
       <Filter>소스 파일\engine\core\camera</Filter>
     </ClCompile>
+    <ClCompile Include="LightingTestScene.cpp">
+      <Filter>소스 파일\client\demo\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -271,12 +274,21 @@
     <ClInclude Include="PerspectiveCamera.h">
       <Filter>소스 파일\engine\core\camera</Filter>
     </ClInclude>
+    <ClInclude Include="LightingTestScene.h">
+      <Filter>소스 파일\client\demo\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="rectangle_frag.glsl">
       <Filter>소스 파일\client\demo\shader</Filter>
     </None>
     <None Include="rectangle_vert.glsl">
+      <Filter>소스 파일\client\demo\shader</Filter>
+    </None>
+    <None Include="lighting_test_rectangle_frag.glsl">
+      <Filter>소스 파일\client\demo\shader</Filter>
+    </None>
+    <None Include="lighting_test_rectangle_vert.glsl">
       <Filter>소스 파일\client\demo\shader</Filter>
     </None>
   </ItemGroup>

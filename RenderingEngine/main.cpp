@@ -1,5 +1,6 @@
 #include "GLInitializer.h"
-#include "DemoScene.h"
+//#include "DemoScene.h"
+#include "LightingTestScene.h"
 #include <memory>
 
 using namespace std;
@@ -14,7 +15,8 @@ int main()
     unique_ptr<GLWindow> pWindow = make_unique<GLWindow>(800, 800, "Poodle 0.0.1");
     pWindow->bind();
 
-    unique_ptr<DemoScene> pScene = make_unique<DemoScene>(*pWindow);
+    //unique_ptr<DemoScene> pScene = make_unique<DemoScene>(*pWindow);
+    unique_ptr<LightingTestScene> pScene = make_unique<LightingTestScene>(*pWindow);
 
     pWindow->setEventHandler(*pScene);
     pWindow->startMainLoop();
