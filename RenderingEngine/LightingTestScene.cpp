@@ -136,8 +136,16 @@ void LightingTestScene::onRender()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    __pShaderProgram->setUniform3f("objectColor", 1.f, 1.f, 1.f);
-    __pShaderProgram->setUniform3f("lightColor", 0.3f, 0.3f, 0.6f);
+    __pShaderProgram->setUniform3f("material.ambient", 0.3f, 0.3f, 0.2f);
+    __pShaderProgram->setUniform3f("material.diffuse", 1.f, 1.f, 0.6f);
+    __pShaderProgram->setUniform3f("material.specular", 1.f, 1.f, 1.f);
+    __pShaderProgram->setUniform3f("light.ambient", 0.7f, 0.2f, 0.2f);
+    __pShaderProgram->setUniform3f("light.diffuse", 1.f, 0.3f, 0.2f);
+    __pShaderProgram->setUniform3f("light.specular", 1.f, 0.2f, 0.2f);
+
+    const vec3 DIRECTION = normalize(vec3(1.f, 0.f, 0.f));
+    __pShaderProgram->setUniform3f("light.direction", DIRECTION.x, DIRECTION.y, DIRECTION.z);
+
     __pShaderProgram->setUniformMatrix4f("viewMat", __pCamera->getViewMatrix());
     __pShaderProgram->setUniformMatrix4f("projectionMat", __pCamera->getProjectionMatrix());
     __pShaderProgram->setUniformMatrix4f("modelMat", __cube.transform.getModelMatrix());
@@ -195,62 +203,86 @@ void LightingTestScene::__init()
         // top
         // 0 (top left)
         -0.5f, 0.5f, 0.5f, // position
+        0.f, 1.f, 0.f, // normal
         // 1 (top right)
         0.5f, 0.5f, 0.5f,
+        0.f, 1.f, 0.f, 
         // 2 (bottom right)
         0.5f, 0.5f, -0.5f,
+        0.f, 1.f, 0.f,
         // 3 (bottom left)
         -0.5f, 0.5f, -0.5f,
+        0.f, 1.f, 0.f,
 
         // bottom
         // 4 (top left) 
         -0.5f, -0.5f, 0.5f,
+        0.f, -1.f, 0.f,
         // 5 (top right)
         0.5f, -0.5f, 0.5f,
+        0.f, -1.f, 0.f,
         // 6 (bottom right)
         0.5f, -0.5f, -0.5f,
+        0.f, -1.f, 0.f,
         // 7 (bottom left)
         -0.5f, -0.5f, -0.5f,
+        0.f, -1.f, 0.f,
 
         // left
         // 8 (3) 
         -0.5f, 0.5f, -0.5f,
+        -1.f, 0.f, 0.f,
         // 9 (0)
         -0.5f, 0.5f, 0.5f,
+        -1.f, 0.f, 0.f,
         // 10 (4)
         -0.5f, -0.5f, 0.5f,
+        -1.f, 0.f, 0.f,
         // 11 (7)
         -0.5f, -0.5f, -0.5f,
+        -1.f, 0.f, 0.f,
 
         // right
         // 12 (2) 
         0.5f, 0.5f, -0.5f,
+        1.f, 0.f, 0.f,
         // 13 (1) 
         0.5f, 0.5f, 0.5f,
+        1.f, 0.f, 0.f,
         // 14 (5) 
         0.5f, -0.5f, 0.5f,
+        1.f, 0.f, 0.f,
         // 15 (6) 
         0.5f, -0.5f, -0.5f,
+        1.f, 0.f, 0.f,
 
         // front
         // 16 (3)
-        -0.5f, 0.5f, -0.5f,
+        -0.5f, 0.5f, 0.5f,
+        0.f, 0.f, 1.f,
         // 17 (2) 
-        0.5f, 0.5f, -0.5f,
+        0.5f, 0.5f, 0.5f,
+        0.f, 0.f, 1.f,
         // 18 (6) 
-        0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f, 0.5f,
+        0.f, 0.f, 1.f,
         // 19 (7) 
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, 0.5f,
+        0.f, 0.f, 1.f,
 
         // back
         // 20 (0)
-        -0.5f, 0.5f, 0.5f,
+        -0.5f, 0.5f, -0.5f,
+        0.f, 0.f, -1.f,
         // 21 (1) 
-        0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, -0.5f,
+        0.f, 0.f, -1.f,
         // 22 (5) 
-        0.5f, -0.5f, 0.5f,
+        0.5f, -0.5f, -0.5f,
+        0.f, 0.f, -1.f,
         // 23 (4)
-        -0.5f, -0.5f, 0.5f
+        -0.5f, -0.5f, -0.5f,
+        0.f, 0.f, -1.f
     };
 
     constexpr GLuint indices[] =
@@ -264,7 +296,7 @@ void LightingTestScene::__init()
     };
 
     __pVao = make_shared<VertexArray>(
-        VertexAttributeListFactory::get(VertexAttributeFlag::POS3),
+        VertexAttributeListFactory::get(VertexAttributeFlag::POS3 | VertexAttributeFlag::NORMAL3),
         make_shared<VertexBuffer>(vertices, sizeof(vertices), GL_STATIC_DRAW),
         make_shared<IndexBuffer>(indices, sizeof(indices), GL_STATIC_DRAW),
         static_cast<GLsizei>(size(vertices)));
