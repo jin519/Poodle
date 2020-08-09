@@ -139,12 +139,16 @@ void LightingTestScene::onRender()
     __pShaderProgram->setUniform3f("material.ambient", 0.3f, 0.3f, 0.2f);
     __pShaderProgram->setUniform3f("material.diffuse", 1.f, 1.f, 0.6f);
     __pShaderProgram->setUniform3f("material.specular", 1.f, 1.f, 1.f);
+    __pShaderProgram->setUniform1f("material.shininess", 160.f);
     __pShaderProgram->setUniform3f("light.ambient", 0.7f, 0.2f, 0.2f);
-    __pShaderProgram->setUniform3f("light.diffuse", 1.f, 0.3f, 0.2f);
-    __pShaderProgram->setUniform3f("light.specular", 1.f, 0.2f, 0.2f);
+    __pShaderProgram->setUniform3f("light.diffuse", 0.5f, 0.1f, 0.1f);
+    __pShaderProgram->setUniform3f("light.specular", 1.f, 0.5f, 0.5f);
 
     const vec3 DIRECTION = normalize(vec3(1.f, 0.f, 0.f));
     __pShaderProgram->setUniform3f("light.direction", DIRECTION.x, DIRECTION.y, DIRECTION.z);
+
+    const vec4 CAMERA_DIRECTION = __pCamera->getTransform().getBasisZ();
+    __pShaderProgram->setUniform3f("camera.direction", CAMERA_DIRECTION.x, CAMERA_DIRECTION.y, CAMERA_DIRECTION.z);
 
     __pShaderProgram->setUniformMatrix4f("viewMat", __pCamera->getViewMatrix());
     __pShaderProgram->setUniformMatrix4f("projectionMat", __pCamera->getProjectionMatrix());
