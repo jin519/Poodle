@@ -1,5 +1,6 @@
 # Demo
-<kbd><img src="demo/demo.gif" width="550px"></kbd>
+<kbd><img src="demo/demo.gif" width="400"></kbd>
+<kbd><img src="demo/demo2.gif" width="400"></kbd>
 
 # Learning History
 
