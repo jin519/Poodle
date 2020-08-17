@@ -10,6 +10,11 @@ using namespace glm;
 using namespace GLCore;
 using namespace Poodle;
 
+vec3 prevPointLightPosition = { -0.7f, -0.3f, 0.f };
+vec3 pointLightPosition = { 0.f, -0.3f, 0.f };
+vec3 centerPosition = { 0.f, -0.3f, 0.f };
+const float RADIUS = length(prevPointLightPosition - centerPosition);
+
 /* constructor */
 LightingTestScene::LightingTestScene(GLWindow& window) : Scene(window) 
 {
@@ -123,28 +128,30 @@ void LightingTestScene::onUpdate(const float deltaTime)
     if (__ePressed)
         cameraTransform.advanceY(TRANSLATION_STEP);
 
-    __pCamera->update();
+    static float elapsedTime = 0.f;
+    elapsedTime += deltaTime;
 
-    const float ANGLE = (deltaTime * __cube.rotationSpeed);
-    
-    Transform& transform = __cube.transform;
-    transform.rotateLocal(ANGLE, ANGLE, ANGLE);
-    transform.updateMatrix();
+    pointLightPosition.x = (RADIUS * cosf(elapsedTime));
+    pointLightPosition.z = (RADIUS * sinf(elapsedTime));
+
+    __pCamera->update();
 }
 
 void LightingTestScene::onRender() 
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    __pShaderProgram->setUniform3f("material.ambient", 0.3f, 0.3f, 0.2f);
-    __pShaderProgram->setUniform3f("material.diffuse", 1.f, 1.f, 0.6f);
-    __pShaderProgram->setUniform3f("material.specular", 1.f, 1.f, 1.f);
-    __pShaderProgram->setUniform1f("material.shininess", 160.f);
+    __pShaderProgram->setUniform3f("material.ambient", 0.2f, 0.2f, 0.2f);
+    __pShaderProgram->setUniform3f("material.diffuse", .6f, .6f, 0.6f);
+    __pShaderProgram->setUniform3f("material.specular", .7f, .7f, .7f);
+    __pShaderProgram->setUniform1f("material.shininess", 80.f);
+    __pShaderProgram->setUniform1ui("light.type", 1u);
+    __pShaderProgram->setUniform3f("light.position", pointLightPosition.x, pointLightPosition.y, pointLightPosition.z);
     __pShaderProgram->setUniform3f("light.ambient", 0.7f, 0.2f, 0.2f);
     __pShaderProgram->setUniform3f("light.diffuse", 0.5f, 0.1f, 0.1f);
     __pShaderProgram->setUniform3f("light.specular", 1.f, 0.5f, 0.5f);
 
-    const vec3 DIRECTION = normalize(vec3(1.f, 0.f, 0.f));
+    const vec3 DIRECTION = normalize(vec3(-1.f, -1.f, -1.f));
     __pShaderProgram->setUniform3f("light.direction", DIRECTION.x, DIRECTION.y, DIRECTION.z);
 
     const vec4 CAMERA_DIRECTION = __pCamera->getTransform().getBasisZ();
@@ -152,7 +159,6 @@ void LightingTestScene::onRender()
 
     __pShaderProgram->setUniformMatrix4f("viewMat", __pCamera->getViewMatrix());
     __pShaderProgram->setUniformMatrix4f("projectionMat", __pCamera->getProjectionMatrix());
-    __pShaderProgram->setUniformMatrix4f("modelMat", __cube.transform.getModelMatrix());
     __pShaderProgram->bind();
     
     __pVao->draw();
@@ -204,99 +210,23 @@ void LightingTestScene::__init()
 
     constexpr GLfloat vertices[] =
     {
-        // top
         // 0 (top left)
-        -0.5f, 0.5f, 0.5f, // position
+        -1.f, -.5f, 1.f, // position
         0.f, 1.f, 0.f, // normal
         // 1 (top right)
-        0.5f, 0.5f, 0.5f,
+        1.f, -.5f, 1.f,
         0.f, 1.f, 0.f, 
         // 2 (bottom right)
-        0.5f, 0.5f, -0.5f,
+        1.f, -.5f, -1.f,
         0.f, 1.f, 0.f,
         // 3 (bottom left)
-        -0.5f, 0.5f, -0.5f,
+        -1.f, -.5f, -1.f,
         0.f, 1.f, 0.f,
-
-        // bottom
-        // 4 (top left) 
-        -0.5f, -0.5f, 0.5f,
-        0.f, -1.f, 0.f,
-        // 5 (top right)
-        0.5f, -0.5f, 0.5f,
-        0.f, -1.f, 0.f,
-        // 6 (bottom right)
-        0.5f, -0.5f, -0.5f,
-        0.f, -1.f, 0.f,
-        // 7 (bottom left)
-        -0.5f, -0.5f, -0.5f,
-        0.f, -1.f, 0.f,
-
-        // left
-        // 8 (3) 
-        -0.5f, 0.5f, -0.5f,
-        -1.f, 0.f, 0.f,
-        // 9 (0)
-        -0.5f, 0.5f, 0.5f,
-        -1.f, 0.f, 0.f,
-        // 10 (4)
-        -0.5f, -0.5f, 0.5f,
-        -1.f, 0.f, 0.f,
-        // 11 (7)
-        -0.5f, -0.5f, -0.5f,
-        -1.f, 0.f, 0.f,
-
-        // right
-        // 12 (2) 
-        0.5f, 0.5f, -0.5f,
-        1.f, 0.f, 0.f,
-        // 13 (1) 
-        0.5f, 0.5f, 0.5f,
-        1.f, 0.f, 0.f,
-        // 14 (5) 
-        0.5f, -0.5f, 0.5f,
-        1.f, 0.f, 0.f,
-        // 15 (6) 
-        0.5f, -0.5f, -0.5f,
-        1.f, 0.f, 0.f,
-
-        // front
-        // 16 (3)
-        -0.5f, 0.5f, 0.5f,
-        0.f, 0.f, 1.f,
-        // 17 (2) 
-        0.5f, 0.5f, 0.5f,
-        0.f, 0.f, 1.f,
-        // 18 (6) 
-        0.5f, -0.5f, 0.5f,
-        0.f, 0.f, 1.f,
-        // 19 (7) 
-        -0.5f, -0.5f, 0.5f,
-        0.f, 0.f, 1.f,
-
-        // back
-        // 20 (0)
-        -0.5f, 0.5f, -0.5f,
-        0.f, 0.f, -1.f,
-        // 21 (1) 
-        0.5f, 0.5f, -0.5f,
-        0.f, 0.f, -1.f,
-        // 22 (5) 
-        0.5f, -0.5f, -0.5f,
-        0.f, 0.f, -1.f,
-        // 23 (4)
-        -0.5f, -0.5f, -0.5f,
-        0.f, 0.f, -1.f
     };
 
     constexpr GLuint indices[] =
     {
-        0, 3, 2, 0, 2, 1,       // top
-        4, 7, 6, 4, 6, 5,       // bottom
-        8, 10, 9, 8, 11, 10,    // left
-        12, 14, 13, 12, 15, 14, // right
-        16, 18, 17, 16, 19, 18, // front
-        20, 22, 21, 20, 23, 22 // back
+        0, 3, 2, 0, 2, 1
     };
 
     __pVao = make_shared<VertexArray>(
@@ -308,9 +238,9 @@ void LightingTestScene::__init()
     __pCamera = make_unique<PerspectiveCamera>();
     __pCamera->setNear(0.1f);
     __pCamera->setFar(200.f);
-    __pCamera->getTransform().advanceZ(5.f);
-
-    __cube.rotationSpeed = 0.5f;
+    __pCamera->getTransform().setPosition(0.f, 2.f, 2.f);
+    __pCamera->getTransform().rotateGlobal(-.9f, 0.f, 0.f);
 
     __pShaderProgram = make_shared<ShaderProgram>("lighting_test_rectangle_vert.glsl", "lighting_test_rectangle_frag.glsl");
+    __pShaderProgram->setUniformMatrix4f("modelMat", mat4{ 1.f });
 }

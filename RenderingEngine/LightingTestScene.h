@@ -32,7 +32,6 @@ private:
 	std::shared_ptr<GLCore::VertexArray> __pVao;
 	std::shared_ptr<GLCore::ShaderProgram> __pShaderProgram;
 	std::unique_ptr<Poodle::PerspectiveCamera> __pCamera;
-	Poodle::Cube __cube;
 
 	bool __mouseMoved = false;
 	double __mouseXPos = 0.0;
