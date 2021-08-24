@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="gl core">
+      <UniqueIdentifier>{00f9bae1-cea2-46c0-a6a9-616fa02c2465}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gl core\base">
+      <UniqueIdentifier>{6cb173de-3a12-48ee-a5bb-cfcf7b84ec02}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GLInitializer.cpp">
+      <Filter>gl core\base</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GLInitializer.h">
+      <Filter>gl core\base</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
