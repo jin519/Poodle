@@ -1,4 +1,4 @@
-#include "GLInitializer.h"
+ï»¿#include "GLInitializer.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -16,11 +16,11 @@ namespace GLCore
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		/*
-			dummy window »ı¼º ÀÌÀ¯:
-			GLFWwindow´Â render context¸¦ °ü¸®ÇÏ´Â ¿ªÇÒµµ ¼öÇàÇÔ.
-			glad°¡ openglÀÇ ÇÔ¼ö Æ÷ÀÎÅÍ ¸ñ·ÏÀ» ±×·¡ÇÈ µå¶óÀÌ¹ö·ÎºÎÅÍ ÀĞ¾î¿À±â À§ÇØ¼­´Â
-			bindµÈ render context°¡ ÀÖ¾î¾ß ÇÏ¸ç, ÇØ´ç render context·ÎºÎÅÍ ÇÔ¼ö ¸ñ·ÏÀ» ÀĞ¾î¿È.
-			µû¶ó¼­ opengl ÇÔ¼ö ¸ñ·ÏÀ» ÃÊ±âÈ­ ÇÏ±â À§ÇØ GLFWwindow(render context)°¡ ¹İµå½Ã ÇÊ¿äÇÔ.
+			dummy window ìƒì„± ì´ìœ :
+			GLFWwindowëŠ” render contextë¥¼ ê´€ë¦¬í•˜ëŠ” ì—­í• ë„ ìˆ˜í–‰í•¨.
+			gladê°€ openglì˜ í•¨ìˆ˜ í¬ì¸í„° ëª©ë¡ì„ ê·¸ë˜í”½ ë“œë¼ì´ë²„ë¡œë¶€í„° ì½ì–´ì˜¤ê¸° ìœ„í•´ì„œëŠ”
+			bindëœ render contextê°€ ìˆì–´ì•¼ í•˜ë©°, í•´ë‹¹ render contextë¡œë¶€í„° í•¨ìˆ˜ ëª©ë¡ì„ ì½ì–´ì˜´.
+			ë”°ë¼ì„œ opengl í•¨ìˆ˜ ëª©ë¡ì„ ì´ˆê¸°í™” í•˜ê¸° ìœ„í•´ GLFWwindow(render context)ê°€ ë°˜ë“œì‹œ í•„ìš”í•¨.
 		*/
 		GLFWwindow* const pWindow = glfwCreateWindow(1, 1, "dummy", nullptr, nullptr);
 		

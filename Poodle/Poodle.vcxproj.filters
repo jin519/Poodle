@@ -18,6 +18,12 @@
     <ClInclude Include="Constant.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="SevertyType.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TextReader.cpp">
@@ -25,6 +31,9 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
