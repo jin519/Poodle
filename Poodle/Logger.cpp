@@ -1,4 +1,4 @@
-#include "Logger.h"
+﻿#include "Logger.h"
 #include <sstream>
 #include <iostream>
 
@@ -31,6 +31,10 @@ namespace Poodle
 		}
 
 		oss << message; 
+
+		// 콘솔 출력 색상을 기본으로 되돌린다. 
+		oss << "\033[0m"; 
+		
 		cout << oss.str() << endl;
 	}
 }

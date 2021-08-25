@@ -157,7 +157,6 @@
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="SevertyType.h" />
     <ClInclude Include="TextReader.h" />
   </ItemGroup>
   <ItemGroup>

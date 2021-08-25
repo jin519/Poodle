@@ -1,7 +1,9 @@
-#include <glad/glad.h>
+﻿#include <glad/glad.h>
 #include "DemoScene.h"
+#include "../Poodle/Logger.h"
 
 using namespace GLCore; 
+using namespace Poodle; 
 
 DemoScene::DemoScene(GLWindow& window) : Scene{ window }
 {
@@ -15,7 +17,10 @@ void DemoScene::onKey(
 	const int mods)
 {
 	if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
-		getWindow().setCloseFlag(true); 
+	{
+		Logger::commit(Logger::SeverityType::INFO, "esc 활성: 프로그램을 종료합니다.");
+		getWindow().setCloseFlag(true);
+	}
 }
 
 void DemoScene::onUpdate(const float deltaTime)

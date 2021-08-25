@@ -21,9 +21,6 @@
     <ClInclude Include="Logger.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="SevertyType.h">
-      <Filter>util</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TextReader.cpp">
