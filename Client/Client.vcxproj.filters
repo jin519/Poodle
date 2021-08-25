@@ -5,8 +5,22 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="demo">
+      <UniqueIdentifier>{83095f7e-400b-4fb4-a19b-8be2730b70e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="demo\scene">
+      <UniqueIdentifier>{d280af77-d51a-49cd-b91d-66c7a88b9a78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="DemoScene.cpp">
+      <Filter>demo\scene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DemoScene.h">
+      <Filter>demo\scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

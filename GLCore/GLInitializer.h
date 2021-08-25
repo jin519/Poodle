@@ -1,11 +1,11 @@
 #pragma once
 
-namespace GLCore 
+namespace GLCore
 {
-	class GLInitializer 
+	class GLInitializer
 	{
 	public:
-		GLInitializer() = delete; 
+		GLInitializer() = delete;
 
 		static bool initGL(
 			const int majorVersion,

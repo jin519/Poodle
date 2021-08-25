@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7694df76-284c-430b-9fed-829783c27d11}</ProjectGuid>
-    <RootNamespace>Poodle</RootNamespace>
+    <ProjectGuid>{07b0b9e1-6a87-46ab-8842-764675d1bdc1}</ProjectGuid>
+    <RootNamespace>GLCore</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -149,17 +149,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="TextReader.cpp" />
+    <ClInclude Include="GLInitializer.h" />
+    <ClInclude Include="GLWindow.h" />
+    <ClInclude Include="GLWindowEventHandler.h" />
+    <ClInclude Include="GLWindowException.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Constant.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="TextReader.h" />
+    <ClCompile Include="GLInitializer.cpp" />
+    <ClCompile Include="GLWindow.cpp" />
+    <ClCompile Include="GLWindowException.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GLCore\GLCore.vcxproj">
-      <Project>{07b0b9e1-6a87-46ab-8842-764675d1bdc1}</Project>
+    <ProjectReference Include="..\ThirdPartyBuilder\ThirdPartyBuilder.vcxproj">
+      <Project>{c5be1458-f0fa-41ff-97dc-76ed29f021c3}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

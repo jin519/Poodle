@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="base">
+      <UniqueIdentifier>{ae1da942-37b8-4e9b-b04f-938b080ad985}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GLInitializer.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWindowException.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWindowEventHandler.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWindow.h">
+      <Filter>base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GLInitializer.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="GLWindowException.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="GLWindow.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

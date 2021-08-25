@@ -1,21 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="gl core">
-      <UniqueIdentifier>{00f9bae1-cea2-46c0-a6a9-616fa02c2465}</UniqueIdentifier>
+    <Filter Include="base">
+      <UniqueIdentifier>{5d0a2b26-aae1-4737-8f6b-3f7e18033893}</UniqueIdentifier>
     </Filter>
-    <Filter Include="gl core\base">
-      <UniqueIdentifier>{6cb173de-3a12-48ee-a5bb-cfcf7b84ec02}</UniqueIdentifier>
+    <Filter Include="util">
+      <UniqueIdentifier>{c5d6cc8f-426b-47fd-8fa6-e0bdcb8a4d75}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GLInitializer.cpp">
-      <Filter>gl core\base</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GLInitializer.h">
-      <Filter>gl core\base</Filter>
+    <ClInclude Include="TextReader.h">
+      <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="Constant.h">
+      <Filter>base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TextReader.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
