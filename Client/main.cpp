@@ -1,6 +1,5 @@
 #include "../GLCore/GLInitializer.h"
 #include "DemoScene.h"
-#include <memory>
 
 using namespace std; 
 using namespace GLCore; 

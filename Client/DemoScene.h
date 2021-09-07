@@ -1,7 +1,8 @@
 #pragma once
 
+#include "../GLCore/ShaderProgram.h"
 #include "../Poodle/Scene.h"
-#include <memory>
+#include "../GLCore/VertexArray.h"
 
 class DemoScene : public Poodle::Scene 
 {
@@ -35,4 +36,7 @@ public:
 
 private:
 	void __init();
+
+	std::shared_ptr<GLCore::VertexArray> __pVao;
+	std::shared_ptr<GLCore::ShaderProgram> __pShaderProgram;
 };

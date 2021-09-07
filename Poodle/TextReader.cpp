@@ -5,13 +5,16 @@
 
 using namespace std;
 
-string TextReader::read(const string_view& path)
+namespace Poodle 
 {
-	ifstream fin(path.data());
-	assert(fin);
+	string TextReader::read(const string_view& path)
+	{
+		ifstream fin(path.data());
+		assert(fin);
 
-	ostringstream oss;
-	oss << fin.rdbuf();
+		ostringstream oss;
+		oss << fin.rdbuf();
 
-	return oss.str();
+		return oss.str();
+	}
 }

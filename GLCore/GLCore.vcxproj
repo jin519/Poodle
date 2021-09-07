@@ -149,15 +149,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BufferBase.h" />
+    <ClInclude Include="BufferException.h" />
     <ClInclude Include="GLInitializer.h" />
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="GLWindowEventHandler.h" />
     <ClInclude Include="GLWindowException.h" />
+    <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="ProgramException.h" />
+    <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="VertexArray.h" />
+    <ClInclude Include="VertexArrayException.h" />
+    <ClInclude Include="VertexAttribute.h" />
+    <ClInclude Include="VertexAttributeDataStructure.h" />
+    <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BufferBase.cpp" />
+    <ClCompile Include="BufferException.cpp" />
     <ClCompile Include="GLInitializer.cpp" />
     <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="GLWindowException.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="ProgramException.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="VertexArray.cpp" />
+    <ClCompile Include="VertexArrayException.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ThirdPartyBuilder\ThirdPartyBuilder.vcxproj">

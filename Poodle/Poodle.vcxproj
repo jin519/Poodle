@@ -152,12 +152,19 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TextReader.cpp" />
+    <ClCompile Include="VertexAttributeDataStructureFactory.cpp" />
+    <ClCompile Include="VertexAttributeListFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SeverityType.h" />
     <ClInclude Include="TextReader.h" />
+    <ClInclude Include="VertexAttributeDataStructureFactory.h" />
+    <ClInclude Include="VertexAttributeDataStructureType.h" />
+    <ClInclude Include="VertexAttributeFlag.h" />
+    <ClInclude Include="VertexAttributeListFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GLCore\GLCore.vcxproj">

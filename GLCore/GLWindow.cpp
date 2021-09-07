@@ -63,7 +63,7 @@ namespace GLCore
 		__pWindow = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
 
 		if (!__pWindow)
-			throw GLWindowException("Failed to create GLFW window.");
+			throw GLWindowException("failed to create GLFW window.");
 
 		glfwSetWindowUserPointer(__pWindow, this);
 
@@ -99,8 +99,8 @@ namespace GLCore
 
 			if (firstLoop)
 			{
-				pWindow->getEventHandler().onIdle(0.f);
 				firstLoop = false;
+				pWindow->getEventHandler().onIdle(0.f);
 			}
 			else
 			{

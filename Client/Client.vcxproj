@@ -162,6 +162,10 @@
   <ItemGroup>
     <ClInclude Include="DemoScene.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="triangle.vert" />
+    <None Include="triangle.frag" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
