@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="base">
+      <UniqueIdentifier>{5d0a2b26-aae1-4737-8f6b-3f7e18033893}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{c5d6cc8f-426b-47fd-8fa6-e0bdcb8a4d75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{81bf9d4d-93e9-4f5c-aee8-3548c9c4e05e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\vertex attribute">
+      <UniqueIdentifier>{daf2d5b6-778b-41f6-b168-819a6951b428}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Scene.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="Constant.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexAttributeFlag.h">
+      <Filter>core\vertex attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexAttributeDataStructureType.h">
+      <Filter>core\vertex attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexAttributeDataStructureFactory.h">
+      <Filter>core\vertex attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexAttributeListFactory.h">
+      <Filter>core\vertex attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="SeverityType.h">
+      <Filter>util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Scene.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexAttributeDataStructureFactory.cpp">
+      <Filter>core\vertex attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexAttributeListFactory.cpp">
+      <Filter>core\vertex attribute</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

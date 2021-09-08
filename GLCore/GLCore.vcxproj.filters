@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="base">
+      <UniqueIdentifier>{ae1da942-37b8-4e9b-b04f-938b080ad985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{834a2e43-a496-46d0-a185-40e3c3ec8670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\buffer">
+      <UniqueIdentifier>{fe1ba36b-1f1f-4d15-8dc9-777ad481e680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\vertex array">
+      <UniqueIdentifier>{82170a44-7b8b-4ddf-b741-f783b9c73584}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\vertex attribute">
+      <UniqueIdentifier>{7550b61a-8b34-494f-bb37-4f8b2c8bd4b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\program">
+      <UniqueIdentifier>{5a7caf31-ea9f-4040-9f82-7b279afe1ce7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{7ed602cb-e91a-40b2-ae65-e111104344b7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GLInitializer.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWindowException.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWindowEventHandler.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWindow.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferBase.h">
+      <Filter>core\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferException.h">
+      <Filter>core\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>core\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>core\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexAttributeDataStructure.h">
+      <Filter>core\vertex attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexAttribute.h">
+      <Filter>core\vertex attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArrayException.h">
+      <Filter>core\vertex array</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArray.h">
+      <Filter>core\vertex array</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>core\program</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramException.h">
+      <Filter>core\program</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderReader.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="TextReader.h">
+      <Filter>util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GLInitializer.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="GLWindowException.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="GLWindow.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferBase.cpp">
+      <Filter>core\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferException.cpp">
+      <Filter>core\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>core\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>core\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArrayException.cpp">
+      <Filter>core\vertex array</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArray.cpp">
+      <Filter>core\vertex array</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramException.cpp">
+      <Filter>core\program</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>core\program</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderReader.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="TextReader.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
