@@ -11,7 +11,7 @@
     <Filter Include="demo\scene">
       <UniqueIdentifier>{d280af77-d51a-49cd-b91d-66c7a88b9a78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="demo\shader">
+    <Filter Include="demo\shaders">
       <UniqueIdentifier>{01289e8e-1029-4bad-b599-fa379bcd8b17}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -27,11 +27,14 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="triangle.vert">
-      <Filter>demo\shader</Filter>
+    <None Include="shaders\triangle.frag">
+      <Filter>demo\shaders</Filter>
     </None>
-    <None Include="triangle.frag">
-      <Filter>demo\shader</Filter>
+    <None Include="shaders\triangle.vert">
+      <Filter>demo\shaders</Filter>
+    </None>
+    <None Include="shaders\constant_header.glsl">
+      <Filter>demo\shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

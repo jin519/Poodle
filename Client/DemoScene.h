@@ -37,6 +37,21 @@ public:
 private:
 	void __init();
 
+	constexpr void __setAttribFlag(const GLuint attribFlag); 
+	constexpr GLuint __getAttribFlag() const; 
+
 	std::shared_ptr<GLCore::VertexArray> __pVao;
 	std::shared_ptr<GLCore::ShaderProgram> __pShaderProgram;
+
+	GLuint __attribFlag; 
 };
+
+constexpr void DemoScene::__setAttribFlag(const GLuint attribFlag) 
+{
+	__attribFlag = attribFlag; 
+}
+
+constexpr GLuint DemoScene::__getAttribFlag() const 
+{
+	return __attribFlag; 
+}

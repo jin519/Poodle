@@ -163,8 +163,9 @@
     <ClInclude Include="DemoScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="triangle.vert" />
-    <None Include="triangle.frag" />
+    <None Include="shaders\constant_header.glsl" />
+    <None Include="shaders\triangle.frag" />
+    <None Include="shaders\triangle.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

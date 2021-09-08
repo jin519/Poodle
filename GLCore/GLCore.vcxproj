@@ -158,6 +158,8 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="ProgramException.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="ShaderReader.h" />
+    <ClInclude Include="TextReader.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexArrayException.h" />
     <ClInclude Include="VertexAttribute.h" />
@@ -173,6 +175,8 @@
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="ProgramException.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="ShaderReader.cpp" />
+    <ClCompile Include="TextReader.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexArrayException.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />

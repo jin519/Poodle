@@ -25,14 +25,15 @@ void DemoScene::onKey(
 }
 
 void DemoScene::onUpdate(const float deltaTime)
-{
-}
+{}
 
 void DemoScene::onRender()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	__pShaderProgram->bind(); 
+	__pShaderProgram->setUniform1ui("attribFlag", __getAttribFlag()); 
+
 	__pVao->draw(); 
 
 	getWindow().swapBuffers();
@@ -69,7 +70,7 @@ void DemoScene::__init()
 	glfwSwapInterval(1); // VSYNC 0: off, 1: on
 	glEnable(GL_DEPTH_TEST);
 
-	constexpr GLfloat vertices[] = 
+	constexpr GLfloat vertices[]
 	{
 		0.f, 0.8f, 0.f,		// position 
 		1.f, 0.f, 0.f, 1.f, // color
@@ -81,18 +82,22 @@ void DemoScene::__init()
 		0.f, 0.f, 1.f, 1.f
 	}; 
 
-	constexpr GLuint indices[] =
+	constexpr GLuint indices[]
 	{
 		0, 1, 2
 	}; 
 
+	constexpr VertexAttributeFlag attribFlag{ VertexAttributeFlag::POSITION | VertexAttributeFlag::COLOR };
+
+	__setAttribFlag(GLuint(attribFlag)); 
+
 	__pVao = make_shared<VertexArray>(
-		VertexAttributeListFactory::get(VertexAttributeFlag::POS3 | VertexAttributeFlag::COLOR4),
+		VertexAttributeListFactory::get(attribFlag),
 		make_shared<VertexBuffer>(vertices, sizeof(vertices), GL_STATIC_DRAW),
 		make_shared<IndexBuffer>(indices, sizeof(indices), GL_STATIC_DRAW),
 		static_cast<GLsizei>(size(indices)));
 
 	__pShaderProgram = make_shared<ShaderProgram>(
-		"triangle.vert", 
-		"triangle.frag");
+		"shaders/triangle.vert", 
+		"shaders/triangle.frag");
 }

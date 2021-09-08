@@ -5,7 +5,7 @@
 
 using namespace std;
 
-namespace Poodle 
+namespace GLCore
 {
 	string TextReader::read(const string_view& path)
 	{

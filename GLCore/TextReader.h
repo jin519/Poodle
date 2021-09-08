@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace Poodle 
+namespace GLCore
 {
 	class TextReader
 	{

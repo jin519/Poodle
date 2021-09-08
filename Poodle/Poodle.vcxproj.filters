@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TextReader.h">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -44,9 +41,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TextReader.cpp">
-      <Filter>util</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>base</Filter>
     </ClCompile>

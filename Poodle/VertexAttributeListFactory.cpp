@@ -3,6 +3,7 @@
 
 using namespace std;
 using namespace GLCore;
+using namespace Poodle::Constant; 
 
 namespace Poodle 
 {
@@ -10,46 +11,75 @@ namespace Poodle
 	{
 		vector<VertexAttribute> retVal;
 
-		GLuint location = 0;
 		GLsizei stride = 0;
 		GLsizei offset = 0;
 
-		if (flags & VertexAttributeFlag::POS3)
+		if (flags & VertexAttributeFlag::POSITION)
 		{
 			const VertexAttributeDataStructure& dataStructure = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC3);
 			const GLsizei memSize = dataStructure.memSize();
 
 			stride += memSize;
-			retVal.emplace_back(location++, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::position, dataStructure, 0, offset);
 			offset += memSize;
 		}
 
-		if (flags & VertexAttributeFlag::COLOR4)
+		if (flags & VertexAttributeFlag::NORMAL)
+		{
+			const VertexAttributeDataStructure& dataStructure = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC3);
+			const GLsizei memSize = dataStructure.memSize();
+
+			stride += memSize;
+			retVal.emplace_back(AttribLocation::normal, dataStructure, 0, offset);
+			offset += memSize;
+		}
+
+		if (flags & VertexAttributeFlag::TANGENT)
 		{
 			const VertexAttributeDataStructure& dataStructure = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC4);
 			const GLsizei memSize = dataStructure.memSize();
 
 			stride += memSize;
-			retVal.emplace_back(location++, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::tangent, dataStructure, 0, offset);
 			offset += memSize;
 		}
 
-		if (flags & VertexAttributeFlag::NORMAL3)
+		if (flags & VertexAttributeFlag::TEXCOORD)
 		{
-			const VertexAttributeDataStructure& dataStructure = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC3);
+			const VertexAttributeDataStructure& dataStructure = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC2);
 			const GLsizei memSize = dataStructure.memSize();
 
 			stride += memSize;
-			retVal.emplace_back(location++, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::texcoord, dataStructure, 0, offset);
 			offset += memSize;
 		}
 
-		if (flags & VertexAttributeFlag::TEXCOORD2)
+		if (flags & VertexAttributeFlag::COLOR) 
 		{
-			const VertexAttributeDataStructure& dataStructure = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC2);
+			const VertexAttributeDataStructure& dataStructure = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC4);
+			const GLsizei memSize = dataStructure.memSize();
+
+			stride += memSize;
+			retVal.emplace_back(AttribLocation::color, dataStructure, 0, offset);
+			offset += memSize;
+		}
+
+		if (flags & VertexAttributeFlag::JOINTS)
+		{
+			const VertexAttributeDataStructure& dataStructure = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC4);
+			const GLsizei memSize = dataStructure.memSize();
+
+			stride += memSize;
+			retVal.emplace_back(AttribLocation::joints, dataStructure, 0, offset);
+			offset += memSize;
+		}
+
+		if (flags & VertexAttributeFlag::WEIGHTS)
+		{
+			const VertexAttributeDataStructure& dataStructure = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC4);
 
 			stride += dataStructure.memSize();
-			retVal.emplace_back(location++, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::weights, dataStructure, 0, offset);
 		}
 
 		for (auto& attribute : retVal)

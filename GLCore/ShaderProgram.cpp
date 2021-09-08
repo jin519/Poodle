@@ -1,17 +1,16 @@
 #include "ShaderProgram.h"
+#include "ShaderReader.h"
 #include "ProgramException.h"
-#include "../Poodle/TextReader.h"
 #include <glm/gtc/type_ptr.hpp>
 
 using namespace std;
 using namespace glm;
-using namespace Poodle;
 
 namespace GLCore 
 {
 	ShaderProgram::ShaderProgram(
 		const string_view& vertexShaderPath,
-		const string_view& fragmentShaderPath)
+		const string_view& fragmentShaderPath) 
 	{
 		__init();
 
@@ -121,7 +120,7 @@ namespace GLCore
 		GLuint shader, 
 		const string_view& path)
 	{
-		const string& shaderSource = TextReader::read(path);
+		const string& shaderSource = ShaderReader::read(path);
 		const char* const rawShaderSource = shaderSource.c_str(); 
 
 		glShaderSource(shader, 1, &rawShaderSource, nullptr);

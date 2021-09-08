@@ -19,6 +19,9 @@
     <Filter Include="core\program">
       <UniqueIdentifier>{5a7caf31-ea9f-4040-9f82-7b279afe1ce7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{7ed602cb-e91a-40b2-ae65-e111104344b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLInitializer.h">
@@ -63,6 +66,12 @@
     <ClInclude Include="ProgramException.h">
       <Filter>core\program</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderReader.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="TextReader.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLInitializer.cpp">
@@ -97,6 +106,12 @@
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
       <Filter>core\program</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderReader.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="TextReader.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
