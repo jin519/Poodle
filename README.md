@@ -15,7 +15,7 @@ This project has some third-party dependencies, each of which may have independe
 - <a href="https://github.com/g-truc/glm">glm</a>: OpenGL Mathematics
 - <a href="https://github.com/KhronosGroup/glslang">glslang</a>: Shader front end and validator
 - <a href="https://github.com/nothings/stb">stb</a>: Single-file public domain (or MIT licensed) libraries
-- <a href="https://github.com/assimp/assimp">assimp</a> A library to import and export various 3d-model-formats including scene-post-processing to generate missing render data
+- <a href="https://github.com/assimp/assimp">assimp</a>: A library to import and export various 3d-model-formats including scene-post-processing to generate missing render data
 
 ## Demo
 <kbd><img src="demo/demo.gif" width="400"></kbd>
