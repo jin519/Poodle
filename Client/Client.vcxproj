@@ -163,9 +163,27 @@
     <ClInclude Include="DemoScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resource\Nanosuit\scene.bin" />
+    <None Include="resource\Nanosuit\scene.gltf" />
     <None Include="shaders\constant_header.glsl" />
     <None Include="shaders\triangle.frag" />
     <None Include="shaders\triangle.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\Nanosuit\textures\Body_diffuse.png" />
+    <Image Include="resource\Nanosuit\textures\Body_normal.png" />
+    <Image Include="resource\Nanosuit\textures\Body_specularGlossiness.png" />
+    <Image Include="resource\Nanosuit\textures\Glass_diffuse.png" />
+    <Image Include="resource\Nanosuit\textures\Hand_diffuse.png" />
+    <Image Include="resource\Nanosuit\textures\Hand_specularGlossiness.png" />
+    <Image Include="resource\Nanosuit\textures\Helmet_diffuse.png" />
+    <Image Include="resource\Nanosuit\textures\Helmet_normal.png" />
+    <Image Include="resource\Nanosuit\textures\material_5_diffuse.png" />
+    <Image Include="resource\Nanosuit\textures\material_5_normal.png" />
+    <Image Include="resource\Nanosuit\textures\material_5_specularGlossiness.png" />
+    <Image Include="resource\Nanosuit\textures\material_diffuse.png" />
+    <Image Include="resource\Nanosuit\textures\material_normal.png" />
+    <Image Include="resource\Nanosuit\textures\material_specularGlossiness.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

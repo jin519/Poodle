@@ -110,7 +110,7 @@ namespace GLCore
 		__id = glCreateProgram();
 
 		if (!__id)
-			throw ProgramException("program generation failed.");
+			throw ProgramException{ "program generation failed." };
 
 		__vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		__fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);

@@ -2,6 +2,7 @@
 
 #include "../GLCore/ShaderProgram.h"
 #include "../Poodle/Scene.h"
+#include "../Poodle/Model.h"
 #include "../GLCore/VertexArray.h"
 
 class DemoScene : public Poodle::Scene 
@@ -37,13 +38,17 @@ public:
 private:
 	void __init();
 
-	constexpr void __setAttribFlag(const GLuint attribFlag); 
-	constexpr GLuint __getAttribFlag() const; 
+	std::unique_ptr<Poodle::Model> __pModel; 
 
-	std::shared_ptr<GLCore::VertexArray> __pVao;
-	std::shared_ptr<GLCore::ShaderProgram> __pShaderProgram;
-
+	// FIXME ----------------
+	std::unique_ptr<GLCore::VertexArray> __pVao;
+	std::unique_ptr<GLCore::ShaderProgram> __pShaderProgram;
+	
 	GLuint __attribFlag; 
+
+	constexpr void __setAttribFlag(const GLuint attribFlag);
+	constexpr GLuint __getAttribFlag() const;
+	// ----------------------
 };
 
 constexpr void DemoScene::__setAttribFlag(const GLuint attribFlag) 

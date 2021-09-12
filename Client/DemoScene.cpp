@@ -1,6 +1,7 @@
 ﻿#include "DemoScene.h"
 #include "../Poodle/VertexAttributeListFactory.h"
 #include "../Poodle/Logger.h"
+#include "../Poodle/ModelLoader.h"
 
 using namespace std; 
 using namespace GLCore; 
@@ -65,22 +66,27 @@ void DemoScene::onScroll(const double delta)
 
 void DemoScene::__init()
 {
-	showMouseCursor(true); 
+	showMouseCursor(true);
 
 	glfwSwapInterval(1); // VSYNC 0: off, 1: on
 	glEnable(GL_DEPTH_TEST);
 
-	constexpr GLfloat vertices[]
+	// TODO
+	__pModel = ModelLoader::load("resource/Nanosuit/scene.gltf");
+
+	const vector<vector<GLfloat>> vboList
 	{
-		0.f, 0.8f, 0.f,		// position 
-		1.f, 0.f, 0.f, 1.f, // color
-
-		-0.4f, -0.8f, 0.f, 
-		0.f, 1.f, 0.f, 1.f, 
-
-		0.4f, -0.8f, 0.f,
-		0.f, 0.f, 1.f, 1.f
-	}; 
+		{ // position
+			0.f, 0.8f, 0.f,
+			-0.4f, -0.8f, 0.f,
+			0.4f, -0.8f, 0.f
+		},
+		{ // color
+			1.f, 0.f, 0.f, 1.f,
+			0.f, 1.f, 0.f, 1.f,
+			0.f, 0.f, 1.f, 1.f
+		}
+	};
 
 	constexpr GLuint indices[]
 	{
@@ -89,15 +95,27 @@ void DemoScene::__init()
 
 	constexpr VertexAttributeFlag attribFlag{ VertexAttributeFlag::POSITION | VertexAttributeFlag::COLOR };
 
-	__setAttribFlag(GLuint(attribFlag)); 
+	__setAttribFlag(GLuint(attribFlag)); // FIXME
 
-	__pVao = make_shared<VertexArray>(
-		VertexAttributeListFactory::get(attribFlag),
-		make_shared<VertexBuffer>(vertices, sizeof(vertices), GL_STATIC_DRAW),
-		make_shared<IndexBuffer>(indices, sizeof(indices), GL_STATIC_DRAW),
+	unordered_map<VertexAttribute, std::unique_ptr<VertexBuffer>> attrib2VertexBufferMap;
+	{
+		size_t i = 0ULL;
+
+		for (const VertexAttribute& attrib : VertexAttributeListFactory::get(attribFlag))
+		{
+			const vector<GLfloat>& vbo = vboList[i++];
+
+			attrib2VertexBufferMap.emplace(
+				attrib, make_unique<VertexBuffer>(vbo.data(), (sizeof(GLfloat) * vbo.size()), GL_STATIC_DRAW));
+		}
+	}
+
+	__pVao = make_unique<VertexArray>(
+		move(attrib2VertexBufferMap), 
+		make_unique<IndexBuffer>(indices, sizeof(indices), GL_STATIC_DRAW), 
 		static_cast<GLsizei>(size(indices)));
 
-	__pShaderProgram = make_shared<ShaderProgram>(
+	__pShaderProgram = make_unique<ShaderProgram>(
 		"shaders/triangle.vert", 
 		"shaders/triangle.frag");
 }

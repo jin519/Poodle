@@ -6,27 +6,25 @@ using namespace std;
 namespace GLCore 
 {
 	VertexArray::VertexArray(
-		const vector<VertexAttribute>& attribList,
-		const shared_ptr<VertexBuffer>& pVertexBuffer,
+		unordered_map<VertexAttribute, unique_ptr<VertexBuffer>>&& attrib2VertexBufferMap,
 		const GLsizei numVertices) : 
-		__pVertexBuffer{ pVertexBuffer }, 
+		__attrib2VertexBufferMap{ move(attrib2VertexBufferMap) }, 
 		__count{ numVertices }, 
 		__pDrawFunc{ &VertexArray::__drawArrays }
 	{
-		__init(attribList); 
+		__init(); 
 	}
 
 	VertexArray::VertexArray(
-		const vector<VertexAttribute>& attribList,
-		const shared_ptr<VertexBuffer>& pVertexBuffer,
-		const shared_ptr<IndexBuffer>& pIndexBuffer,
+		unordered_map<VertexAttribute, unique_ptr<VertexBuffer>>&& attrib2VertexBufferMap,
+		unique_ptr<IndexBuffer>&& pIndexBuffer,
 		const GLsizei numIndices) :
-		__pVertexBuffer{ pVertexBuffer },
-		__pIndexBuffer{ pIndexBuffer },
+		__attrib2VertexBufferMap{ move(attrib2VertexBufferMap) },
+		__pIndexBuffer{ move(pIndexBuffer) }, 
 		__count{ numIndices },
 		__pDrawFunc{ &VertexArray::__drawElements }
 	{
-		__init(attribList); 
+		__init();
 	}
 
 	VertexArray::~VertexArray()
@@ -50,37 +48,37 @@ namespace GLCore
 		(this->*__pDrawFunc)();
 	}
 
-	void VertexArray::__init(const vector<VertexAttribute>& attribList)
+	void VertexArray::__init() 
 	{
 		glGenVertexArrays(1, &__id);
 
 		if (!__id)
-			throw VertexArrayException("vertex array generation failed.");
+			throw VertexArrayException{ "vertex array generation failed." };
 
-		__applyAttribute(attribList);
+		__applyAttribute(); 
 	}
 
-	void VertexArray::__applyAttribute(const vector<VertexAttribute>& attribList)
+	void VertexArray::__applyAttribute()
 	{
 		bind();
 
-		__pVertexBuffer->bind();
+		for (const auto& [attrib, pVertexBuffer] : __attrib2VertexBufferMap) 
+		{
+			pVertexBuffer->bind(); 
+
+			glVertexAttribPointer(
+				attrib.location,
+				attrib.dataStructure.numElements,
+				attrib.dataStructure.elementType,
+				attrib.dataStructure.normalized,
+				attrib.stride,
+				reinterpret_cast<const void*>(size_t(attrib.offset)));
+
+			glEnableVertexAttribArray(attrib.location);
+		}
 
 		if (__pIndexBuffer)
 			__pIndexBuffer->bind();
-
-		for (const auto& attribute : attribList)
-		{
-			glVertexAttribPointer(
-				attribute.location,
-				attribute.dataStructure.numElements,
-				attribute.dataStructure.elementType,
-				attribute.dataStructure.normalized,
-				attribute.stride,
-				reinterpret_cast<const void*>(size_t(attribute.offset)));
-
-			glEnableVertexAttribArray(attribute.location);
-		}
 
 		unbind();
 	}

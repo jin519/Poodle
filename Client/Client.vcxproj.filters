@@ -14,6 +14,9 @@
     <Filter Include="demo\shaders">
       <UniqueIdentifier>{01289e8e-1029-4bad-b599-fa379bcd8b17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="리소스 파일\nanosuit">
+      <UniqueIdentifier>{1d43a0df-0e45-4228-a85c-efe3552d76ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -36,5 +39,55 @@
     <None Include="shaders\constant_header.glsl">
       <Filter>demo\shaders</Filter>
     </None>
+    <None Include="resource\Nanosuit\scene.bin">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </None>
+    <None Include="resource\Nanosuit\scene.gltf">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\Nanosuit\textures\Body_diffuse.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\Body_normal.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\Body_specularGlossiness.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\Glass_diffuse.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\Hand_diffuse.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\Hand_specularGlossiness.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\Helmet_diffuse.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\Helmet_normal.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\material_5_diffuse.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\material_5_normal.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\material_5_specularGlossiness.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\material_diffuse.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\material_normal.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
+    <Image Include="resource\Nanosuit\textures\material_specularGlossiness.png">
+      <Filter>리소스 파일\nanosuit</Filter>
+    </Image>
   </ItemGroup>
 </Project>

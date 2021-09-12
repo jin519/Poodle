@@ -8,7 +8,7 @@ namespace GLCore
 		glGenBuffers(1, &_id); 
 
 		if (!_id)
-			throw BufferException("buffer generation failed.");
+			throw BufferException{ "buffer generation failed." };
 	}
 
 	BufferBase::~BufferBase()

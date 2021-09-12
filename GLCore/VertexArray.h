@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
+#include <unordered_map>
 #include "VertexAttribute.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
@@ -12,15 +13,13 @@ namespace GLCore
 	{
 	public:
 		VertexArray(
-			const std::vector<VertexAttribute>& attribList,
-			const std::shared_ptr<VertexBuffer>& pVertexBuffer,
-			const GLsizei numVertices);
+			std::unordered_map<VertexAttribute, std::unique_ptr<VertexBuffer>>&& attrib2VertexBufferMap,
+			const GLsizei numVertices); 
 
 		VertexArray(
-			const std::vector<VertexAttribute>& attribList,
-			const std::shared_ptr<VertexBuffer>& pVertexBuffer,
-			const std::shared_ptr<IndexBuffer>& pIndexBuffer,
-			const GLsizei numIndices);
+			std::unordered_map<VertexAttribute, std::unique_ptr<VertexBuffer>>&& attrib2VertexBufferMap,
+			std::unique_ptr<IndexBuffer>&& pIndexBuffer,
+			const GLsizei numIndices); 
 
 		virtual ~VertexArray();
 
@@ -34,8 +33,8 @@ namespace GLCore
 		constexpr void setCount(const GLsizei count);
 
 	private:
-		void __init(const std::vector<VertexAttribute>& attribList);
-		void __applyAttribute(const std::vector<VertexAttribute>& attribList);
+		void __init(); 
+		void __applyAttribute(); 
 
 		void __drawArrays();
 		void __drawElements();
@@ -45,8 +44,8 @@ namespace GLCore
 		GLint __first = 0;
 		GLsizei __count;
 
-		const std::shared_ptr<VertexBuffer> __pVertexBuffer;
-		const std::shared_ptr<IndexBuffer> __pIndexBuffer;
+		const std::unordered_map<VertexAttribute, std::unique_ptr<VertexBuffer>> __attrib2VertexBufferMap;
+		const std::unique_ptr<IndexBuffer> __pIndexBuffer; 
 
 		void (VertexArray::* const __pDrawFunc)();
 	};

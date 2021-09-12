@@ -20,7 +20,7 @@ namespace Poodle
 			const GLsizei memSize = dataStructure.memSize();
 
 			stride += memSize;
-			retVal.emplace_back(AttribLocation::position, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::position, dataStructure, 0, 0);
 			offset += memSize;
 		}
 
@@ -30,7 +30,7 @@ namespace Poodle
 			const GLsizei memSize = dataStructure.memSize();
 
 			stride += memSize;
-			retVal.emplace_back(AttribLocation::normal, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::normal, dataStructure, 0, 0);
 			offset += memSize;
 		}
 
@@ -40,7 +40,7 @@ namespace Poodle
 			const GLsizei memSize = dataStructure.memSize();
 
 			stride += memSize;
-			retVal.emplace_back(AttribLocation::tangent, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::tangent, dataStructure, 0, 0);
 			offset += memSize;
 		}
 
@@ -50,7 +50,7 @@ namespace Poodle
 			const GLsizei memSize = dataStructure.memSize();
 
 			stride += memSize;
-			retVal.emplace_back(AttribLocation::texcoord, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::texcoord, dataStructure, 0, 0);
 			offset += memSize;
 		}
 
@@ -60,7 +60,7 @@ namespace Poodle
 			const GLsizei memSize = dataStructure.memSize();
 
 			stride += memSize;
-			retVal.emplace_back(AttribLocation::color, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::color, dataStructure, 0, 0);
 			offset += memSize;
 		}
 
@@ -70,7 +70,7 @@ namespace Poodle
 			const GLsizei memSize = dataStructure.memSize();
 
 			stride += memSize;
-			retVal.emplace_back(AttribLocation::joints, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::joints, dataStructure, 0, 0);
 			offset += memSize;
 		}
 
@@ -79,11 +79,11 @@ namespace Poodle
 			const VertexAttributeDataStructure& dataStructure = VertexAttributeDataStructureFactory::get(VertexAttributeDataStructureType::VEC4);
 
 			stride += dataStructure.memSize();
-			retVal.emplace_back(AttribLocation::weights, dataStructure, 0, offset);
+			retVal.emplace_back(AttribLocation::weights, dataStructure, 0, 0);
 		}
 
-		for (auto& attribute : retVal)
-			attribute.stride = stride;
+		/*for (auto& attribute : retVal)
+			attribute.stride = stride;*/
 
 		return retVal;
 	}

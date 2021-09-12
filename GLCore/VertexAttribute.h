@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VertexAttributeDataStructure.h"
+#include <functional>
 
 namespace GLCore
 {
@@ -17,6 +18,8 @@ namespace GLCore
 		VertexAttributeDataStructure dataStructure;
 		GLsizei stride;
 		GLsizei offset;
+
+		constexpr bool operator==(const VertexAttribute& rhs) const noexcept;
 	};
 
 	constexpr VertexAttribute::VertexAttribute(
@@ -29,4 +32,27 @@ namespace GLCore
 		stride{ stride },
 		offset{ offset }
 	{}
+
+	constexpr bool VertexAttribute::operator==(const VertexAttribute& rhs) const noexcept
+	{
+		return (
+			(location == rhs.location) &&
+			(dataStructure == rhs.dataStructure) &&
+			(stride == rhs.stride) &&
+			(offset == rhs.offset)
+		);
+	}
+}
+
+namespace std
+{
+	template<>
+	class hash<GLCore::VertexAttribute>
+	{
+	public:
+		size_t operator()(GLCore::VertexAttribute const& attrib) const noexcept
+		{
+			return attrib.location;
+		}
+	};
 }

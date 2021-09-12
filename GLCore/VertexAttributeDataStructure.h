@@ -17,6 +17,8 @@ namespace GLCore
 		GLint numElements;
 		GLenum elementType;
 		GLboolean normalized;
+
+		constexpr bool operator==(const VertexAttributeDataStructure& rhs) const noexcept;
 	};
 
 	constexpr VertexAttributeDataStructure::VertexAttributeDataStructure(
@@ -31,5 +33,15 @@ namespace GLCore
 	constexpr GLsizei VertexAttributeDataStructure::memSize() const
 	{
 		return (sizeof(elementType) * numElements);
+	}
+
+	constexpr bool VertexAttributeDataStructure::operator==(
+		const VertexAttributeDataStructure& rhs) const noexcept
+	{
+		return (
+			(numElements == rhs.numElements) &&
+			(elementType == rhs.elementType) &&
+			(normalized == rhs.normalized)
+		);
 	}
 }
