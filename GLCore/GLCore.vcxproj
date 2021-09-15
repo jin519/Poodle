@@ -160,6 +160,9 @@
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="ShaderReader.h" />
     <ClInclude Include="TextReader.h" />
+    <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="TextureBase.h" />
+    <ClInclude Include="TextureUtil.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexArrayException.h" />
     <ClInclude Include="VertexAttribute.h" />
@@ -177,6 +180,9 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="ShaderReader.cpp" />
     <ClCompile Include="TextReader.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="TextureBase.cpp" />
+    <ClCompile Include="TextureUtil.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexArrayException.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />

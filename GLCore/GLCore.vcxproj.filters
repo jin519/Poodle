@@ -22,6 +22,9 @@
     <Filter Include="util">
       <UniqueIdentifier>{7ed602cb-e91a-40b2-ae65-e111104344b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core\texture">
+      <UniqueIdentifier>{b73e76eb-0a12-4e2b-8cec-1b9abea9b3cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLInitializer.h">
@@ -72,6 +75,15 @@
     <ClInclude Include="TextReader.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="TextureBase.h">
+      <Filter>core\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>core\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureUtil.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLInitializer.cpp">
@@ -111,6 +123,15 @@
       <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="TextReader.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureBase.cpp">
+      <Filter>core\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>core\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureUtil.cpp">
       <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>

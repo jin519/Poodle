@@ -2,6 +2,7 @@
 #include "../Poodle/VertexAttributeListFactory.h"
 #include "../Poodle/Logger.h"
 #include "../Poodle/ModelLoader.h"
+#include "../GLCore/TextureUtil.h" // FIXME
 
 using namespace std; 
 using namespace GLCore; 
@@ -32,7 +33,7 @@ void DemoScene::onRender()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	__pShaderProgram->bind(); 
+	__pTexture->activate(0); 
 	__pShaderProgram->setUniform1ui("attribFlag", __getAttribFlag()); 
 
 	__pVao->draw(); 
@@ -72,7 +73,7 @@ void DemoScene::__init()
 	glEnable(GL_DEPTH_TEST);
 
 	// TODO
-	__pModel = ModelLoader::load("resource/Nanosuit/scene.gltf");
+	// __pModel = ModelLoader::load("resource/Nanosuit/scene.gltf");
 
 	const vector<vector<GLfloat>> vboList
 	{
@@ -81,11 +82,16 @@ void DemoScene::__init()
 			-0.4f, -0.8f, 0.f,
 			0.4f, -0.8f, 0.f
 		},
+		{ // texcoord
+			0.5f, 1.f, 
+			0.f, 0.f, 
+			1.f, 0.f
+		},
 		{ // color
 			1.f, 0.f, 0.f, 1.f,
 			0.f, 1.f, 0.f, 1.f,
 			0.f, 0.f, 1.f, 1.f
-		}
+		} 
 	};
 
 	constexpr GLuint indices[]
@@ -93,7 +99,7 @@ void DemoScene::__init()
 		0, 1, 2
 	}; 
 
-	constexpr VertexAttributeFlag attribFlag{ VertexAttributeFlag::POSITION | VertexAttributeFlag::COLOR };
+	constexpr VertexAttributeFlag attribFlag{ VertexAttributeFlag::POSITION | VertexAttributeFlag::TEXCOORD | VertexAttributeFlag::COLOR };
 
 	__setAttribFlag(GLuint(attribFlag)); // FIXME
 
@@ -114,6 +120,12 @@ void DemoScene::__init()
 		move(attrib2VertexBufferMap), 
 		make_unique<IndexBuffer>(indices, sizeof(indices), GL_STATIC_DRAW), 
 		static_cast<GLsizei>(size(indices)));
+
+	__pTexture = unique_ptr<Texture2D>{ TextureUtil::createTexture2DFromImage("resource/Nanosuit/textures/Body_normal.png") };
+	__pTexture->setParameteri(GL_TEXTURE_WRAP_S, GL_REPEAT);
+	__pTexture->setParameteri(GL_TEXTURE_WRAP_T, GL_REPEAT);
+	__pTexture->setParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	__pTexture->setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 	__pShaderProgram = make_unique<ShaderProgram>(
 		"shaders/triangle.vert", 

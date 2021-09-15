@@ -4,6 +4,7 @@
 #include "../Poodle/Scene.h"
 #include "../Poodle/Model.h"
 #include "../GLCore/VertexArray.h"
+#include "../GLCore/Texture2D.h"
 
 class DemoScene : public Poodle::Scene 
 {
@@ -38,12 +39,14 @@ public:
 private:
 	void __init();
 
-	std::unique_ptr<Poodle::Model> __pModel; 
+	std::unique_ptr<Poodle::Model> __pModel{};
 
 	// FIXME ----------------
-	std::unique_ptr<GLCore::VertexArray> __pVao;
-	std::unique_ptr<GLCore::ShaderProgram> __pShaderProgram;
-	
+	std::unique_ptr<GLCore::VertexArray> __pVao{};
+	std::unique_ptr<GLCore::ShaderProgram> __pShaderProgram{};
+	std::unique_ptr<GLCore::Texture2D> __pTexture{};
+	// ----------------------
+
 	GLuint __attribFlag; 
 
 	constexpr void __setAttribFlag(const GLuint attribFlag);
