@@ -1,7 +1,7 @@
 #pragma once
 
 #include "VertexAttributeFlag.h"
-#include "SubmeshInfo222.h"
+#include "SubmeshInfo.h"
 #include "../GLCore/VertexArray.h"
 
 namespace Poodle

@@ -54,7 +54,7 @@
     <ClInclude Include="Material.h">
       <Filter>core\data structure</Filter>
     </ClInclude>
-    <ClInclude Include="SubmeshInfo222.h">
+    <ClInclude Include="SubmeshInfo.h">
       <Filter>core\data structure</Filter>
     </ClInclude>
     <ClInclude Include="VertexAttributeFactory.h">
@@ -86,7 +86,7 @@
     <ClCompile Include="Material.cpp">
       <Filter>core\data structure</Filter>
     </ClCompile>
-    <ClCompile Include="SubmeshInfo222.cpp">
+    <ClCompile Include="SubmeshInfo.cpp">
       <Filter>core\data structure</Filter>
     </ClCompile>
   </ItemGroup>
