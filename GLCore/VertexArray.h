@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <vector>
 #include <unordered_map>
 #include "VertexAttribute.h"
 #include "VertexBuffer.h"

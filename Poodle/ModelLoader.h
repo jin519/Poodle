@@ -19,10 +19,12 @@ namespace Poodle
 		{
 		public:
 			GLuint numIndices{};
-			GLuint numVertices{};
-
 			std::vector<GLuint> indexBuffer;
+
+			GLuint numVertices{};
 			std::unordered_map<GLCore::VertexAttribute, std::vector<GLfloat>> attrib2VertexBufferMap;
+
+			std::vector<std::unique_ptr<SubmeshInfo>> submeshInfo;
 		};
 
 		static const aiScene* __loadScene(
@@ -34,7 +36,9 @@ namespace Poodle
 			const std::filesystem::path& parentDir);
 
 		static VertexAttributeFlag __getMeshAttribFlag(const aiMesh* const pAiMesh);
-		
-		static void __parseMesh(const aiScene* const pAiScene); 
+
+		static std::pair<
+			std::unordered_map<GLuint, std::pair<VertexAttributeFlag, size_t>>,
+			std::unordered_map<VertexAttributeFlag, MeshDataset>> __parseMesh(const aiScene* const pAiScene);
 	};
 }

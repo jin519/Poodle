@@ -1,7 +1,7 @@
 #include "VertexAttributeDataStructureFactory.h"
-#include "Logger.h"
-#include <cassert>
+#include <exception>
 
+using namespace std; 
 using namespace GLCore;
 
 namespace Poodle 
@@ -25,8 +25,7 @@ namespace Poodle
 			return vec4;
 
 		default:
-			Logger::commit(SeverityType::ERROR, "invalid vertex attribute data structure type.");
-			assert(false); 
+			throw exception{ "invalid vertex attribute data structure type." }; 
 		}
 	}
 }

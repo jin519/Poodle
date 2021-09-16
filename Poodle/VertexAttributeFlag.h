@@ -6,6 +6,7 @@ namespace Poodle
 {
 	enum class VertexAttributeFlag : GLuint
 	{
+		NONE = 0U, 
 		POSITION = (1U << Constant::AttribLocation::position),	// vec3 | float | XYZ vertex positions
 		NORMAL = (1U << Constant::AttribLocation::normal),		// vec3 | float | Normalized XYZ vertex normals
 		TANGENT = (1U << Constant::AttribLocation::tangent),	// vec4 | float | XYZW vertex tangents where the w component is a sign value (-1 or +1) indicating handedness of the tangent basis

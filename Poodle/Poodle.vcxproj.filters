@@ -54,7 +54,7 @@
     <ClInclude Include="Material.h">
       <Filter>core\data structure</Filter>
     </ClInclude>
-    <ClInclude Include="SubMeshInfo.h">
+    <ClInclude Include="SubmeshInfo222.h">
       <Filter>core\data structure</Filter>
     </ClInclude>
     <ClInclude Include="VertexAttributeFactory.h">
@@ -77,7 +77,6 @@
     <ClCompile Include="ModelLoader.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="SubMeshInfo.cpp" />
     <ClCompile Include="Mesh.cpp">
       <Filter>core\data structure</Filter>
     </ClCompile>
@@ -85,6 +84,9 @@
       <Filter>core\vertex attribute</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
+      <Filter>core\data structure</Filter>
+    </ClCompile>
+    <ClCompile Include="SubmeshInfo222.cpp">
       <Filter>core\data structure</Filter>
     </ClCompile>
   </ItemGroup>

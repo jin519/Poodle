@@ -1,40 +1,35 @@
 #pragma once
 
 #include "VertexAttributeFlag.h"
-#include "SubMeshInfo.h"
+#include "SubmeshInfo222.h"
 #include "../GLCore/VertexArray.h"
-#include <vector>
-#include <memory>
 
-namespace Poodle 
+namespace Poodle
 {
-	class Mesh 
+	class Mesh
 	{
 	public:
-		Mesh() = default; 
-		explicit Mesh(std::unique_ptr<GLCore::VertexArray>&& pVao) noexcept; 
+		Mesh(
+			const VertexAttributeFlag attribFlag, 
+			std::vector<std::unique_ptr<SubmeshInfo>>&& submeshInfo, 
+			std::unique_ptr<GLCore::VertexArray>&& pVao);
 
-		constexpr VertexAttributeFlag getAttribFlag() const;
-		constexpr void setAttribFlag(const VertexAttributeFlag attribFlag);
+		constexpr VertexAttributeFlag getAttribFlag() const; 
 
-		void addSubMeshInfo(
-			const GLuint numIndices,
-			const GLuint indexOffset);
+		const SubmeshInfo* getSubmeshInfo(const size_t submeshIndex) const; 
+
+		const GLCore::VertexArray* getVao() const; 
 
 	private:
-		VertexAttributeFlag __attribFlag; 
+		VertexAttributeFlag __attribFlag{ VertexAttributeFlag::NONE };
 
-		std::vector<std::unique_ptr<SubMeshInfo>> __subMeshInfoList; 
+		std::vector<std::unique_ptr<SubmeshInfo>> __submeshInfo; 
+
 		std::unique_ptr<GLCore::VertexArray> __pVao;
 	};
 
 	constexpr VertexAttributeFlag Mesh::getAttribFlag() const
 	{
-		return __attribFlag;
-	}
-
-	constexpr void Mesh::setAttribFlag(const VertexAttributeFlag attribFlag)
-	{
-		__attribFlag = attribFlag;
+		return __attribFlag; 
 	}
 }

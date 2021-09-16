@@ -73,7 +73,7 @@ void DemoScene::__init()
 	glEnable(GL_DEPTH_TEST);
 
 	// TODO
-	// __pModel = ModelLoader::load("resource/Nanosuit/scene.gltf");
+	__pModel = ModelLoader::load("resource/Nanosuit/scene.gltf");
 
 	const vector<vector<GLfloat>> vboList
 	{
@@ -122,6 +122,7 @@ void DemoScene::__init()
 		static_cast<GLsizei>(size(indices)));
 
 	__pTexture = unique_ptr<Texture2D>{ TextureUtil::createTexture2DFromImage("resource/Nanosuit/textures/Body_normal.png") };
+
 	__pTexture->setParameteri(GL_TEXTURE_WRAP_S, GL_REPEAT);
 	__pTexture->setParameteri(GL_TEXTURE_WRAP_T, GL_REPEAT);
 	__pTexture->setParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
