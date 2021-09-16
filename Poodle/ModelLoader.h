@@ -1,9 +1,8 @@
 #pragma once
 
-#include <string_view>
 #include <assimp/Importer.hpp> 
 #include <assimp/scene.h>
-#include <memory>
+#include <filesystem>
 #include "Model.h"
 
 namespace Poodle 
@@ -29,6 +28,10 @@ namespace Poodle
 		static const aiScene* __loadScene(
 			Assimp::Importer& importer,
 			const std::string_view& filePath); 
+
+		static std::unordered_map<GLuint, std::shared_ptr<Material>> __parseMaterial(
+			const aiScene* const pAiScene,
+			const std::filesystem::path& parentDir);
 
 		static VertexAttributeFlag __getMeshAttribFlag(const aiMesh* const pAiMesh);
 		

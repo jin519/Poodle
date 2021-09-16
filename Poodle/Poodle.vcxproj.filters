@@ -48,9 +48,6 @@
     <ClInclude Include="Model.h">
       <Filter>core\data structure</Filter>
     </ClInclude>
-    <ClInclude Include="ModelLoaderException.h">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>core\data structure</Filter>
     </ClInclude>
@@ -80,15 +77,15 @@
     <ClCompile Include="ModelLoader.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="ModelLoaderException.cpp">
-      <Filter>util</Filter>
-    </ClCompile>
     <ClCompile Include="SubMeshInfo.cpp" />
     <ClCompile Include="Mesh.cpp">
       <Filter>core\data structure</Filter>
     </ClCompile>
     <ClCompile Include="VertexAttributeFactory.cpp">
       <Filter>core\vertex attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>core\data structure</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

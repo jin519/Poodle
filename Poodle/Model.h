@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Mesh.h"
+#include "Material.h"
 
 namespace Poodle 
 {

@@ -150,9 +150,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
-    <ClCompile Include="ModelLoaderException.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SubMeshInfo.cpp" />
     <ClCompile Include="VertexAttributeDataStructureFactory.cpp" />
@@ -166,7 +166,6 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
-    <ClInclude Include="ModelLoaderException.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SeverityType.h" />
     <ClInclude Include="SubMeshInfo.h" />

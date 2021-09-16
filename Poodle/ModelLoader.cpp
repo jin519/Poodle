@@ -1,7 +1,6 @@
 #include <assimp/postprocess.h>
-#include <unordered_map> // FIXME
 #include "ModelLoader.h"
-#include "ModelLoaderException.h"
+#include "../GLCore/TextureUtil.h"
 #include "VertexAttributeFactory.h"
 
 using namespace std; 
@@ -15,12 +14,15 @@ namespace Poodle
 		const aiScene* const pAiScene = __loadScene(importer, filePath);
 
 		if (!pAiScene || (pAiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE))
-			throw ModelLoaderException{ importer.GetErrorString() };
+			throw exception{ importer.GetErrorString() };
 
 		if (!pAiScene->HasMeshes())
 			return nullptr;
 
-		__parseMesh(pAiScene); 
+		const filesystem::path& parentDir = filesystem::path{ filePath }.parent_path();
+		const unordered_map<GLuint, shared_ptr<Material>>& aiMaterialIndex2MaterialMap = __parseMaterial(pAiScene, parentDir);
+
+		// __parseMesh(pAiScene); 
 
 		return nullptr; 
 	}
@@ -47,10 +49,73 @@ namespace Poodle
 			aiPostProcessSteps::aiProcess_Debone);
 	}
 
+	unordered_map<GLuint, shared_ptr<Material>> ModelLoader::__parseMaterial(
+		const aiScene* const pAiScene,
+		const filesystem::path& textureDir)
+	{
+		unordered_map<GLuint, shared_ptr<Material>> retVal;
+
+		const auto getTexture = [&textureDir](
+			const aiMaterial* const pAiMaterial, 
+			const aiTextureType textureType) -> pair<Texture2D*, GLfloat>
+		{
+			Texture2D* pTexture{}; 
+
+			aiString textureName;
+			aiTextureMapping mappingCoord{ aiTextureMapping::aiTextureMapping_UV };
+			GLuint uvIndex{};
+			ai_real blendFactor{ 1.f };
+			aiTextureOp operation{ aiTextureOp::aiTextureOp_Add };
+			aiTextureMapMode wrapModes[3]
+			{
+				aiTextureMapMode::aiTextureMapMode_Wrap,
+				aiTextureMapMode::aiTextureMapMode_Wrap,
+				aiTextureMapMode::aiTextureMapMode_Wrap
+			};
+
+			if (pAiMaterial->GetTextureCount(textureType))
+			{
+				 pAiMaterial->GetTexture(
+					textureType, 
+					0U, 
+					&textureName, 
+					&mappingCoord,
+					&uvIndex, 
+					&blendFactor, 
+					&operation, 
+					wrapModes);
+
+				const string& imagePath = (textureDir / textureName.C_Str()).generic_string();
+
+				pTexture = TextureUtil::createTexture2DFromImage(imagePath);
+			}
+
+			return { pTexture, blendFactor };
+		};
+
+		for (GLuint materialIter = 0U; materialIter < pAiScene->mNumMaterials; ++materialIter) 
+		{
+			const aiMaterial* const pAiMaterial = pAiScene->mMaterials[materialIter];
+
+			const auto& [pDiffuseTexture, diffuseTextureBlendFactor] = getTexture(
+				pAiMaterial,
+				aiTextureType::aiTextureType_DIFFUSE);
+
+			shared_ptr<Material> pMaterial = make_shared<Material>();
+			
+			pMaterial->setDiffuseTexture(shared_ptr<Texture2D>{ pDiffuseTexture });
+			pMaterial->setDiffuseTextureBlendFactor(diffuseTextureBlendFactor);
+			
+			retVal.emplace(materialIter, pMaterial);
+		}
+
+		return retVal; 
+	}
+
 	VertexAttributeFlag ModelLoader::__getMeshAttribFlag(const aiMesh* const pAiMesh)
 	{
 		if (!pAiMesh->HasPositions())
-			throw ModelLoaderException{ "mesh has no position." };
+			throw exception{ "mesh has no position." };
 
 		VertexAttributeFlag retVal{VertexAttributeFlag::POSITION}; 
 
@@ -79,6 +144,8 @@ namespace Poodle
 	// TODO
 	void ModelLoader::__parseMesh(const aiScene* const pAiScene)
 	{
+		unordered_map<VertexAttributeFlag, Mesh> attribFlag2MeshMap; 
+
 		/*
 			각 aiMesh는 sub mesh로 간주한다.
 			attribute flag가 동일한 sub mesh는 동일한 mesh에 소속된다.
@@ -219,5 +286,7 @@ namespace Poodle
 				}
 			}
 		}
+
+		int x = 20; 
 	}
 }
