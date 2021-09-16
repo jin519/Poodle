@@ -1,4 +1,4 @@
-#include <assimp/postprocess.h>
+ï»¿#include <assimp/postprocess.h>
 #include "ModelLoader.h"
 #include "../GLCore/TextureUtil.h"
 #include "VertexAttributeFactory.h"
@@ -22,7 +22,7 @@ namespace Poodle
 		const filesystem::path& parentDir = filesystem::path{ filePath }.parent_path();
 		const auto& aiMaterialIndex2MaterialMap = __parseMaterial(pAiScene, parentDir);
 
-		const auto& [aiMeshIndex2AttribFlagSubMeshInfoIndexPairMap, attribFlag2MeshDatasetMap] = __parseMesh(pAiScene);
+		const auto& [aiMeshIndex2attribFlagMap, attribFlag2MeshDatasetMap] = __parseMesh(pAiScene);
 
 		return nullptr; 
 	}
@@ -135,22 +135,24 @@ namespace Poodle
 	}
 
 	pair<
-		unordered_map<GLuint, pair<VertexAttributeFlag, size_t>>, 
+		unordered_map<GLuint, VertexAttributeFlag>,
 		unordered_map<VertexAttributeFlag, ModelLoader::MeshDataset>> ModelLoader::__parseMesh(const aiScene* const pAiScene)
 	{
 		pair<
-			unordered_map<GLuint, pair<VertexAttributeFlag, size_t>>,
-			unordered_map<VertexAttributeFlag, ModelLoader::MeshDataset>> retVal; 
+			unordered_map<GLuint, VertexAttributeFlag>,
+			unordered_map<VertexAttributeFlag, MeshDataset>> retVal; 
 
-		auto& aiMeshIndex2AttribFlagSubmeshInfoIndexPairMap = retVal.first;
+		auto& aiMeshIndex2attribFlagMap = retVal.first; 
 		auto& attribFlag2MeshDatasetMap = retVal.second; 
 
-		/*
-			°¢ aiMesh´Â submesh·Î °£ÁÖÇÑ´Ù.
-			attribute flag°¡ µ¿ÀÏÇÑ submesh´Â µ¿ÀÏÇÑ mesh¿¡ ¼Ò¼ÓµÈ´Ù.
-		*/
+		unordered_map<VertexAttributeFlag, vector<GLuint>> attribFlag2AiMeshIndicesMap; 
+		
 		for (GLuint meshIter = 0U; meshIter < pAiScene->mNumMeshes; ++meshIter) 
 		{
+			/*
+				ê° aiMeshëŠ” submeshë¡œ ê°„ì£¼í•œë‹¤.
+				attribute flagê°€ ë™ì¼í•œ submeshëŠ” ë™ì¼í•œ meshì— ì†Œì†ëœë‹¤.
+			*/
 			const aiMesh* const pAiMesh = pAiScene->mMeshes[meshIter];
 
 			const GLuint numVertices = pAiMesh->mNumVertices;
@@ -167,12 +169,12 @@ namespace Poodle
 			}
 			
 			const VertexAttributeFlag attribFlag = __getMeshAttribFlag(pAiMesh);
-			
-			MeshDataset& meshDataset = attribFlag2MeshDatasetMap[attribFlag];
-			
-			aiMeshIndex2AttribFlagSubmeshInfoIndexPairMap.emplace(
+
+			aiMeshIndex2attribFlagMap.emplace(
 				meshIter,
-				make_pair(attribFlag, meshDataset.submeshInfo.size()));
+				attribFlag);
+
+			MeshDataset& meshDataset = attribFlag2MeshDatasetMap[attribFlag];
 
 			meshDataset.submeshInfo.emplace_back(make_unique<SubmeshInfo>(
 				numSubmeshIndices, 
@@ -180,125 +182,120 @@ namespace Poodle
 
 			meshDataset.numIndices += numSubmeshIndices; 
 			meshDataset.numVertices += numVertices; 
+
+			attribFlag2AiMeshIndicesMap[attribFlag].emplace_back(meshIter);
 		}
 
-		for (const auto& [aiMeshIndex, attribFlagSubMeshInfoIndexPair] : aiMeshIndex2AttribFlagSubmeshInfoIndexPairMap) 
+		for (const auto& [attribFlag, aiMeshIndices] : attribFlag2AiMeshIndicesMap) 
 		{
-			const auto& [attribFlag, subMeshInfoIndex] = attribFlagSubMeshInfoIndexPair;
+			MeshDataset& meshDataset = attribFlag2MeshDatasetMap[attribFlag]; 
+
+			vector<GLuint>& indexBuffer = meshDataset.indexBuffer;
+			indexBuffer.reserve(meshDataset.numIndices);
+
+			const size_t numMeshVertices = size_t(meshDataset.numVertices);
+			auto& attrib2VertexBufferMap = meshDataset.attrib2VertexBufferMap;
+
+			vector<GLfloat>& positionBuffer = attrib2VertexBufferMap[VertexAttributeFactory::get(VertexAttributeFlag::POSITION)];
+			positionBuffer.resize(numMeshVertices * 3ULL);
+
+			vector<GLfloat>& normalBuffer = attrib2VertexBufferMap[VertexAttributeFactory::get(VertexAttributeFlag::NORMAL)];
+			if (attribFlag & VertexAttributeFlag::NORMAL)
+				normalBuffer.resize(numMeshVertices * 3ULL);
+
+			vector<GLfloat>& tangentBuffer = attrib2VertexBufferMap[VertexAttributeFactory::get(VertexAttributeFlag::TANGENT)];
+			if (attribFlag & VertexAttributeFlag::TANGENT)
+				tangentBuffer.resize(numMeshVertices * 3ULL);
+
+			vector<GLfloat>& texcoordBuffer = attrib2VertexBufferMap[VertexAttributeFactory::get(VertexAttributeFlag::TEXCOORD)];
+			if (attribFlag & VertexAttributeFlag::TEXCOORD)
+				texcoordBuffer.resize(numMeshVertices * 2ULL);
+
+			vector<GLfloat>& colorBuffer = attrib2VertexBufferMap[VertexAttributeFactory::get(VertexAttributeFlag::COLOR)];
+			if (attribFlag & VertexAttributeFlag::COLOR)
+				colorBuffer.resize(numMeshVertices * 4ULL);
+
+			GLfloat* pPositionCursor = positionBuffer.data();
+			GLfloat* pNormalCursor = normalBuffer.data();
+			GLfloat* pTangentCursor = tangentBuffer.data();
+			GLfloat* pTexcoordCursor = texcoordBuffer.data();
+			GLfloat* pColorCursor = colorBuffer.data();
+
+			auto submeshIter = meshDataset.submeshInfo.begin(); 
+
+			for (const GLuint aiMeshIndex : aiMeshIndices) 
+			{
+				const aiMesh* const pAiMesh = pAiScene->mMeshes[aiMeshIndex]; 
+				const size_t numSubMeshVertices = pAiMesh->mNumVertices;
+
+				// ----------------------------------- INDEX
+
+				const GLuint submeshIndexOffset = submeshIter->get()->getIndexOffset(); 
+
+				for (GLuint faceIter = 0U; faceIter < pAiMesh->mNumFaces; ++faceIter)
+				{
+					const aiFace* const pAiFace = (pAiMesh->mFaces + faceIter);
+
+					for (GLuint indexIter = 0U; indexIter < pAiFace->mNumIndices; ++indexIter)
+						indexBuffer.emplace_back(pAiFace->mIndices[indexIter] + submeshIndexOffset);
+				}
+
+				// ----------------------------------- VERTEX - POSITION
+				
+				const size_t numSubMeshPositions = (numSubMeshVertices * 3ULL); 
+				const size_t memSize = (sizeof(GLfloat) * numSubMeshPositions);
+
+				memcpy(pPositionCursor, pAiMesh->mVertices, memSize);
+				pPositionCursor += numSubMeshPositions;
+
+				// ----------------------------------- VERTEX - NORMAL
+				
+				if (normalBuffer.size()) 
+				{
+					const size_t numSubMeshNormals = (numSubMeshVertices * 3ULL); 
+					const size_t memSize = (sizeof(GLfloat) * numSubMeshNormals);
+
+					memcpy(pNormalCursor, pAiMesh->mNormals, memSize);
+					pNormalCursor += numSubMeshNormals; 
+				}
+
+				// ----------------------------------- VERTEX - TANGENT
+				
+				if (tangentBuffer.size())
+				{
+					const size_t numSubMeshTangents = (numSubMeshVertices * 3ULL);
+					const size_t memSize = (sizeof(GLfloat) * numSubMeshTangents);
+
+					memcpy(pTangentCursor, pAiMesh->mTangents, memSize);
+					pTangentCursor += numSubMeshTangents;
+				}
+
+				// ----------------------------------- VERTEX - TEXCOORD
+				
+				if (texcoordBuffer.size())
+				{
+					const size_t numSubMeshTexcoords = (numSubMeshVertices * 2ULL);
+					const size_t memSize = (sizeof(GLfloat) * numSubMeshTexcoords);
+
+					memcpy(pTexcoordCursor, pAiMesh->mTextureCoords[0], memSize);
+					pTexcoordCursor += numSubMeshTexcoords;
+				}
+
+				// ----------------------------------- VERTEX - COLOR
+				
+				if (colorBuffer.size())
+				{
+					const size_t numSubMeshColors = (numSubMeshVertices * 4ULL);
+					const size_t memSize = (sizeof(GLfloat) * numSubMeshColors);
+
+					memcpy(pColorCursor, pAiMesh->mColors[0], memSize);
+					pColorCursor += numSubMeshColors;
+				}
+
+				++submeshIter; 
+			}
 		}
 
 		return retVal;
 	}
-
-	
-
-		//for (const auto& [attribFlag, meshIndices] : attribFlag2AiMeshIndiceMap) 
-		//{
-		//	MeshDataset& meshDataset = attribFlag2MeshDatasetMap[attribFlag]; 
-		//	
-		//	vector<GLuint>& indexBuffer = meshDataset.indexBuffer;
-		//	indexBuffer.reserve(meshDataset.numIndices);
-		//	
-		//	auto& attrib2VertexBufferMap = meshDataset.attrib2VertexBufferMap;
-		//	const size_t numMeshVertices = size_t(meshDataset.numVertices);
-
-		//	vector<GLfloat>& positionBuffer = attrib2VertexBufferMap[VertexAttributeFactory::get(VertexAttributeFlag::POSITION)];
-		//	positionBuffer.resize(numMeshVertices * 3ULL);
-
-		//	vector<GLfloat>& normalBuffer = attrib2VertexBufferMap[VertexAttributeFactory::get(VertexAttributeFlag::NORMAL)];
-		//	if (attribFlag & VertexAttributeFlag::NORMAL)
-		//		normalBuffer.resize(numMeshVertices * 3ULL);
-
-		//	vector<GLfloat>& tangentBuffer = attrib2VertexBufferMap[VertexAttributeFactory::get(VertexAttributeFlag::TANGENT)];
-		//	if (attribFlag & VertexAttributeFlag::TANGENT)
-		//		tangentBuffer.resize(numMeshVertices * 4ULL);
-
-		//	vector<GLfloat>& texcoordBuffer = attrib2VertexBufferMap[VertexAttributeFactory::get(VertexAttributeFlag::TEXCOORD)];
-		//	if (attribFlag & VertexAttributeFlag::TEXCOORD)
-		//		texcoordBuffer.resize(numMeshVertices * 2ULL);
-
-		//	vector<GLfloat>& colorBuffer = attrib2VertexBufferMap[VertexAttributeFactory::get(VertexAttributeFlag::COLOR)];
-		//	if (attribFlag & VertexAttributeFlag::COLOR)
-		//		colorBuffer.resize(numMeshVertices * 4ULL);
-
-		//	GLfloat* pPositionCursor = positionBuffer.data();
-		//	GLfloat* pNormalCursor = normalBuffer.data(); 
-		//	GLfloat* pTangentCursor = tangentBuffer.data();
-		//	GLfloat* pTexcoordCursor = texcoordBuffer.data(); 
-		//	GLfloat* pColorCursor = colorBuffer.data(); 
-
-		//	for (const GLuint meshIter : meshIndices) 
-		//	{
-		//		const aiMesh* const pAiMesh = pAiScene->mMeshes[meshIter];
-
-		//		// -------------- INDEX
-		//		{
-		//			const GLuint subMeshIndexOffset = aiMeshIndex2SubMeshInfoMap[meshIter].getIndexOffset();
-
-		//			for (GLuint faceIter = 0U; faceIter < pAiMesh->mNumFaces; ++faceIter)
-		//			{
-		//				const aiFace* const pAiFace = (pAiMesh->mFaces + faceIter);
-
-		//				for (GLuint indexIter = 0U; indexIter < pAiFace->mNumIndices; ++indexIter)
-		//					indexBuffer.emplace_back(pAiFace->mIndices[indexIter] + subMeshIndexOffset);
-		//			}
-		//		}
-
-		//		// -------------- VERTEX
-
-		//		const size_t numSubMeshVertices = pAiMesh->mNumVertices; 
-
-		//		// -------------- VERTEX - POSITION
-		//		{
-		//			const size_t numSubMeshPositions = (numSubMeshVertices * 3ULL); 
-		//			const size_t memSize = (sizeof(GLfloat) * numSubMeshPositions);
-
-		//			memcpy(pPositionCursor, pAiMesh->mVertices, memSize);
-		//			pPositionCursor += numSubMeshPositions;
-		//		}
-
-		//		// -------------- VERTEX - NORMAL
-		//		if (normalBuffer.size()) 
-		//		{
-		//			const size_t numSubMeshNormals = (numSubMeshVertices * 3ULL); 
-		//			const size_t memSize = (sizeof(GLfloat) * numSubMeshNormals);
-
-		//			memcpy(pNormalCursor, pAiMesh->mNormals, memSize);
-		//			pNormalCursor += numSubMeshNormals; 
-		//		}
-
-		//		// -------------- VERTEX - TANGENT
-		//		if (tangentBuffer.size())
-		//		{
-		//			const size_t numSubMeshTangents = (numSubMeshVertices * 4ULL);
-		//			const size_t memSize = (sizeof(GLfloat) * numSubMeshTangents);
-
-		//			memcpy(pTangentCursor, pAiMesh->mTangents, memSize);
-		//			pTangentCursor += numSubMeshTangents;
-		//		}
-
-		//		// -------------- VERTEX - TEXCOORD
-		//		if (texcoordBuffer.size())
-		//		{
-		//			const size_t numSubMeshTexcoords = (numSubMeshVertices * 2ULL);
-		//			const size_t memSize = (sizeof(GLfloat) * numSubMeshTexcoords);
-
-		//			memcpy(pTexcoordCursor, pAiMesh->mTextureCoords[0], memSize);
-		//			pTexcoordCursor += numSubMeshTexcoords;
-		//		}
-
-		//		// -------------- VERTEX - COLOR
-		//		if (colorBuffer.size())
-		//		{
-		//			const size_t numSubMeshColors = (numSubMeshVertices * 4ULL);
-		//			const size_t memSize = (sizeof(GLfloat) * numSubMeshColors);
-
-		//			memcpy(pColorCursor, pAiMesh->mColors[0], memSize);
-		//			pColorCursor += numSubMeshColors;
-		//		}
-		//	}
-		//}
-
-		//int x = 20; 
-//	}
 }

@@ -38,7 +38,7 @@ namespace Poodle
 		static VertexAttributeFlag __getMeshAttribFlag(const aiMesh* const pAiMesh);
 
 		static std::pair<
-			std::unordered_map<GLuint, std::pair<VertexAttributeFlag, size_t>>,
+			std::unordered_map<GLuint, VertexAttributeFlag>,
 			std::unordered_map<VertexAttributeFlag, MeshDataset>> __parseMesh(const aiScene* const pAiScene);
 	};
 }
