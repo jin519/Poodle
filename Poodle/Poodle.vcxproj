@@ -155,7 +155,9 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VertexAttributeDataStructureFactory.cpp" />
     <ClCompile Include="VertexAttributeFactory.cpp" />
     <ClCompile Include="VertexAttributeListFactory.cpp" />
@@ -168,9 +170,11 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SeverityType.h" />
     <ClInclude Include="SubmeshInfo.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="VertexAttributeDataStructureFactory.h" />
     <ClInclude Include="VertexAttributeDataStructureType.h" />
     <ClInclude Include="VertexAttributeFactory.h" />
