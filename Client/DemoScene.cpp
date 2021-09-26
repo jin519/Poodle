@@ -29,21 +29,113 @@ void DemoScene::onKey(
 		Logger::commit(SeverityType::INFO, "esc 활성: 프로그램을 종료합니다.");
 		getWindow().setCloseFlag(true);
 	}
+
+	if ((key == GLFW_KEY_W) && (action == GLFW_PRESS))
+	{
+		Logger::commit(SeverityType::INFO, "w 활성: 카메라를 앞으로 이동합니다."); 
+		__wPressed = true;
+	}
+
+	if ((key == GLFW_KEY_W) && (action == GLFW_RELEASE))
+	{
+		Logger::commit(SeverityType::INFO, "w 해제");
+		__wPressed = false;
+	}
+
+	if ((key == GLFW_KEY_S) && (action == GLFW_PRESS))
+	{
+		Logger::commit(SeverityType::INFO, "s 활성: 카메라를 뒤로 이동합니다.");
+		__sPressed = true;
+	}
+
+	if ((key == GLFW_KEY_S) && (action == GLFW_RELEASE))
+	{
+		Logger::commit(SeverityType::INFO, "s 해제");
+		__sPressed = false;
+	}
+
+	if ((key == GLFW_KEY_A) && (action == GLFW_PRESS))
+	{
+		Logger::commit(SeverityType::INFO, "a 활성: 카메라를 오른쪽으로 이동합니다.");
+		__aPressed = true;
+	}
+
+	if ((key == GLFW_KEY_A) && (action == GLFW_RELEASE))
+	{
+		Logger::commit(SeverityType::INFO, "a 해제");
+		__aPressed = false;
+	}
+
+	if ((key == GLFW_KEY_D) && (action == GLFW_PRESS))
+	{
+		Logger::commit(SeverityType::INFO, "d 활성: 카메라를 왼쪽으로 이동합니다.");
+		__dPressed = true;
+	}
+
+	if ((key == GLFW_KEY_D) && (action == GLFW_RELEASE))
+	{
+		Logger::commit(SeverityType::INFO, "d 해제");
+		__dPressed = false;
+	}
+
+	if ((key == GLFW_KEY_Q) && (action == GLFW_PRESS))
+	{
+		Logger::commit(SeverityType::INFO, "q 활성: 카메라를 위로 이동합니다.");
+		__qPressed = true;
+	}
+
+	if ((key == GLFW_KEY_Q) && (action == GLFW_RELEASE))
+	{
+		Logger::commit(SeverityType::INFO, "q 해제");
+		__qPressed = false;
+	}
+
+	if ((key == GLFW_KEY_E) && (action == GLFW_PRESS))
+	{
+		Logger::commit(SeverityType::INFO, "e 활성: 카메라를 아래로 이동합니다.");
+		__ePressed = true;
+	}
+
+	if ((key == GLFW_KEY_E) && (action == GLFW_RELEASE))
+	{
+		Logger::commit(SeverityType::INFO, "e 해제");
+		__ePressed = false;
+	}
 }
 
 void DemoScene::onUpdate(const float deltaTime)
-{}
+{
+	Transform& cameraTransform = __pCamera->getTransform(); 
+	const GLfloat translationStep = (deltaTime * Constant::Camera::translationStep);
+
+	if (__wPressed)
+		cameraTransform.advanceZ(-translationStep);
+	if (__sPressed)
+		cameraTransform.advanceZ(translationStep);
+	if (__aPressed)
+		cameraTransform.advanceX(translationStep);
+	if (__dPressed)
+		cameraTransform.advanceX(-translationStep);
+	if (__qPressed)
+		cameraTransform.advanceY(translationStep);
+	if (__ePressed)
+		cameraTransform.advanceY(-translationStep);
+
+	__pCamera->update(); 
+}
 
 void DemoScene::onRender()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	/*__pShaderProgram->setUniform1ui("attribFlag", GLuint(__pMesh->getAttribFlag()));
-	__pMesh->draw();*/
+	__pShaderProgram->setUniformMatrix4f("viewMat", __pCamera->getViewMatrix());
+	__pShaderProgram->setUniformMatrix4f("projectionMat", __pCamera->getProjectionMatrix());
 
 	for (auto& pMesh : __pModel->getMeshes()) 
 	{
+		__pShaderProgram->setUniformMatrix4f("modelMat", __pModel->getTransform().getModelMatrix()); 
 		__pShaderProgram->setUniform1ui("attribFlag", GLuint(pMesh->getAttribFlag()));
+		
 		pMesh->draw();
 	}
 
@@ -59,6 +151,7 @@ void DemoScene::onResize(
 	const int height)
 {
 	__super::onResize(width, height); 
+	__pCamera->setAspectRatio(width, height); 
 }
 
 void DemoScene::onMouseButton(
@@ -85,58 +178,8 @@ void DemoScene::__init()
 	glfwSwapInterval(1); // VSYNC 0: off, 1: on
 	glEnable(GL_DEPTH_TEST);
 
-	// TODO
 	__pModel = ModelLoader::load("resource/Nanosuit/scene.gltf");
-
-	// TEST -------------------------
-	constexpr VertexAttributeFlag attribFlag{ VertexAttributeFlag::POSITION | VertexAttributeFlag::COLOR };
-	
-	std::vector<std::unique_ptr<SubmeshInfo>> submeshInfo;
-	submeshInfo.emplace_back(make_unique<SubmeshInfo>(3U, 0U));
-
-	const vector<vector<GLfloat>> vboList
-	{
-		{ // position
-			0.f, 0.8f, 0.f,
-			-0.4f, -0.8f, 0.f,
-			0.4f, -0.8f, 0.f
-		},
-		{ // color
-			1.f, 0.f, 0.f, 1.f,
-			0.f, 1.f, 0.f, 1.f,
-			0.f, 0.f, 1.f, 1.f
-		} 
-	};
-
-	constexpr GLuint indices[]
-	{
-		0, 1, 2
-	}; 
-
-	unordered_map<VertexAttribute, std::unique_ptr<VertexBuffer>> attrib2VertexBufferMap;
-	{
-		size_t i = 0ULL;
-
-		for (const VertexAttribute& attrib : VertexAttributeListFactory::get(attribFlag))
-		{
-			const vector<GLfloat>& vbo = vboList[i++];
-
-			attrib2VertexBufferMap.emplace(
-				attrib, make_unique<VertexBuffer>(vbo.data(), (sizeof(GLfloat) * vbo.size()), GL_STATIC_DRAW));
-		}
-	}
-
-	std::unique_ptr<GLCore::VertexArray> pVao{};
-
-    pVao = make_unique<VertexArray>(
-		move(attrib2VertexBufferMap), 
-		make_unique<IndexBuffer>(indices, sizeof(indices), GL_STATIC_DRAW), 
-		static_cast<GLsizei>(size(indices)));
-
-	__pMesh = make_shared<Mesh>(
-		attribFlag,
-		move(submeshInfo),
-		move(pVao)); 
+	__pModel->getTransform().setScale(0.1f); 
 
 	/*__pTexture = unique_ptr<Texture2D>{TextureUtil::createTexture2DFromImage("resource/Nanosuit/textures/Body_normal.png")}; 
 
@@ -145,7 +188,12 @@ void DemoScene::__init()
 	__pTexture->setParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	__pTexture->setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);*/
 
-	__pShaderProgram = make_unique<ShaderProgram>(
+	__pCamera = make_unique<PerspectiveCamera>(); 
+	__pCamera->setNear(0.1f);
+	__pCamera->setFar(200.f);
+	__pCamera->getTransform().advanceZ(70.f);
+
+	__pShaderProgram = make_shared<ShaderProgram>(
 		"shaders/triangle.vert", 
 		"shaders/triangle.frag");
 }

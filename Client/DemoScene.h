@@ -3,8 +3,9 @@
 #include "../GLCore/ShaderProgram.h"
 #include "../Poodle/Scene.h"
 #include "../Poodle/Model.h"
-#include "../GLCore/VertexArray.h"
-#include "../GLCore/Texture2D.h"
+#include "../Poodle/PerspectiveCamera.h"
+#include "../GLCore/VertexArray.h" // FIXME
+#include "../GLCore/Texture2D.h" // FIXME
 
 class DemoScene : public Poodle::Scene 
 {
@@ -41,27 +42,18 @@ private:
 	void __init();
 
 	std::unique_ptr<Poodle::Model> __pModel{};
-	std::unique_ptr<GLCore::ShaderProgram> __pShaderProgram{};
+	std::shared_ptr<GLCore::ShaderProgram> __pShaderProgram{};
+	std::unique_ptr<Poodle::PerspectiveCamera> __pCamera{};
 
 	// FIXME ----------------
 	// std::unique_ptr<GLCore::VertexArray> __pVao{};
 	// std::unique_ptr<GLCore::Texture2D> __pTexture{};
-	std::shared_ptr<Poodle::Mesh> __pMesh{}; 
 	// ----------------------
 
-	GLuint __attribFlag; 
-
-	constexpr void __setAttribFlag(const GLuint attribFlag);
-	constexpr GLuint __getAttribFlag() const;
-	// ----------------------
+	bool __wPressed{ false };
+	bool __sPressed{ false }; 
+	bool __aPressed{ false }; 
+	bool __dPressed{ false }; 
+	bool __qPressed{ false }; 
+	bool __ePressed{ false }; 
 };
-
-constexpr void DemoScene::__setAttribFlag(const GLuint attribFlag) 
-{
-	__attribFlag = attribFlag; 
-}
-
-constexpr GLuint DemoScene::__getAttribFlag() const 
-{
-	return __attribFlag; 
-}

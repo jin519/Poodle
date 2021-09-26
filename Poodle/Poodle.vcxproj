@@ -149,20 +149,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="OrthoCamera.cpp" />
+    <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="TransformableCamera.cpp" />
     <ClCompile Include="VertexAttributeDataStructureFactory.cpp" />
     <ClCompile Include="VertexAttributeFactory.cpp" />
     <ClCompile Include="VertexAttributeListFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Material.h" />
@@ -170,11 +175,14 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="OrthoCamera.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SeverityType.h" />
     <ClInclude Include="SubmeshInfo.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="TransformableCamera.h" />
     <ClInclude Include="VertexAttributeDataStructureFactory.h" />
     <ClInclude Include="VertexAttributeDataStructureType.h" />
     <ClInclude Include="VertexAttributeFactory.h" />

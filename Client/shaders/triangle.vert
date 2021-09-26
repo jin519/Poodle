@@ -2,6 +2,10 @@
 
 #include "constant_header.glsl"
 
+uniform mat4 modelMat; 
+uniform mat4 viewMat; 
+uniform mat4 projectionMat; 
+
 uniform uint attribFlag;
 
 layout (location = positionAttribLocation) in vec3 position_;
@@ -20,7 +24,8 @@ out flat uint hasColor;
 
 void main() 
 {
-	gl_Position = vec4(position_ * .1f, 1.f); 
+	const mat4 mvpMatrix = (projectionMat * viewMat * modelMat); 
+	gl_Position = (mvpMatrix * vec4(position_, 1.f)); 
 
 //	hasTexcoord = (attribFlag & texcoordAttribFlag);
 //
