@@ -1,15 +1,19 @@
 ﻿#include <assimp/postprocess.h>
+#include <stack>
 #include "ModelLoader.h"
 #include "../GLCore/TextureUtil.h"
 #include "VertexAttributeFactory.h"
 
 using namespace std; 
+using namespace glm;
 using namespace GLCore; 
 
 namespace Poodle 
 {
 	unique_ptr<Model> ModelLoader::load(const string_view& filePath)
 	{
+		unique_ptr<Model> retVal{};
+
 		Assimp::Importer importer; 
 		const aiScene* const pAiScene = __loadScene(importer, filePath);
 
@@ -20,11 +24,24 @@ namespace Poodle
 			return nullptr;
 
 		const filesystem::path& parentDir = filesystem::path{ filePath }.parent_path();
-		const auto& aiMaterialIndex2MaterialMap = __parseMaterial(pAiScene, parentDir);
+		auto [materials, aiMaterial2MaterialIndexMap] = __parseMaterial(
+			pAiScene, 
+			parentDir); 
 
-		const auto& [aiMeshIndex2attribFlagMap, attribFlag2MeshDatasetMap] = __parseMesh(pAiScene);
+		auto [nodes, aiNode2NodeIndexMap] = __parseNode(pAiScene);
 
-		return nullptr; 
+		auto [meshes, aiMesh2MeshIndexMap] = __parseMesh(
+			pAiScene, 
+			aiMaterial2MaterialIndexMap);
+
+		retVal = make_unique<Model>(
+			pAiScene->mName.C_Str(),
+			aiNode2NodeIndexMap.at(pAiScene->mRootNode),
+			move(nodes),
+			move(materials),
+			move(meshes));
+
+		return retVal; 
 	}
 
 	const aiScene* ModelLoader::__loadScene(
@@ -49,13 +66,52 @@ namespace Poodle
 			aiPostProcessSteps::aiProcess_Debone);
 	}
 
-	unordered_map<GLuint, shared_ptr<Material>> ModelLoader::__parseMaterial(
-		const aiScene* const pAiScene,
-		const filesystem::path& textureDir)
+	pair<
+		vector<unique_ptr<Node>>,
+		unordered_map<const aiNode*, int>> ModelLoader::__parseNode(const aiScene* const pAiScene)
 	{
-		unordered_map<GLuint, shared_ptr<Material>> retVal;
+		pair<vector<unique_ptr<Node>>, unordered_map<const aiNode*, int>> retVal;
+		auto& [nodes, aiNode2NodeIndexMap] = retVal;
 
-		const auto getTexture = [&textureDir](
+		stack<const aiNode*> nodeStack;
+		nodeStack.emplace(pAiScene->mRootNode);
+
+		while (nodeStack.size())
+		{
+			const aiNode* const pAiNode = nodeStack.top();
+			nodeStack.pop();
+
+			const int nodeIndex = int(nodes.size());
+			aiNode2NodeIndexMap.emplace(pAiNode, nodeIndex);
+
+			const string& name = pAiNode->mName.C_Str();
+			const mat4& localJointMatrix = transpose(reinterpret_cast<const mat4&>(pAiNode->mTransformation));
+			nodes.emplace_back(make_unique<Node>(name, localJointMatrix));
+
+			const aiNode* const pAiParentNode = pAiNode->mParent;
+			if (pAiParentNode)
+			{
+				const int parentIndex = aiNode2NodeIndexMap.at(pAiParentNode);
+				nodes[parentIndex]->addChildIndex(nodeIndex);
+			}
+
+			for (GLuint childIter = 0U; childIter < pAiNode->mNumChildren; ++childIter)
+				nodeStack.emplace(pAiNode->mChildren[childIter]);
+		}
+
+		return retVal;
+	}
+
+	pair<
+		vector<shared_ptr<Material>>, 
+		unordered_map<GLuint, int>> ModelLoader::__parseMaterial(
+			const aiScene* const pAiScene, 
+			const filesystem::path& parentDir)
+	{
+		pair<vector<shared_ptr<Material>>, unordered_map<GLuint, int>> retVal;
+		auto& [materials, aiMaterialIndex2MaterialIndexMap] = retVal;
+
+		const auto getTexture = [&parentDir](
 			const aiMaterial* const pAiMaterial, 
 			const aiTextureType textureType) -> pair<Texture2D*, GLfloat>
 		{
@@ -85,8 +141,7 @@ namespace Poodle
 					&operation, 
 					wrapModes);
 
-				const string& imagePath = (textureDir / textureName.C_Str()).generic_string();
-
+				const string& imagePath = (parentDir / textureName.C_Str()).generic_string();
 				pTexture = TextureUtil::createTexture2DFromImage(imagePath);
 			}
 
@@ -101,12 +156,14 @@ namespace Poodle
 				pAiMaterial,
 				aiTextureType::aiTextureType_DIFFUSE);
 
-			shared_ptr<Material> pMaterial = make_shared<Material>();
+			aiMaterialIndex2MaterialIndexMap.emplace(materialIter, int(materials.size()));
+
+			materials.emplace_back(make_shared<Material>());
+			shared_ptr<Material>& pMaterial = materials.back(); 
 			
+			// FIXME
 			pMaterial->setDiffuseTexture(shared_ptr<Texture2D>{ pDiffuseTexture });
 			pMaterial->setDiffuseTextureBlendFactor(diffuseTextureBlendFactor);
-			
-			retVal.emplace(materialIter, pMaterial);
 		}
 
 		return retVal; 
@@ -135,33 +192,43 @@ namespace Poodle
 	}
 
 	pair<
-		unordered_map<GLuint, VertexAttributeFlag>,
-		unordered_map<VertexAttributeFlag, ModelLoader::MeshDataset>> ModelLoader::__parseMesh(const aiScene* const pAiScene)
+		vector<shared_ptr<Mesh>>, 
+		unordered_map<const aiMesh*, int>> ModelLoader::__parseMesh(
+			const aiScene* const pAiScene, 
+			const unordered_map<GLuint, int>& aiMaterialIndex2MaterialIndexMap)
 	{
-		pair<
-			unordered_map<GLuint, VertexAttributeFlag>,
-			unordered_map<VertexAttributeFlag, MeshDataset>> retVal; 
+		pair<vector<shared_ptr<Mesh>>, unordered_map<const aiMesh*, int>> retVal; 
+		auto& [meshes, aiMesh2MeshIndexMap] = retVal;
 
-		auto& aiMeshIndex2attribFlagMap = retVal.first; 
-		auto& attribFlag2MeshDatasetMap = retVal.second; 
+		class MeshDataset
+		{
+		public:
+			GLuint numIndices{};
+			std::vector<GLuint> indexBuffer;
 
+			GLuint numVertices{};
+			std::unordered_map<GLCore::VertexAttribute, std::vector<GLfloat>> attrib2VertexBufferMap;
+
+			std::vector<std::unique_ptr<SubmeshInfo>> submeshInfo;
+		};
+		
+		unordered_map<GLuint, pair<VertexAttributeFlag, size_t>> aiMeshIndex2AttribFlagSubMeshIndexPairMap; 
+		unordered_map<VertexAttributeFlag, MeshDataset> attribFlag2MeshDatasetMap; 
 		unordered_map<VertexAttributeFlag, vector<GLuint>> attribFlag2AiMeshIndicesMap; 
 		
+		/*
+			각 aiMesh는 submesh로 간주한다.
+			attribute flag가 동일한 submesh는 동일한 mesh에 소속된다.
+		*/
 		for (GLuint meshIter = 0U; meshIter < pAiScene->mNumMeshes; ++meshIter) 
 		{
-			/*
-				각 aiMesh는 submesh로 간주한다.
-				attribute flag가 동일한 submesh는 동일한 mesh에 소속된다.
-			*/
 			const aiMesh* const pAiMesh = pAiScene->mMeshes[meshIter];
 
 			const GLuint numVertices = pAiMesh->mNumVertices;
-
 			if (!numVertices)
 				continue;
 			
 			GLuint numSubmeshIndices{};
-			
 			for (GLuint faceIter = 0U; faceIter < pAiMesh->mNumFaces; ++faceIter)
 			{
 				const aiFace* const pAiFace = (pAiMesh->mFaces + faceIter);
@@ -169,17 +236,19 @@ namespace Poodle
 			}
 			
 			const VertexAttributeFlag attribFlag = __getMeshAttribFlag(pAiMesh);
-
-			aiMeshIndex2attribFlagMap.emplace(
-				meshIter,
-				attribFlag);
-
 			MeshDataset& meshDataset = attribFlag2MeshDatasetMap[attribFlag];
 
-			meshDataset.submeshInfo.emplace_back(make_unique<SubmeshInfo>(
+			vector<unique_ptr<SubmeshInfo>>& submeshInfo = meshDataset.submeshInfo; 
+			const size_t subMeshIndex = submeshInfo.size();
+
+			aiMeshIndex2AttribFlagSubMeshIndexPairMap.emplace(
+				meshIter, 
+				make_pair(attribFlag, subMeshIndex)); 
+			
+			submeshInfo.emplace_back(make_unique<SubmeshInfo>(
 				numSubmeshIndices, 
 				meshDataset.numIndices)); 
-
+			
 			meshDataset.numIndices += numSubmeshIndices; 
 			meshDataset.numVertices += numVertices; 
 
@@ -188,6 +257,8 @@ namespace Poodle
 
 		for (const auto& [attribFlag, aiMeshIndices] : attribFlag2AiMeshIndicesMap) 
 		{
+			const int meshIndex = int(meshes.size());
+
 			MeshDataset& meshDataset = attribFlag2MeshDatasetMap[attribFlag]; 
 
 			vector<GLuint>& indexBuffer = meshDataset.indexBuffer;
@@ -221,16 +292,22 @@ namespace Poodle
 			GLfloat* pTexcoordCursor = texcoordBuffer.data();
 			GLfloat* pColorCursor = colorBuffer.data();
 
-			auto submeshIter = meshDataset.submeshInfo.begin(); 
-
 			for (const GLuint aiMeshIndex : aiMeshIndices) 
 			{
 				const aiMesh* const pAiMesh = pAiScene->mMeshes[aiMeshIndex]; 
 				const size_t numSubMeshVertices = pAiMesh->mNumVertices;
 
+				aiMesh2MeshIndexMap.emplace(pAiMesh, meshIndex);
+
+				const size_t submeshIndex = aiMeshIndex2AttribFlagSubMeshIndexPairMap[aiMeshIndex].second;
+				SubmeshInfo& submeshInfo = *meshDataset.submeshInfo[submeshIndex];
+
+				const int materialIndex = aiMaterialIndex2MaterialIndexMap.at(pAiMesh->mMaterialIndex); 
+				submeshInfo.setMaterialIndex(materialIndex); 
+
 				// ----------------------------------- INDEX
 
-				const GLuint submeshIndexOffset = submeshIter->get()->getIndexOffset(); 
+				const GLuint submeshIndexOffset = submeshInfo.getIndexOffset();
 
 				for (GLuint faceIter = 0U; faceIter < pAiMesh->mNumFaces; ++faceIter)
 				{
@@ -242,58 +319,82 @@ namespace Poodle
 
 				// ----------------------------------- VERTEX - POSITION
 				
-				const size_t numSubMeshPositions = (numSubMeshVertices * 3ULL); 
-				const size_t memSize = (sizeof(GLfloat) * numSubMeshPositions);
+				const size_t numSubmeshPositions = (numSubMeshVertices * 3ULL); 
+				const size_t memSize = (sizeof(GLfloat) * numSubmeshPositions);
 
 				memcpy(pPositionCursor, pAiMesh->mVertices, memSize);
-				pPositionCursor += numSubMeshPositions;
+				pPositionCursor += numSubmeshPositions;
 
 				// ----------------------------------- VERTEX - NORMAL
 				
 				if (normalBuffer.size()) 
 				{
-					const size_t numSubMeshNormals = (numSubMeshVertices * 3ULL); 
-					const size_t memSize = (sizeof(GLfloat) * numSubMeshNormals);
+					const size_t numSubmeshNormals = (numSubMeshVertices * 3ULL); 
+					const size_t memSize = (sizeof(GLfloat) * numSubmeshNormals);
 
 					memcpy(pNormalCursor, pAiMesh->mNormals, memSize);
-					pNormalCursor += numSubMeshNormals; 
+					pNormalCursor += numSubmeshNormals; 
 				}
 
 				// ----------------------------------- VERTEX - TANGENT
 				
 				if (tangentBuffer.size())
 				{
-					const size_t numSubMeshTangents = (numSubMeshVertices * 3ULL);
-					const size_t memSize = (sizeof(GLfloat) * numSubMeshTangents);
+					const size_t numSubmeshTangents = (numSubMeshVertices * 3ULL);
+					const size_t memSize = (sizeof(GLfloat) * numSubmeshTangents);
 
 					memcpy(pTangentCursor, pAiMesh->mTangents, memSize);
-					pTangentCursor += numSubMeshTangents;
+					pTangentCursor += numSubmeshTangents;
 				}
 
 				// ----------------------------------- VERTEX - TEXCOORD
 				
 				if (texcoordBuffer.size())
 				{
-					const size_t numSubMeshTexcoords = (numSubMeshVertices * 2ULL);
-					const size_t memSize = (sizeof(GLfloat) * numSubMeshTexcoords);
+					const size_t numSubmeshTexcoords = (numSubMeshVertices * 2ULL);
+					const size_t memSize = (sizeof(GLfloat) * numSubmeshTexcoords);
 
 					memcpy(pTexcoordCursor, pAiMesh->mTextureCoords[0], memSize);
-					pTexcoordCursor += numSubMeshTexcoords;
+					pTexcoordCursor += numSubmeshTexcoords;
 				}
 
 				// ----------------------------------- VERTEX - COLOR
 				
 				if (colorBuffer.size())
 				{
-					const size_t numSubMeshColors = (numSubMeshVertices * 4ULL);
-					const size_t memSize = (sizeof(GLfloat) * numSubMeshColors);
+					const size_t numSubmeshColors = (numSubMeshVertices * 4ULL);
+					const size_t memSize = (sizeof(GLfloat) * numSubmeshColors);
 
 					memcpy(pColorCursor, pAiMesh->mColors[0], memSize);
-					pColorCursor += numSubMeshColors;
+					pColorCursor += numSubmeshColors;
 				}
-
-				++submeshIter; 
 			}
+
+			unordered_map<VertexAttribute, unique_ptr<VertexBuffer>> attrib2VboMap;
+			for (const auto [attrib, vbo] : meshDataset.attrib2VertexBufferMap)
+			{
+				attrib2VboMap.emplace(
+					attrib, 
+					make_unique<VertexBuffer>(
+						vbo.data(),
+						sizeof(GLfloat) * vbo.size(),
+						GL_STATIC_DRAW)); 
+			}
+
+			unique_ptr<IndexBuffer> pEbo = make_unique<IndexBuffer>(
+				indexBuffer.data(), 
+				sizeof(GLuint) * indexBuffer.size(), 
+				GL_STATIC_DRAW);
+
+			unique_ptr<VertexArray> pVao = make_unique<VertexArray>(
+				move(attrib2VboMap),
+				move(pEbo),
+				static_cast<GLsizei>(indexBuffer.size())); 
+
+			meshes.emplace_back(make_shared<Mesh>(
+				attribFlag,
+				move(meshDataset.submeshInfo),
+				move(pVao))); 
 		}
 
 		return retVal;

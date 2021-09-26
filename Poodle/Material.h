@@ -8,6 +8,8 @@ namespace Poodle
 	class Material 
 	{
 	public:
+		Material() = default; 
+
 		constexpr const std::shared_ptr<GLCore::Texture2D>& getDiffuseTexture() const;
 		void setDiffuseTexture(const std::shared_ptr<GLCore::Texture2D>& pTexture); 
 

@@ -19,8 +19,8 @@ namespace Poodle
 		return __submeshInfo.at(submeshIndex).get();
 	}
 
-	const VertexArray* Mesh::getVao() const
+	void Mesh::draw()
 	{
-		return __pVao.get();
+		__pVao->draw(); 
 	}
 }

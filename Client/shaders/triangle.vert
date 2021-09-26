@@ -20,16 +20,15 @@ out flat uint hasColor;
 
 void main() 
 {
-	if ((attribFlag & postionAttribFlag) != 0U)
-		gl_Position = vec4(position_, 1.f); 
+	gl_Position = vec4(position_ * .1f, 1.f); 
 
-	hasTexcoord = (attribFlag & texcoordAttribFlag);
-
-	if (hasTexcoord != 0U)
-		texcoord = texcoord_; 
-
-	hasColor = (attribFlag & colorAttribFlag);
-	
-	if (hasColor != 0U)
-		color = color_; 
+//	hasTexcoord = (attribFlag & texcoordAttribFlag);
+//
+//	if (hasTexcoord != 0U)
+//		texcoord = texcoord_; 
+//
+//	hasColor = (attribFlag & colorAttribFlag);
+//	
+//	if (hasColor != 0U)
+//		color = color_; 
 }

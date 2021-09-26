@@ -15,14 +15,14 @@ namespace Poodle
 
 		constexpr GLuint getIndexOffset() const; 
 
-		constexpr const std::shared_ptr<Material>& getMaterial() const; 
-		void setMaterial(const std::shared_ptr<Material>& pMaterial); 
+		constexpr int getMaterialIndex() const; 
+		constexpr void setMaterialIndex(const int materialIndex); 
 
 	private:
 		GLuint __numIndices{};
 		GLuint __indexOffset{};
-		
-		std::shared_ptr<Material> __pMaterial{};
+
+		int __materialIndex{ -1 };
 	};
 	
 	constexpr SubmeshInfo::SubmeshInfo(
@@ -42,8 +42,13 @@ namespace Poodle
 		return __indexOffset; 
 	}
 
-	constexpr const std::shared_ptr<Material>& SubmeshInfo::getMaterial() const
+	constexpr int SubmeshInfo::getMaterialIndex() const 
 	{
-		return __pMaterial; 
+		return __materialIndex;
+	}
+
+	constexpr void SubmeshInfo::setMaterialIndex(const int materialIndex) 
+	{
+		__materialIndex = materialIndex;
 	}
 }

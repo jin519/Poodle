@@ -15,30 +15,27 @@ namespace Poodle
 		static std::unique_ptr<Model> load(const std::string_view& filePath); 
 
 	private:
-		class MeshDataset 
-		{
-		public:
-			GLuint numIndices{};
-			std::vector<GLuint> indexBuffer;
-
-			GLuint numVertices{};
-			std::unordered_map<GLCore::VertexAttribute, std::vector<GLfloat>> attrib2VertexBufferMap;
-
-			std::vector<std::unique_ptr<SubmeshInfo>> submeshInfo;
-		};
-
 		static const aiScene* __loadScene(
 			Assimp::Importer& importer,
 			const std::string_view& filePath); 
 
-		static std::unordered_map<GLuint, std::shared_ptr<Material>> __parseMaterial(
-			const aiScene* const pAiScene,
-			const std::filesystem::path& parentDir);
+		static std::pair<
+			std::vector<std::unique_ptr<Node>>,
+			std::unordered_map<const aiNode*, int>> __parseNode(const aiScene* const pAiScene);
+
+		/// <returns>[materials, aiMaterialIndex2MaterialIndexMap]</returns>
+		static std::pair<
+			std::vector<std::shared_ptr<Material>>, 
+			std::unordered_map<GLuint, int>> __parseMaterial(
+				const aiScene* const pAiScene, 
+				const std::filesystem::path& parentDir);
 
 		static VertexAttributeFlag __getMeshAttribFlag(const aiMesh* const pAiMesh);
 
 		static std::pair<
-			std::unordered_map<GLuint, VertexAttributeFlag>,
-			std::unordered_map<VertexAttributeFlag, MeshDataset>> __parseMesh(const aiScene* const pAiScene);
+			std::vector<std::shared_ptr<Mesh>>, 
+			std::unordered_map<const aiMesh*, int>> __parseMesh(
+				const aiScene* const pAiScene, 
+				const std::unordered_map<GLuint, int>& aiMaterialIndex2MaterialIndexMap);
 	};
 }

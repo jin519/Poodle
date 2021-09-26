@@ -152,9 +152,10 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SubmeshInfo.cpp" />
     <ClCompile Include="VertexAttributeDataStructureFactory.cpp" />
     <ClCompile Include="VertexAttributeFactory.cpp" />
     <ClCompile Include="VertexAttributeListFactory.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SeverityType.h" />
     <ClInclude Include="SubmeshInfo.h" />

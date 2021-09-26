@@ -10,6 +10,7 @@ class DemoScene : public Poodle::Scene
 {
 public:
 	explicit DemoScene(GLCore::GLWindow& window);
+	virtual ~DemoScene(); 
 
 	virtual void onKey(
 		const int key, 
@@ -40,11 +41,12 @@ private:
 	void __init();
 
 	std::unique_ptr<Poodle::Model> __pModel{};
+	std::unique_ptr<GLCore::ShaderProgram> __pShaderProgram{};
 
 	// FIXME ----------------
-	std::unique_ptr<GLCore::VertexArray> __pVao{};
-	std::unique_ptr<GLCore::ShaderProgram> __pShaderProgram{};
-	std::unique_ptr<GLCore::Texture2D> __pTexture{};
+	// std::unique_ptr<GLCore::VertexArray> __pVao{};
+	// std::unique_ptr<GLCore::Texture2D> __pTexture{};
+	std::shared_ptr<Poodle::Mesh> __pMesh{}; 
 	// ----------------------
 
 	GLuint __attribFlag; 

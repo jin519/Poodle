@@ -16,9 +16,9 @@ namespace Poodle
 
 		constexpr VertexAttributeFlag getAttribFlag() const; 
 
-		const SubmeshInfo* getSubmeshInfo(const size_t submeshIndex) const; 
+		const SubmeshInfo* getSubmeshInfo(const size_t submeshIndex) const;
 
-		const GLCore::VertexArray* getVao() const; 
+		void draw(); 
 
 	private:
 		VertexAttributeFlag __attribFlag{ VertexAttributeFlag::NONE };

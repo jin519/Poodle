@@ -60,6 +60,9 @@
     <ClInclude Include="VertexAttributeFactory.h">
       <Filter>core\vertex attribute</Filter>
     </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>core\data structure</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -86,7 +89,10 @@
     <ClCompile Include="Material.cpp">
       <Filter>core\data structure</Filter>
     </ClCompile>
-    <ClCompile Include="SubmeshInfo.cpp">
+    <ClCompile Include="Node.cpp">
+      <Filter>core\data structure</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
       <Filter>core\data structure</Filter>
     </ClCompile>
   </ItemGroup>

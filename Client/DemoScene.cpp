@@ -13,6 +13,11 @@ DemoScene::DemoScene(GLWindow& window) : Scene{ window }
 	__init(); 
 }
 
+DemoScene::~DemoScene()
+{
+	__pModel.reset(); 
+}
+
 void DemoScene::onKey(
 	const int key, 
 	const int scancode, 
@@ -33,10 +38,18 @@ void DemoScene::onRender()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	__pTexture->activate(0); 
-	__pShaderProgram->setUniform1ui("attribFlag", __getAttribFlag()); 
+	/*__pShaderProgram->setUniform1ui("attribFlag", GLuint(__pMesh->getAttribFlag()));
+	__pMesh->draw();*/
 
-	__pVao->draw(); 
+	for (auto& pMesh : __pModel->getMeshes()) 
+	{
+		__pShaderProgram->setUniform1ui("attribFlag", GLuint(pMesh->getAttribFlag()));
+		pMesh->draw();
+	}
+
+	//__pTexture->activate(0); 
+	//__pShaderProgram->setUniform1ui("attribFlag", __getAttribFlag()); 
+	//__pVao->draw(); 
 
 	getWindow().swapBuffers();
 }
@@ -75,17 +88,18 @@ void DemoScene::__init()
 	// TODO
 	__pModel = ModelLoader::load("resource/Nanosuit/scene.gltf");
 
+	// TEST -------------------------
+	constexpr VertexAttributeFlag attribFlag{ VertexAttributeFlag::POSITION | VertexAttributeFlag::COLOR };
+	
+	std::vector<std::unique_ptr<SubmeshInfo>> submeshInfo;
+	submeshInfo.emplace_back(make_unique<SubmeshInfo>(3U, 0U));
+
 	const vector<vector<GLfloat>> vboList
 	{
 		{ // position
 			0.f, 0.8f, 0.f,
 			-0.4f, -0.8f, 0.f,
 			0.4f, -0.8f, 0.f
-		},
-		{ // texcoord
-			0.5f, 1.f, 
-			0.f, 0.f, 
-			1.f, 0.f
 		},
 		{ // color
 			1.f, 0.f, 0.f, 1.f,
@@ -98,10 +112,6 @@ void DemoScene::__init()
 	{
 		0, 1, 2
 	}; 
-
-	constexpr VertexAttributeFlag attribFlag{ VertexAttributeFlag::POSITION | VertexAttributeFlag::TEXCOORD | VertexAttributeFlag::COLOR };
-
-	__setAttribFlag(GLuint(attribFlag)); // FIXME
 
 	unordered_map<VertexAttribute, std::unique_ptr<VertexBuffer>> attrib2VertexBufferMap;
 	{
@@ -116,17 +126,24 @@ void DemoScene::__init()
 		}
 	}
 
-	__pVao = make_unique<VertexArray>(
+	std::unique_ptr<GLCore::VertexArray> pVao{};
+
+    pVao = make_unique<VertexArray>(
 		move(attrib2VertexBufferMap), 
 		make_unique<IndexBuffer>(indices, sizeof(indices), GL_STATIC_DRAW), 
 		static_cast<GLsizei>(size(indices)));
 
-	__pTexture = unique_ptr<Texture2D>{ TextureUtil::createTexture2DFromImage("resource/Nanosuit/textures/Body_normal.png") };
+	__pMesh = make_shared<Mesh>(
+		attribFlag,
+		move(submeshInfo),
+		move(pVao)); 
+
+	/*__pTexture = unique_ptr<Texture2D>{TextureUtil::createTexture2DFromImage("resource/Nanosuit/textures/Body_normal.png")}; 
 
 	__pTexture->setParameteri(GL_TEXTURE_WRAP_S, GL_REPEAT);
 	__pTexture->setParameteri(GL_TEXTURE_WRAP_T, GL_REPEAT);
 	__pTexture->setParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	__pTexture->setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	__pTexture->setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);*/
 
 	__pShaderProgram = make_unique<ShaderProgram>(
 		"shaders/triangle.vert", 
