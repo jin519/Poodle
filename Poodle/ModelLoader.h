@@ -3,6 +3,7 @@
 #include <assimp/Importer.hpp> 
 #include <assimp/scene.h>
 #include <filesystem>
+#include <tuple>
 #include "Model.h"
 
 namespace Poodle 
@@ -23,11 +24,17 @@ namespace Poodle
 			std::vector<std::unique_ptr<Node>>,
 			std::unordered_map<const aiNode*, int>> __parseNode(const aiScene* const pAiScene);
 
-		/// <returns>[materials, aiMaterialIndex2MaterialIndexMap]</returns>
-		static std::pair<
+		static std::shared_ptr<GLCore::Texture2D> __parseTexture(
+			const aiMaterial* const pAiMaterial, 
+			const aiTextureType textureType, 
+			const std::filesystem::path& parentDir);
+
+		/// <returns>[materials, aiMaterialIndex2MaterialIndexMap, textures]</returns>
+		static std::tuple<
 			std::vector<std::shared_ptr<Material>>, 
-			std::unordered_map<GLuint, int>> __parseMaterial(
-				const aiScene* const pAiScene, 
+			std::unordered_map<GLuint, int>, 
+			std::vector<std::shared_ptr<GLCore::Texture2D>>> __parseMaterial(
+				const aiScene* const pAiScene,
 				const std::filesystem::path& parentDir);
 
 		static VertexAttributeFlag __getMeshAttribFlag(const aiMesh* const pAiMesh);

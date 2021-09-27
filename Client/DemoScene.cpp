@@ -2,7 +2,6 @@
 #include "../Poodle/VertexAttributeListFactory.h"
 #include "../Poodle/Logger.h"
 #include "../Poodle/ModelLoader.h"
-#include "../GLCore/TextureUtil.h" // FIXME
 
 using namespace std; 
 using namespace GLCore; 
@@ -136,12 +135,29 @@ void DemoScene::onRender()
 		__pShaderProgram->setUniformMatrix4f("modelMat", __pModel->getTransform().getModelMatrix()); 
 		__pShaderProgram->setUniform1ui("attribFlag", GLuint(pMesh->getAttribFlag()));
 		
-		pMesh->draw();
-	}
+		for (const auto& pSubmeshInfo : pMesh->getSubmeshInfo())
+		{
+			const int materialIndex = pSubmeshInfo->getMaterialIndex();
+			const shared_ptr<Material>& pMaterial = __pModel->getMaterial(materialIndex);
 
-	//__pTexture->activate(0); 
-	//__pShaderProgram->setUniform1ui("attribFlag", __getAttribFlag()); 
-	//__pVao->draw(); 
+			const int diffuseTexIndex = pMaterial->getDiffuseTextureIndex(); 
+			const bool hasDiffuseTex = (diffuseTexIndex >= 0); 
+
+			if (hasDiffuseTex)
+			{
+				Texture2D& diffuseTex = *__pModel->getTexture(diffuseTexIndex);
+				diffuseTex.activate(diffuseTexIndex);
+
+				__pShaderProgram->setUniform1i("hasDiffuseTex", hasDiffuseTex);
+				__pShaderProgram->setUniform1i("diffuseTex", diffuseTexIndex);
+			}
+
+			const GLsizei count = GLsizei(pSubmeshInfo->getNumIndices()); 
+			const size_t first = size_t(pSubmeshInfo->getIndexOffset());
+
+			pMesh->draw(count, first); 
+		}
+	}
 
 	getWindow().swapBuffers();
 }
@@ -180,13 +196,6 @@ void DemoScene::__init()
 
 	__pModel = ModelLoader::load("resource/Nanosuit/scene.gltf");
 	__pModel->getTransform().setScale(0.1f); 
-
-	/*__pTexture = unique_ptr<Texture2D>{TextureUtil::createTexture2DFromImage("resource/Nanosuit/textures/Body_normal.png")}; 
-
-	__pTexture->setParameteri(GL_TEXTURE_WRAP_S, GL_REPEAT);
-	__pTexture->setParameteri(GL_TEXTURE_WRAP_T, GL_REPEAT);
-	__pTexture->setParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	__pTexture->setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);*/
 
 	__pCamera = make_unique<PerspectiveCamera>(); 
 	__pCamera->setNear(0.1f);

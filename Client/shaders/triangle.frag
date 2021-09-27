@@ -2,8 +2,9 @@
 
 #include "constant_header.glsl"
 
-uniform uint attribFlag; 
-uniform sampler2D tex; 
+uniform uint attribFlag;
+uniform bool hasDiffuseTex; 
+uniform sampler2D diffuseTex; 
 
 in vec2 texcoord;
 in flat uint hasTexcoord; 
@@ -15,6 +16,14 @@ out vec4 fragColor;
 
 void main() 
 {
+	if (hasTexcoord != 0U)
+	{
+		if (hasDiffuseTex)
+			fragColor = vec4(texture(diffuseTex, texcoord).rgb, 1.f); 
+		else
+			fragColor = vec4(1.f, 1.f, 1.f, 1.f); 
+	}
+
 //	if (hasTexcoord != 0U)
 //	{
 //		vec4 fetched = texture(tex, texcoord);
@@ -27,5 +36,5 @@ void main()
 //	else if (hasColor != 0U)
 //		fragColor = color; 
 //	else
-		fragColor = vec4(1.f, 1.f, 1.f, 1.f); 
+//		fragColor = vec4(1.f, 1.f, 1.f, 1.f); 
 }

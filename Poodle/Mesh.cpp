@@ -19,8 +19,10 @@ namespace Poodle
 		return __submeshInfo.at(submeshIndex).get();
 	}
 
-	void Mesh::draw()
+	void Mesh::draw(
+		const GLsizei count,
+		const size_t first)
 	{
-		__pVao->draw(); 
+		__pVao->draw(count, first);
 	}
 }

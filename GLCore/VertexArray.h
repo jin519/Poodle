@@ -13,10 +13,6 @@ namespace GLCore
 	public:
 		VertexArray(
 			std::unordered_map<VertexAttribute, std::unique_ptr<VertexBuffer>>&& attrib2VertexBufferMap,
-			const GLsizei numVertices); 
-
-		VertexArray(
-			std::unordered_map<VertexAttribute, std::unique_ptr<VertexBuffer>>&& attrib2VertexBufferMap,
 			std::unique_ptr<IndexBuffer>&& pIndexBuffer,
 			const GLsizei numIndices); 
 
@@ -26,6 +22,9 @@ namespace GLCore
 		static void unbind();
 
 		void draw();
+		void draw(
+			const GLsizei count, 
+			const size_t first); 
 
 		constexpr void setPrimitiveType(const GLenum primitiveType);
 		constexpr void setVertexStartingIndex(const GLint index);
@@ -35,18 +34,13 @@ namespace GLCore
 		void __init(); 
 		void __applyAttribute(); 
 
-		void __drawArrays();
-		void __drawElements();
-
 		GLuint __id;
-		GLenum __mode = GL_TRIANGLES;
-		GLint __first = 0;
+		GLenum __mode{ GL_TRIANGLES };
 		GLsizei __count;
+		size_t __first{ 0ULL };
 
 		const std::unordered_map<VertexAttribute, std::unique_ptr<VertexBuffer>> __attrib2VertexBufferMap;
-		const std::unique_ptr<IndexBuffer> __pIndexBuffer; 
-
-		void (VertexArray::* const __pDrawFunc)();
+		const std::unique_ptr<IndexBuffer> __pIndexBuffer;
 	};
 
 	constexpr void VertexArray::setPrimitiveType(const GLenum primitiveType)

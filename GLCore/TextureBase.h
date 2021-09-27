@@ -26,6 +26,9 @@ namespace GLCore
 			const GLenum paramName, 
 			const GLfloat* const pParamValues);
 
+		constexpr GLfloat getBlendFactor() const; 
+		constexpr void setBlendFactor(const GLfloat blendFactor); 
+
 		TextureBase& operator=(const TextureBase& rhs) = delete;
 		TextureBase& operator=(TextureBase&& rhs) = delete;
 
@@ -34,5 +37,16 @@ namespace GLCore
 
 	private:
 		GLenum __type;
+		GLfloat __blendFactor{ 1.f };
 	};
+
+	constexpr GLfloat TextureBase::getBlendFactor() const
+	{
+		return __blendFactor; 
+	}
+
+	constexpr void TextureBase::setBlendFactor(const GLfloat blendFactor)
+	{
+		__blendFactor = blendFactor;
+	}
 }

@@ -1,12 +1,11 @@
 #include "Material.h"
 
-using namespace std; 
-using namespace GLCore; 
+using namespace glm; 
 
 namespace Poodle 
 {
-	void Material::setDiffuseTexture(const shared_ptr<Texture2D>& pTexture)
+    void Material::setDiffuseColor(const vec3& diffuseColor)
 	{
-		__pDiffuseTexture = pTexture; 
+		__diffuseColor = diffuseColor; 
 	}
 }

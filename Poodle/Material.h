@@ -1,38 +1,37 @@
 #pragma once
 
-#include "../GLCore/Texture2D.h"
-#include <memory>
+#include <glm/glm.hpp>
 
-namespace Poodle 
+namespace Poodle
 {
-	class Material 
+	class Material
 	{
 	public:
-		Material() = default; 
+		Material() = default;
 
-		constexpr const std::shared_ptr<GLCore::Texture2D>& getDiffuseTexture() const;
-		void setDiffuseTexture(const std::shared_ptr<GLCore::Texture2D>& pTexture); 
+		constexpr const glm::vec3& getDiffuseColor() const;
+		void setDiffuseColor(const glm::vec3& diffuseColor);
 
-		constexpr GLfloat getDiffuseTextureBlendFactor() const; 
-		constexpr void setDiffuseTextureBlendFactor(const GLfloat blendFactor);
+		constexpr int getDiffuseTextureIndex() const;
+		constexpr void setDiffuseTextureIndex(const int diffuseTextureIndex);
 
 	private:
-		std::shared_ptr<GLCore::Texture2D> __pDiffuseTexture{};
-		GLfloat __diffuseTextureBlendFactor{ 1.f };
+		glm::vec3 __diffuseColor{ 0.f };
+		int __diffuseTextureIndex{ -1 };
 	};
 
-	constexpr const std::shared_ptr<GLCore::Texture2D>& Material::getDiffuseTexture() const
+	constexpr const glm::vec3& Material::getDiffuseColor() const
 	{
-		return __pDiffuseTexture;
+		return __diffuseColor; 
 	}
 
-	constexpr GLfloat Material::getDiffuseTextureBlendFactor() const
+	constexpr int Material::getDiffuseTextureIndex() const
 	{
-		return __diffuseTextureBlendFactor; 
+		return __diffuseTextureIndex; 
 	}
 
-	constexpr void Material::setDiffuseTextureBlendFactor(const GLfloat blendFactor)
+	constexpr void Material::setDiffuseTextureIndex(const int diffuseTextureIndex)
 	{
-		__diffuseTextureBlendFactor = blendFactor; 
+		__diffuseTextureIndex = diffuseTextureIndex; 
 	}
 }

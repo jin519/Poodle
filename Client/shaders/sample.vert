@@ -25,14 +25,14 @@ out flat uint hasColor;
 void main() 
 {
 	const mat4 mvpMatrix = (projectionMat * viewMat * modelMat); 
-	gl_Position = (mvpMatrix * vec4(position_, 1.f)); 
 
 	hasTexcoord = (attribFlag & texcoordAttribFlag);
 	if (hasTexcoord != 0U)
 		texcoord = texcoord_; 
-//
-//	hasColor = (attribFlag & colorAttribFlag);
-//	
-//	if (hasColor != 0U)
-//		color = color_; 
+
+	hasColor = (attribFlag & colorAttribFlag);
+	if (hasColor != 0U)
+		color = color_; 
+
+	gl_Position = (mvpMatrix * vec4(position_, 1.f)); 
 }

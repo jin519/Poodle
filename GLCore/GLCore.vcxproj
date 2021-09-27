@@ -164,7 +164,6 @@
     <ClInclude Include="TextureBase.h" />
     <ClInclude Include="TextureUtil.h" />
     <ClInclude Include="VertexArray.h" />
-    <ClInclude Include="VertexArrayException.h" />
     <ClInclude Include="VertexAttribute.h" />
     <ClInclude Include="VertexAttributeDataStructure.h" />
     <ClInclude Include="VertexBuffer.h" />
@@ -184,7 +183,6 @@
     <ClCompile Include="TextureBase.cpp" />
     <ClCompile Include="TextureUtil.cpp" />
     <ClCompile Include="VertexArray.cpp" />
-    <ClCompile Include="VertexArrayException.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>

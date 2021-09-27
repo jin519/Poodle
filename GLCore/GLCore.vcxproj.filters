@@ -57,9 +57,6 @@
     <ClInclude Include="VertexAttribute.h">
       <Filter>core\vertex attribute</Filter>
     </ClInclude>
-    <ClInclude Include="VertexArrayException.h">
-      <Filter>core\vertex array</Filter>
-    </ClInclude>
     <ClInclude Include="VertexArray.h">
       <Filter>core\vertex array</Filter>
     </ClInclude>
@@ -106,9 +103,6 @@
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
       <Filter>core\buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexArrayException.cpp">
-      <Filter>core\vertex array</Filter>
     </ClCompile>
     <ClCompile Include="VertexArray.cpp">
       <Filter>core\vertex array</Filter>

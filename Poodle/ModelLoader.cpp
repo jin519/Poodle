@@ -1,8 +1,8 @@
 ﻿#include <assimp/postprocess.h>
 #include <stack>
 #include "ModelLoader.h"
-#include "../GLCore/TextureUtil.h"
 #include "VertexAttributeFactory.h"
+#include "../GLCore/TextureUtil.h"
 
 using namespace std; 
 using namespace glm;
@@ -24,7 +24,7 @@ namespace Poodle
 			return nullptr;
 
 		const filesystem::path& parentDir = filesystem::path{ filePath }.parent_path();
-		auto [materials, aiMaterial2MaterialIndexMap] = __parseMaterial(
+		auto [materials, aiMaterial2MaterialIndexMap, textures] = __parseMaterial(
 			pAiScene, 
 			parentDir); 
 
@@ -39,6 +39,7 @@ namespace Poodle
 			aiNode2NodeIndexMap.at(pAiScene->mRootNode),
 			move(nodes),
 			move(materials),
+			move(textures),
 			move(meshes));
 
 		return retVal; 
@@ -102,68 +103,80 @@ namespace Poodle
 		return retVal;
 	}
 
-	pair<
+	shared_ptr<Texture2D> ModelLoader::__parseTexture(
+		const aiMaterial* const pAiMaterial, 
+		const aiTextureType textureType, 
+		const filesystem::path& parentDir)
+	{
+		shared_ptr<Texture2D> pRetVal{};
+
+		if (pAiMaterial->GetTextureCount(textureType)) 
+		{
+			aiString path;
+			ai_real blendFactor{ 1.f };
+			{
+				pAiMaterial->GetTexture(
+					textureType,
+					0U,
+					&path,
+					nullptr,
+					nullptr,
+					&blendFactor,
+					nullptr,
+					nullptr);
+			}
+
+			pRetVal = shared_ptr<Texture2D>{ 
+				TextureUtil::createTexture2DFromImage(
+					(parentDir / path.C_Str()).generic_string()) };
+			
+			pRetVal->setBlendFactor(blendFactor); 
+
+			pRetVal->setParameteri(GL_TEXTURE_WRAP_S, GL_REPEAT);
+			pRetVal->setParameteri(GL_TEXTURE_WRAP_T, GL_REPEAT);
+			pRetVal->setParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			pRetVal->setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		}
+
+		return pRetVal;
+	}
+
+	tuple<
 		vector<shared_ptr<Material>>, 
-		unordered_map<GLuint, int>> ModelLoader::__parseMaterial(
+		unordered_map<GLuint, int>, 
+		vector<shared_ptr<Texture2D>>> ModelLoader::__parseMaterial(
 			const aiScene* const pAiScene, 
 			const filesystem::path& parentDir)
 	{
-		pair<vector<shared_ptr<Material>>, unordered_map<GLuint, int>> retVal;
-		auto& [materials, aiMaterialIndex2MaterialIndexMap] = retVal;
-
-		const auto getTexture = [&parentDir](
-			const aiMaterial* const pAiMaterial, 
-			const aiTextureType textureType) -> pair<Texture2D*, GLfloat>
-		{
-			Texture2D* pTexture{}; 
-
-			aiString textureName;
-			aiTextureMapping mappingCoord{ aiTextureMapping::aiTextureMapping_UV };
-			GLuint uvIndex{};
-			ai_real blendFactor{ 1.f };
-			aiTextureOp operation{ aiTextureOp::aiTextureOp_Add };
-			aiTextureMapMode wrapModes[3]
-			{
-				aiTextureMapMode::aiTextureMapMode_Wrap,
-				aiTextureMapMode::aiTextureMapMode_Wrap,
-				aiTextureMapMode::aiTextureMapMode_Wrap
-			};
-
-			if (pAiMaterial->GetTextureCount(textureType))
-			{
-				 pAiMaterial->GetTexture(
-					textureType, 
-					0U, 
-					&textureName, 
-					&mappingCoord,
-					&uvIndex, 
-					&blendFactor, 
-					&operation, 
-					wrapModes);
-
-				const string& imagePath = (parentDir / textureName.C_Str()).generic_string();
-				pTexture = TextureUtil::createTexture2DFromImage(imagePath);
-			}
-
-			return { pTexture, blendFactor };
-		};
+		tuple<vector<shared_ptr<Material>>, unordered_map<GLuint, int>, std::vector<std::shared_ptr<GLCore::Texture2D>>> retVal;
+		auto& [materials, aiMaterialIndex2MaterialIndexMap, textures] = retVal; 
 
 		for (GLuint materialIter = 0U; materialIter < pAiScene->mNumMaterials; ++materialIter) 
 		{
 			const aiMaterial* const pAiMaterial = pAiScene->mMaterials[materialIter];
 
-			const auto& [pDiffuseTexture, diffuseTextureBlendFactor] = getTexture(
-				pAiMaterial,
-				aiTextureType::aiTextureType_DIFFUSE);
-
 			aiMaterialIndex2MaterialIndexMap.emplace(materialIter, int(materials.size()));
 
 			materials.emplace_back(make_shared<Material>());
-			shared_ptr<Material>& pMaterial = materials.back(); 
+			shared_ptr<Material>& pMaterial = materials.back();
+
+			// ----------------------------------- DIFFUSE
+
+			const shared_ptr<Texture2D>& pDiffuseTexture = __parseTexture(
+				pAiMaterial,
+				aiTextureType::aiTextureType_DIFFUSE,
+				parentDir);
 			
-			// FIXME
-			pMaterial->setDiffuseTexture(shared_ptr<Texture2D>{ pDiffuseTexture });
-			pMaterial->setDiffuseTextureBlendFactor(diffuseTextureBlendFactor);
+			if (pDiffuseTexture)
+			{
+				aiColor3D diffuseColor{ 0.f, 0.f, 0.f };
+				pAiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor); 
+
+				pMaterial->setDiffuseTextureIndex(int(textures.size()));
+				pMaterial->setDiffuseColor({ diffuseColor.r, diffuseColor.g, diffuseColor.b }); 
+
+				textures.emplace_back(pDiffuseTexture);
+			}
 		}
 
 		return retVal; 

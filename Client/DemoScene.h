@@ -4,8 +4,6 @@
 #include "../Poodle/Scene.h"
 #include "../Poodle/Model.h"
 #include "../Poodle/PerspectiveCamera.h"
-#include "../GLCore/VertexArray.h" // FIXME
-#include "../GLCore/Texture2D.h" // FIXME
 
 class DemoScene : public Poodle::Scene 
 {
@@ -44,11 +42,6 @@ private:
 	std::unique_ptr<Poodle::Model> __pModel{};
 	std::shared_ptr<GLCore::ShaderProgram> __pShaderProgram{};
 	std::unique_ptr<Poodle::PerspectiveCamera> __pCamera{};
-
-	// FIXME ----------------
-	// std::unique_ptr<GLCore::VertexArray> __pVao{};
-	// std::unique_ptr<GLCore::Texture2D> __pTexture{};
-	// ----------------------
 
 	bool __wPressed{ false };
 	bool __sPressed{ false }; 
