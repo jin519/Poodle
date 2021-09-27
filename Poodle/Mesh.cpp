@@ -5,18 +5,28 @@ using namespace GLCore;
 
 namespace Poodle 
 {
+	void Mesh::addSubmeshInfo(unique_ptr<SubmeshInfo>&& pSubmeshInfo)
+	{
+		__submeshInfoList.emplace_back(move(pSubmeshInfo)); 
+	}
+
+	void Mesh::setVao(unique_ptr<VertexArray>&& pVao)
+	{
+		__pVao = move(pVao); 
+	}
+
 	Mesh::Mesh(
 		const VertexAttributeFlag attribFlag,
 		vector<unique_ptr<SubmeshInfo>>&& submeshInfo,
 		unique_ptr<VertexArray>&& pVao) :
 		__attribFlag{ attribFlag }, 
-		__submeshInfo{ move(submeshInfo) },
+		__submeshInfoList{ move(submeshInfo) },
 		__pVao{ move(pVao) }
 	{}
 
 	const SubmeshInfo* Mesh::getSubmeshInfo(const size_t submeshIndex) const
 	{
-		return __submeshInfo.at(submeshIndex).get();
+		return __submeshInfoList.at(submeshIndex).get();
 	}
 
 	void Mesh::draw(

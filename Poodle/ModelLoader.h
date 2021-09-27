@@ -16,6 +16,18 @@ namespace Poodle
 		static std::unique_ptr<Model> load(const std::string_view& filePath); 
 
 	private:
+		class MeshDataset
+		{
+		public:
+			GLuint numIndices{};
+			std::vector<GLuint> indexBuffer;
+
+			GLuint numVertices{};
+			std::unordered_map<VertexAttributeFlag, std::vector<GLfloat>> attribFlag2VertexBufferMap;
+
+			std::unordered_map<GLuint, std::unique_ptr<SubmeshInfo>> aiMeshIdx2SubmeshInfoMap;
+		};
+
 		static const aiScene* __loadScene(
 			Assimp::Importer& importer,
 			const std::string_view& filePath); 
@@ -39,10 +51,19 @@ namespace Poodle
 
 		static VertexAttributeFlag __getMeshAttribFlag(const aiMesh* const pAiMesh);
 
+		static std::unordered_map<VertexAttributeFlag, MeshDataset> __parseMeshDataset(
+			const aiScene* const pAiScene, 
+			const std::unordered_map<GLuint, int>& aiMaterialIdx2MaterialIdxMap);
+		
+		/// <summary>
+		/// 각 aiMesh는 submesh로 간주한다.
+		/// 보유하고 있는 vertex attribute 목록을 조사하고, 동일하다면 mesh로 병합한다.
+		/// </summary>
+		/// <returns>[meshes, pAiMesh2MeshIdxMap]</returns>
 		static std::pair<
-			std::vector<std::shared_ptr<Mesh>>, 
+			std::vector<std::shared_ptr<Mesh>>,
 			std::unordered_map<const aiMesh*, int>> __parseMesh(
-				const aiScene* const pAiScene, 
-				const std::unordered_map<GLuint, int>& aiMaterialIndex2MaterialIndexMap);
+				const aiScene* const pAiScene,
+				const std::unordered_map<GLuint, int>& aiMaterialIdx2MaterialIdxMap);
 	};
 }

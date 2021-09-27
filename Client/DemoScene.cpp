@@ -55,7 +55,7 @@ void DemoScene::onKey(
 
 	if ((key == GLFW_KEY_A) && (action == GLFW_PRESS))
 	{
-		Logger::commit(SeverityType::INFO, "a 활성: 카메라를 오른쪽으로 이동합니다.");
+		Logger::commit(SeverityType::INFO, "a 활성: 카메라를 왼쪽으로 이동합니다.");
 		__aPressed = true;
 	}
 
@@ -67,7 +67,7 @@ void DemoScene::onKey(
 
 	if ((key == GLFW_KEY_D) && (action == GLFW_PRESS))
 	{
-		Logger::commit(SeverityType::INFO, "d 활성: 카메라를 왼쪽으로 이동합니다.");
+		Logger::commit(SeverityType::INFO, "d 활성: 카메라를 오른쪽으로 이동합니다.");
 		__dPressed = true;
 	}
 
@@ -79,7 +79,7 @@ void DemoScene::onKey(
 
 	if ((key == GLFW_KEY_Q) && (action == GLFW_PRESS))
 	{
-		Logger::commit(SeverityType::INFO, "q 활성: 카메라를 위로 이동합니다.");
+		Logger::commit(SeverityType::INFO, "q 활성: 카메라를 아래로 이동합니다.");
 		__qPressed = true;
 	}
 
@@ -91,7 +91,7 @@ void DemoScene::onKey(
 
 	if ((key == GLFW_KEY_E) && (action == GLFW_PRESS))
 	{
-		Logger::commit(SeverityType::INFO, "e 활성: 카메라를 아래로 이동합니다.");
+		Logger::commit(SeverityType::INFO, "e 활성: 카메라를 위로 이동합니다.");
 		__ePressed = true;
 	}
 
@@ -112,13 +112,13 @@ void DemoScene::onUpdate(const float deltaTime)
 	if (__sPressed)
 		cameraTransform.advanceZ(translationStep);
 	if (__aPressed)
-		cameraTransform.advanceX(translationStep);
-	if (__dPressed)
 		cameraTransform.advanceX(-translationStep);
+	if (__dPressed)
+		cameraTransform.advanceX(translationStep);
 	if (__qPressed)
-		cameraTransform.advanceY(translationStep);
-	if (__ePressed)
 		cameraTransform.advanceY(-translationStep);
+	if (__ePressed)
+		cameraTransform.advanceY(translationStep);
 
 	__pCamera->update(); 
 }

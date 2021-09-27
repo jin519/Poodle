@@ -29,7 +29,7 @@ namespace Poodle
 			constexpr float defaultAspectRatio{ 1.f };
 			constexpr float defaultZNear{ 1.f };
 			constexpr float defaultZFar{ 1000.f };
-			constexpr float translationStep{ 5.f };
+			constexpr float translationStep{ 10.f };
 		}
 
 		constexpr GLfloat minScale{ 0.001f };

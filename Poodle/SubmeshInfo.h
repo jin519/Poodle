@@ -9,14 +9,13 @@ namespace Poodle
 	public:
 		constexpr SubmeshInfo(
 			const GLuint numIndices,
-			const GLuint indexOffset);
+			const GLuint indexOffset, 
+			const int materialIndex);
 
 		constexpr GLuint getNumIndices() const; 
-
 		constexpr GLuint getIndexOffset() const; 
 
 		constexpr int getMaterialIndex() const; 
-		constexpr void setMaterialIndex(const int materialIndex); 
 
 	private:
 		GLuint __numIndices{};
@@ -27,9 +26,11 @@ namespace Poodle
 	
 	constexpr SubmeshInfo::SubmeshInfo(
 		const GLuint numIndices,
-		const GLuint indexOffset) :
+		const GLuint indexOffset, 
+		const int materialIndex) :
 		__numIndices{ numIndices }, 
-		__indexOffset{ indexOffset }
+		__indexOffset{ indexOffset }, 
+		__materialIndex{ materialIndex }
 	{}
 
 	constexpr GLuint SubmeshInfo::getNumIndices() const
@@ -45,10 +46,5 @@ namespace Poodle
 	constexpr int SubmeshInfo::getMaterialIndex() const 
 	{
 		return __materialIndex;
-	}
-
-	constexpr void SubmeshInfo::setMaterialIndex(const int materialIndex) 
-	{
-		__materialIndex = materialIndex;
 	}
 }
