@@ -1,8 +1,14 @@
 Rendering engine using native C++ and modern openGL.
 
+## Platform
+
+- Windows 10 Desktop - Visual Studio 2019
+
 ## Build
 
-- Windows x64 - Visual Studio 2019
+- Set `Client` as startup project.
+- Then Right-click it.
+- Go to Configuration Properties | Debugging | Environment and write `PATH=%PATH%;../ThirdParty/bin/Debug`.
 
 ## License
 
@@ -18,5 +24,6 @@ This project has some third-party dependencies, each of which may have independe
 - <a href="https://github.com/assimp/assimp">assimp</a>: A library to import and export various 3d-model-formats including scene-post-processing to generate missing render data
 
 ## Demo
+
 <kbd><img src="demo/demo.gif" width="400"></kbd>
 <kbd><img src="demo/demo2.gif" width="400"></kbd>
