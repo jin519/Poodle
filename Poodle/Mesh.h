@@ -15,18 +15,7 @@ namespace Poodle
 
 		void setVao(std::unique_ptr<GLCore::VertexArray>&& pVao); 
 
-		// FIXME ----------
-
-		Mesh(
-			const VertexAttributeFlag attribFlag, 
-			std::vector<std::unique_ptr<SubmeshInfo>>&& submeshInfo, 
-			std::unique_ptr<GLCore::VertexArray>&& pVao);
-
-		// ----------------
-
 		constexpr VertexAttributeFlag getAttribFlag() const; 
-
-		const SubmeshInfo* getSubmeshInfo(const size_t submeshIndex) const;
 		
 		constexpr const std::vector<std::unique_ptr<SubmeshInfo>>& getSubmeshInfo() const; 
 

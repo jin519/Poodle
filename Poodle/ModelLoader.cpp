@@ -51,7 +51,6 @@ namespace Poodle
 		const string_view& filePath)
 	{
 		return importer.ReadFile(filePath.data(),
-			aiPostProcessSteps::aiProcess_PreTransformVertices | // TEST
 			aiPostProcessSteps::aiProcess_CalcTangentSpace |
 			aiPostProcessSteps::aiProcess_JoinIdenticalVertices |
 			aiPostProcessSteps::aiProcess_Triangulate |
