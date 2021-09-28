@@ -130,34 +130,7 @@ void DemoScene::onRender()
 	__pShaderProgram->setUniformMatrix4f("viewMat", __pCamera->getViewMatrix());
 	__pShaderProgram->setUniformMatrix4f("projectionMat", __pCamera->getProjectionMatrix());
 
-	for (auto& pMesh : __pModel->getMeshes()) 
-	{
-		__pShaderProgram->setUniformMatrix4f("modelMat", __pModel->getTransform().getModelMatrix()); 
-		__pShaderProgram->setUniform1ui("attribFlag", GLuint(pMesh->getAttribFlag()));
-		
-		for (const auto& pSubmeshInfo : pMesh->getSubmeshInfo())
-		{
-			const int materialIndex = pSubmeshInfo->getMaterialIndex();
-			const shared_ptr<Material>& pMaterial = __pModel->getMaterial(materialIndex);
-
-			const int diffuseTexIndex = pMaterial->getDiffuseTextureIndex(); 
-			const bool hasDiffuseTex = (diffuseTexIndex >= 0); 
-
-			if (hasDiffuseTex)
-			{
-				Texture2D& diffuseTex = *__pModel->getTexture(diffuseTexIndex);
-				diffuseTex.activate(diffuseTexIndex);
-
-				__pShaderProgram->setUniform1i("hasDiffuseTex", hasDiffuseTex);
-				__pShaderProgram->setUniform1i("diffuseTex", diffuseTexIndex);
-			}
-
-			const GLsizei count = GLsizei(pSubmeshInfo->getNumIndices()); 
-			const size_t first = size_t(pSubmeshInfo->getIndexOffset());
-
-			pMesh->draw(count, first); 
-		}
-	}
+	__pModel->draw(__pShaderProgram);
 
 	getWindow().swapBuffers();
 }
@@ -201,7 +174,8 @@ void DemoScene::__init()
 	__pCamera = make_unique<PerspectiveCamera>(); 
 	__pCamera->setNear(0.1f);
 	__pCamera->setFar(200.f);
-	__pCamera->getTransform().advanceZ(70.f);
+	__pCamera->getTransform().advanceY(8.f);
+	__pCamera->getTransform().advanceZ(25.f);
 
 	__pShaderProgram = make_shared<ShaderProgram>(
 		"shaders/triangle.vert", 

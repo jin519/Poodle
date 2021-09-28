@@ -18,6 +18,14 @@ namespace Poodle
 			constexpr GLuint weights{ 6U };
 		}
 
+		namespace TexLocation 
+		{
+			constexpr GLuint diffuse{ 0U }; 
+			constexpr GLuint specular{ 1U }; 
+			constexpr GLuint ambient{ 2U }; 
+			constexpr GLuint emission{ 3U }; 
+		}
+
 		namespace Camera
 		{
 			constexpr float defaultFov{ glm::quarter_pi<float>() };

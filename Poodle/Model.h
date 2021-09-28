@@ -5,6 +5,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "../GLCore/Texture2D.h"
+#include "../GLCore/ShaderProgram.h"
 
 namespace Poodle 
 {
@@ -18,6 +19,8 @@ namespace Poodle
 			std::vector<std::shared_ptr<Material>>&& materials,
 			std::vector<std::shared_ptr<GLCore::Texture2D>>&& textures,
 			std::vector<std::shared_ptr<Mesh>>&& meshes);
+
+		void draw(std::shared_ptr<GLCore::ShaderProgram>& pShaderProgram);
 
 		constexpr const std::vector<std::shared_ptr<Mesh>>& getMeshes() const;
 

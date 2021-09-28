@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <assimp/Importer.hpp> 
 #include <assimp/scene.h>
@@ -16,18 +16,6 @@ namespace Poodle
 		static std::unique_ptr<Model> load(const std::string_view& filePath); 
 
 	private:
-		class MeshDataset
-		{
-		public:
-			GLuint numIndices{};
-			std::vector<GLuint> indexBuffer;
-
-			GLuint numVertices{};
-			std::unordered_map<VertexAttributeFlag, std::vector<GLfloat>> attribFlag2VertexBufferMap;
-
-			std::unordered_map<GLuint, std::unique_ptr<SubmeshInfo>> aiMeshIdx2SubmeshInfoMap;
-		};
-
 		static const aiScene* __loadScene(
 			Assimp::Importer& importer,
 			const std::string_view& filePath); 
@@ -51,13 +39,9 @@ namespace Poodle
 
 		static VertexAttributeFlag __getMeshAttribFlag(const aiMesh* const pAiMesh);
 
-		static std::unordered_map<VertexAttributeFlag, MeshDataset> __parseMeshDataset(
-			const aiScene* const pAiScene, 
-			const std::unordered_map<GLuint, int>& aiMaterialIdx2MaterialIdxMap);
-		
 		/// <summary>
-		/// °¢ aiMesh´Â submesh·Î °£ÁÖÇÑ´Ù.
-		/// º¸À¯ÇÏ°í ÀÖ´Â vertex attribute ¸ñ·ÏÀ» Á¶»çÇÏ°í, µ¿ÀÏÇÏ´Ù¸é mesh·Î º´ÇÕÇÑ´Ù.
+		/// ê° aiMeshëŠ” submeshë¡œ ê°„ì£¼í•œë‹¤.
+		/// ë³´ìœ í•˜ê³  ìˆëŠ” vertex attribute ëª©ë¡ì„ ì¡°ì‚¬í•˜ê³ , ë™ì¼í•˜ë‹¤ë©´ meshë¡œ ë³‘í•©í•œë‹¤.
 		/// </summary>
 		/// <returns>[meshes, pAiMesh2MeshIdxMap]</returns>
 		static std::pair<
@@ -65,5 +49,18 @@ namespace Poodle
 			std::unordered_map<const aiMesh*, int>> __parseMesh(
 				const aiScene* const pAiScene,
 				const std::unordered_map<GLuint, int>& aiMaterialIdx2MaterialIdxMap);
+
+		class MeshDataset
+		{
+		public:
+			GLuint numIndices{};
+			std::vector<GLuint> indexBuffer;
+
+			GLuint numVertices{};
+			std::unordered_map<VertexAttributeFlag, std::vector<GLfloat>> attribFlag2VertexBufferMap;
+
+			std::unordered_map<GLuint, size_t> aiMeshIdx2SubmeshInfoIdxMap;
+			std::vector<std::unique_ptr<SubmeshInfo>> submeshInfos;
+		};
 	};
 }

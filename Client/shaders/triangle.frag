@@ -3,8 +3,15 @@
 #include "constant_header.glsl"
 
 uniform uint attribFlag;
+
 uniform bool hasDiffuseTex; 
 uniform sampler2D diffuseTex; 
+uniform bool hasSpecularTex; 
+uniform sampler2D specularTex; 
+uniform bool hasAmbientTex; 
+uniform sampler2D ambientTex; 
+uniform bool hasEmissionTex; 
+uniform sampler2D emissionTex; 
 
 in vec2 texcoord;
 in flat uint hasTexcoord; 

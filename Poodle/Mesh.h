@@ -11,24 +11,22 @@ namespace Poodle
 	public:
 		constexpr Mesh(const VertexAttributeFlag attribFlag); 
 
-		void addSubmeshInfo(std::unique_ptr<SubmeshInfo>&& pSubmeshInfo);
-
-		void setVao(std::unique_ptr<GLCore::VertexArray>&& pVao); 
-
 		constexpr VertexAttributeFlag getAttribFlag() const; 
-		
-		constexpr const std::vector<std::unique_ptr<SubmeshInfo>>& getSubmeshInfo() const; 
 
-		void draw(
-			const GLsizei count, 
-			const size_t first); 
+		constexpr size_t getNumSubmeshInfos() const;
+		const SubmeshInfo* getSubmeshInfo(const size_t submeshInfoIndex) const;
+		void setSubmeshInfos(std::vector<std::unique_ptr<SubmeshInfo>>&& submeshInfos);
+
+		void setVao(std::unique_ptr<GLCore::VertexArray>&& pVao);
+
+		void draw(const size_t submeshIndex);
 
 	private:
 		VertexAttributeFlag __attribFlag{ VertexAttributeFlag::NONE };
 
-		std::vector<std::unique_ptr<SubmeshInfo>> __submeshInfoList; 
+		std::vector<std::unique_ptr<SubmeshInfo>> __submeshInfos; 
 
-		std::unique_ptr<GLCore::VertexArray> __pVao;
+		std::unique_ptr<GLCore::VertexArray> __pVao{};
 	};
 
 	constexpr Mesh::Mesh(const VertexAttributeFlag attribFlag) : 
@@ -40,8 +38,8 @@ namespace Poodle
 		return __attribFlag; 
 	}
 
-	constexpr const std::vector<std::unique_ptr<SubmeshInfo>>& Mesh::getSubmeshInfo() const
+	constexpr size_t Mesh::getNumSubmeshInfos() const
 	{
-		return __submeshInfoList; 
+		return __submeshInfos.size(); 
 	}
 }

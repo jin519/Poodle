@@ -64,7 +64,6 @@ namespace Poodle
 			aiPostProcessSteps::aiProcess_FindDegenerates |
 			aiPostProcessSteps::aiProcess_FindInvalidData |
 			aiPostProcessSteps::aiProcess_FindInstances |
-			aiPostProcessSteps::aiProcess_FlipUVs |
 			aiPostProcessSteps::aiProcess_Debone);
 	}
 
@@ -205,46 +204,6 @@ namespace Poodle
 		return retVal;
 	}
 
-	unordered_map<VertexAttributeFlag, ModelLoader::MeshDataset> ModelLoader::__parseMeshDataset(
-		const aiScene* const pAiScene, 
-		const unordered_map<GLuint, int>& aiMaterialIdx2MaterialIdxMap)
-	{
-		unordered_map<VertexAttributeFlag, MeshDataset> retVal; 
-
-		for (GLuint subIter = 0U; subIter < pAiScene->mNumMeshes; ++subIter)
-		{
-			const aiMesh* const pAiMesh = pAiScene->mMeshes[subIter];
-
-			const GLuint numVertices = pAiMesh->mNumVertices;
-			if (!numVertices)
-				continue;
-
-			const VertexAttributeFlag attribFlag = __getMeshAttribFlag(pAiMesh);
-			MeshDataset& meshDataset = retVal[attribFlag];
-
-			GLuint numIndices{};
-			for (GLuint faceIter = 0U; faceIter < pAiMesh->mNumFaces; ++faceIter)
-			{
-				const aiFace* const pAiFace = (pAiMesh->mFaces + faceIter);
-				numIndices += pAiFace->mNumIndices;
-			}
-
-			const int materialIndex = aiMaterialIdx2MaterialIdxMap.at(pAiMesh->mMaterialIndex);
-
-			meshDataset.aiMeshIdx2SubmeshInfoMap.emplace(
-				subIter,
-				make_unique<SubmeshInfo>(
-					numIndices,
-					meshDataset.numVertices,
-					materialIndex));
-
-			meshDataset.numIndices += numIndices;
-			meshDataset.numVertices += numVertices;
-		}
-
-		return retVal;
-	}
-
 	pair<
 		vector<shared_ptr<Mesh>>, 
 		unordered_map<const aiMesh*, int>> ModelLoader::__parseMesh(
@@ -254,10 +213,54 @@ namespace Poodle
 		pair<vector<shared_ptr<Mesh>>, unordered_map<const aiMesh*, int>> retVal; 
 		auto& [meshes, pAiMesh2MeshIdxMap] = retVal;
 
-		unordered_map<VertexAttributeFlag, MeshDataset> attribFlag2MeshDatasetMap = __parseMeshDataset(
-			pAiScene,
-			aiMaterialIdx2MaterialIdxMap); 
+		unordered_map<VertexAttributeFlag, MeshDataset> attribFlag2MeshDatasetMap;
 
+		/*
+			mesh dataset을 파싱한다.
+			numIndices, numVertices, aiMeshIdx2SubmeshInfoIdxMap, submeshInfos가 채워진다.
+		*/
+		for (GLuint subIter = 0U; subIter < pAiScene->mNumMeshes; ++subIter)
+		{
+			const aiMesh* const pAiMesh = pAiScene->mMeshes[subIter];
+
+			const GLuint numVertices = pAiMesh->mNumVertices;
+			if (!numVertices)
+				continue;
+
+			const VertexAttributeFlag attribFlag = __getMeshAttribFlag(pAiMesh);
+
+			MeshDataset& meshDataset = attribFlag2MeshDatasetMap[attribFlag];
+			vector<unique_ptr<SubmeshInfo>>& submeshInfos = meshDataset.submeshInfos;
+
+			const size_t submeshInfoIndex = submeshInfos.size();
+			meshDataset.aiMeshIdx2SubmeshInfoIdxMap.emplace(subIter, submeshInfoIndex);
+
+			GLuint numIndices{};
+			for (GLuint faceIter = 0U; faceIter < pAiMesh->mNumFaces; ++faceIter)
+			{
+				const aiFace* const pAiFace = (pAiMesh->mFaces + faceIter);
+				numIndices += pAiFace->mNumIndices;
+			}
+
+			const GLuint indexOffset{ meshDataset.numVertices };
+			const GLuint firstIndex{ meshDataset.numIndices };
+
+			const int materialIndex = aiMaterialIdx2MaterialIdxMap.at(pAiMesh->mMaterialIndex);
+			
+			submeshInfos.emplace_back(make_unique<SubmeshInfo>(
+				numIndices,
+				indexOffset,
+				firstIndex,
+				materialIndex));
+
+			meshDataset.numIndices += numIndices;
+			meshDataset.numVertices += numVertices;
+		}
+
+		/*
+			mesh dataset 내 indexBuffer, attribFlag2VertexBufferMap을 채운다.
+			mesh dataset 정보를 이용하여 mesh를 생성한다.
+		*/
 		for (auto& [attribFlag, meshDataset] : attribFlag2MeshDatasetMap)
 		{
 			const int meshIndex = int(meshes.size()); 
@@ -266,19 +269,19 @@ namespace Poodle
 			Mesh& mesh = *meshes.back(); 
 
 			const size_t numIndices = size_t(meshDataset.numIndices); 
-			vector<GLuint>& indexBuffer = meshDataset.indexBuffer;
 			const size_t numVertices = size_t(meshDataset.numVertices);
 			auto& attribFlag2VertexBufferMap = meshDataset.attribFlag2VertexBufferMap;
-			auto& aiMeshIdx2SubmeshInfoMap = meshDataset.aiMeshIdx2SubmeshInfoMap;
+			const auto& aiMeshIdx2SubmeshInfoIdxMap = meshDataset.aiMeshIdx2SubmeshInfoIdxMap;
+			auto& submeshInfos = meshDataset.submeshInfos; 
 
-			indexBuffer.reserve(numIndices);
-
+			vector<GLuint>& indexBuffer = meshDataset.indexBuffer;
 			vector<GLfloat>& positionBuffer = attribFlag2VertexBufferMap[VertexAttributeFlag::POSITION];
 			vector<GLfloat>& normalBuffer = attribFlag2VertexBufferMap[VertexAttributeFlag::NORMAL];
 			vector<GLfloat>& tangentBuffer = attribFlag2VertexBufferMap[VertexAttributeFlag::TANGENT];
 			vector<GLfloat>& texcoordBuffer = attribFlag2VertexBufferMap[VertexAttributeFlag::TEXCOORD];
 			vector<GLfloat>& colorBuffer = attribFlag2VertexBufferMap[VertexAttributeFlag::COLOR];
-			
+
+			indexBuffer.reserve(numIndices);
 			positionBuffer.resize(numVertices * 3ULL); 
 
 			if (attribFlag & VertexAttributeFlag::NORMAL)
@@ -299,17 +302,14 @@ namespace Poodle
 			GLfloat* pTexcoordCursor = texcoordBuffer.data();
 			GLfloat* pColorCursor = colorBuffer.data();
 
-			/*
-				mesh dataset 내 indexBuffer, attribFlag2VertexBufferMap을 채운다.
-				mesh 내 submeshInfoList를 채운다.
-			*/
-			for (auto& [aiMeshIndex, pSubmeshInfo] : aiMeshIdx2SubmeshInfoMap)
+			for (const auto& [aiMeshIndex, submeshInfoIndex] : aiMeshIdx2SubmeshInfoIdxMap)
 			{
 				const aiMesh* const pAiMesh = pAiScene->mMeshes[aiMeshIndex]; 
+				const SubmeshInfo& submeshInfo = *submeshInfos[submeshInfoIndex]; 
 
 				// ----------------------------------- INDEX
 
-				const GLuint submeshIndexOffset = pSubmeshInfo->getIndexOffset();
+				const GLuint submeshIndexOffset = submeshInfo.getIndexOffset();
 
 				for (GLuint faceIter = 0U; faceIter < pAiMesh->mNumFaces; ++faceIter)
 				{
@@ -359,11 +359,16 @@ namespace Poodle
 				
 				if (texcoordBuffer.size())
 				{
-					const size_t numSubmeshTexcoords = (numSubmeshVertices * 2ULL);
-					const size_t memSize = (sizeof(GLfloat) * numSubmeshTexcoords);
+					static constexpr size_t texCoordSize{ sizeof(vec2) };
+					const aiVector3D* pAiTexCoords = pAiMesh->mTextureCoords[0];
 
-					memcpy(pTexcoordCursor, pAiMesh->mTextureCoords[0], memSize);
-					pTexcoordCursor += numSubmeshTexcoords;
+					for (size_t texCoordIter = 0ULL; texCoordIter < numSubmeshVertices; ++texCoordIter)
+					{
+						memcpy(pTexcoordCursor, pAiTexCoords, texCoordSize);
+						
+						++pAiTexCoords;
+						pTexcoordCursor += 2ULL;
+					}
 				}
 
 				// ----------------------------------- VERTEX - COLOR
@@ -377,13 +382,9 @@ namespace Poodle
 					pColorCursor += numSubmeshColors;
 				}
 
-				mesh.addSubmeshInfo(move(pSubmeshInfo)); 
 				pAiMesh2MeshIdxMap.emplace(pAiMesh, meshIndex); 
 			}
 
-			/*
-				mesh dataset 정보를 이용하여 mesh 내 vao를 채운다.
-			*/
 			unique_ptr<VertexArray> pVao{};
 			{
 				unordered_map<VertexAttribute, unique_ptr<VertexBuffer>> attrib2VboMap;
@@ -395,7 +396,7 @@ namespace Poodle
 					if (numVertices)
 					{
 						const VertexAttribute& attrib = VertexAttributeFactory::get(attribFlag);
-
+						
 						unique_ptr<VertexBuffer> pVbo = make_unique<VertexBuffer>(
 							vertexBuffer.data(),
 							(sizeof(GLfloat) * numVertices),
@@ -414,9 +415,10 @@ namespace Poodle
 					move(attrib2VboMap),
 					move(pEbo),
 					GLsizei(numIndices));
-
-				mesh.setVao(move(pVao));
 			}
+
+			mesh.setSubmeshInfos(move(submeshInfos));
+			mesh.setVao(move(pVao));
 		}
 
 		return retVal;

@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../GLCore/ShaderProgram.h"
-#include "../Poodle/Scene.h"
 #include "../Poodle/Model.h"
+#include "../Poodle/Scene.h"
 #include "../Poodle/PerspectiveCamera.h"
 
 class DemoScene : public Poodle::Scene 
