@@ -2,13 +2,12 @@ Rendering engine using native C++ and modern openGL.
 
 ## Platform
 
-- Windows 10 Desktop - Visual Studio 2019
+- Windows 10 Desktop [Visual Studio 2019]
 
 ## Build
 
 - Set `Client` as startup project.
-- Then Right-click it.
-- Go to Configuration Properties | Debugging | Environment and write `PATH=%PATH%;../ThirdParty/bin/Debug`.
+- Go to Configuration Properties &#8594; Debugging &#8594; Environment and type `PATH=%PATH%;../ThirdParty/bin/Debug`.
 
 ## License
 
