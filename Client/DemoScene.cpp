@@ -121,12 +121,14 @@ void DemoScene::onUpdate(const float deltaTime)
 		cameraTransform.advanceY(translationStep);
 
 	__pCamera->update(); 
+	__pModel->getTransform().updateMatrix();
 }
 
 void DemoScene::onRender()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	__pShaderProgram->setUniformMatrix4f("modelMat", __pModel->getTransform().getModelMatrix());
 	__pShaderProgram->setUniformMatrix4f("viewMat", __pCamera->getViewMatrix());
 	__pShaderProgram->setUniformMatrix4f("projectionMat", __pCamera->getProjectionMatrix());
 
@@ -168,14 +170,13 @@ void DemoScene::__init()
 	glfwSwapInterval(1); // VSYNC 0: off, 1: on
 	glEnable(GL_DEPTH_TEST);
 
-	__pModel = ModelLoader::load("resource/Nanosuit/scene.gltf");
-	__pModel->getTransform().setScale(0.1f); 
+	__pModel = ModelLoader::load("resource/HalloweenPumpkin/scene.gltf");
+	__pModel->getTransform().setScale(0.01f); 
 
 	__pCamera = make_unique<PerspectiveCamera>(); 
 	__pCamera->setNear(0.1f);
 	__pCamera->setFar(200.f);
-	__pCamera->getTransform().advanceY(8.f);
-	__pCamera->getTransform().advanceZ(25.f);
+	__pCamera->getTransform().advanceZ(4.f);
 
 	__pShaderProgram = make_shared<ShaderProgram>(
 		"shaders/triangle.vert", 
